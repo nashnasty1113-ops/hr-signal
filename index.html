@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR 시그널</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --cream-dark: #EDE7D9;
+    --cream-border: #D8D0C0;
+    --ink: #2A2218;
+    --ink-mid: #5A5040;
+    --ink-light: #8A7F6A;
+    --accent-red: #C94A2A;
+    --accent-orange: #E07A3A;
+    --accent-green: #3A7A5A;
+    --accent-blue: #2A5A8A;
+    --panel-width: 420px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    border-bottom: 2px solid var(--ink);
+    padding: 18px 32px 14px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    background: var(--cream);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .site-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .site-logo span {
+    color: var(--accent-red);
+  }
+
+  .site-meta {
+    font-size: 11px;
+    color: var(--ink-light);
+    text-align: right;
+  }
+
+  .admin-link {
+    font-size: 11px;
+    color: var(--ink-light);
+    text-decoration: none;
+    border-bottom: 1px solid var(--cream-border);
+    cursor: pointer;
+  }
+
+  .admin-link:hover { color: var(--ink); }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 60px);
+  }
+
+  .main-content {
+    flex: 1;
+    max-width: 680px;
+    padding: 32px 32px 80px;
+    transition: margin-right 0.35s ease;
+  }
+
+  .main-content.panel-open {
+    margin-right: var(--panel-width);
+  }
+
+  /* ─── EDITION HEADER ─── */
+  .edition-header {
+    border-bottom: 1px solid var(--cream-border);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+
+  .edition-number {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .edition-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .edition-date {
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .edition-intro {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+
+  /* ─── SECTION ─── */
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 2px solid var(--ink);
+    padding-top: 10px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .section-count {
+    font-size: 10px;
+    color: var(--ink-light);
+    letter-spacing: 1px;
+  }
+
+  /* ─── TOP 5 ─── */
+  .top5-list { list-style: none; }
+
+  .top5-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--cream-border);
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 4px;
+    padding-left: 4px;
+    padding-right: 8px;
+  }
+
+  .top5-item:hover { background: var(--cream-dark); }
+  .top5-item.active { background: var(--cream-dark); }
+
+  .top5-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cream-border);
+    min-width: 36px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+
+  .top5-item:nth-child(1) .top5-num { color: var(--ink); }
+  .top5-item:nth-child(2) .top5-num { color: var(--ink-mid); }
+  .top5-item:nth-child(3) .top5-num { color: var(--ink-light); }
+
+  .top5-body { flex: 1; }
+
+  .top5-cat {
+    font-size: 10px;
+    color: var(--accent-red);
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+
+  .top5-headline {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 3px;
+  }
+
+  .top5-meta {
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .top5-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+
+  .badge-hot { background: #FDEEE9; color: var(--accent-red); }
+  .badge-new { background: #E9F3EE; color: var(--accent-green); }
+  .badge-trend { background: #E9EFF8; color: var(--accent-blue); }
+
+  /* ─── EDITOR'S PICK ─── */
+  .editors-pick {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 6px;
+    padding: 20px 22px;
+    margin-bottom: 40px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .editors-pick:hover { opacity: 0.92; }
+
+  .pick-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent-orange);
+    margin-bottom: 8px;
+  }
+
+  .pick-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .pick-desc {
+    font-size: 12px;
+    color: #C0B8A8;
+    line-height: 1.7;
+  }
+
+  /* ─── NEWS LIST ─── */
+  .news-list { list-style: none; }
+
+  .news-item {
+    display: flex;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--cream-border);
+    cursor: pointer;
+    border-radius: 4px;
+    padding-left: 4px;
+    padding-right: 8px;
+    transition: background 0.15s;
+  }
+
+  .news-item:hover { background: var(--cream-dark); }
+  .news-item.active { background: var(--cream-dark); }
+
+  .news-body { flex: 1; }
+
+  .news-tags {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 1px 7px;
+    border: 1px solid var(--cream-border);
+    border-radius: 10px;
+    color: var(--ink-light);
+  }
+
+  .news-headline {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 3px;
+  }
+
+  .news-snippet {
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .news-date {
+    font-size: 11px;
+    color: var(--ink-light);
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+
+  /* ─── DETAIL PANEL ─── */
+  .detail-panel {
+    width: var(--panel-width);
+    background: var(--cream);
+    border-left: 1px solid var(--cream-border);
+    position: fixed;
+    top: 60px;
+    right: 0;
+    bottom: 0;
+    transform: translateX(100%);
+    transition: transform 0.35s ease;
+    overflow-y: auto;
+    z-index: 90;
+  }
+
+  .detail-panel.open {
+    transform: translateX(0);
+  }
+
+  .panel-inner {
+    padding: 24px 26px 60px;
+  }
+
+  .panel-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .panel-tags {
+    display: flex;
+    gap: 6px;
+  }
+
+  .panel-tag {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+
+  .panel-tag-cat {
+    background: var(--accent-red);
+    color: white;
+  }
+
+  .panel-tag-section {
+    background: var(--cream-dark);
+    color: var(--ink-mid);
+    border: 1px solid var(--cream-border);
+  }
+
+  .panel-close {
+    width: 28px; height: 28px;
+    border: 1px solid var(--cream-border);
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--ink-mid);
+    transition: background 0.15s;
+  }
+
+  .panel-close:hover { background: var(--cream-dark); }
+
+  .panel-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+
+  .panel-sub {
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .panel-divider {
+    border: none;
+    border-top: 1px solid var(--cream-border);
+    margin: 16px 0;
+  }
+
+  .panel-meta-row {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-bottom: 16px;
+  }
+
+  .panel-meta-row strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .panel-summary-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+  }
+
+  .panel-summary {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .panel-points {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+
+  .panel-points li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--cream-border);
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .panel-points li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent-red);
+    font-size: 10px;
+  }
+
+  .panel-source {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 16px;
+  }
+
+  .panel-link {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-size: 12px;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .panel-link:hover { opacity: 0.7; }
+
+  .panel-nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .panel-nav-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--cream-border);
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--ink-mid);
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.15s;
+  }
+
+  .panel-nav-btn:hover { background: var(--cream-dark); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--cream-border);
+    padding: 20px 32px;
+    font-size: 11px;
+    color: var(--ink-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ─── EDITION SELECTOR ─── */
+  .edition-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .edition-btn {
+    padding: 5px 14px;
+    border: 1px solid var(--cream-border);
+    border-radius: 14px;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--ink-mid);
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .edition-btn:hover { border-color: var(--ink-light); }
+  .edition-btn.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  /* ─── LOADING / EMPTY ─── */
+  .loading {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--ink-light);
+    font-size: 13px;
+  }
+
+  /* ─── MODAL (Admin Login) ─── */
+  .modal-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(42,34,24,0.55);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-backdrop.show { display: flex; }
+
+  .modal {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 32px 28px;
+    width: 320px;
+    border: 1px solid var(--cream-border);
+  }
+
+  .modal h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+
+  .modal p {
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-bottom: 20px;
+  }
+
+  .modal input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--cream-border);
+    border-radius: 4px;
+    background: white;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-bottom: 12px;
+    outline: none;
+  }
+
+  .modal input:focus { border-color: var(--ink-mid); }
+
+  .modal-btns {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    flex: 1;
+    padding: 10px;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: opacity 0.15s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-cancel {
+    padding: 10px 16px;
+    border: 1px solid var(--cream-border);
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink-mid);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .error-msg {
+    font-size: 12px;
+    color: var(--accent-red);
+    margin-bottom: 10px;
+    display: none;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    :root { --panel-width: 100vw; }
+    .main-content.panel-open { margin-right: 0; }
+    .detail-panel { top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a class="site-logo" href="#">HR<span>시그널</span></a>
+  <div class="site-meta">
+    <span id="edition-label">매일유업 피플팀</span><br>
+    <a class="admin-link" onclick="openAdminLogin()">관리자 ↗</a>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <main class="main-content" id="main">
+    <div class="loading" id="loading">불러오는 중...</div>
+    <div id="content" style="display:none"></div>
+  </main>
+
+  <!-- DETAIL PANEL -->
+  <aside class="detail-panel" id="detail-panel">
+    <div class="panel-inner" id="panel-inner">
+      <!-- JS로 채워짐 -->
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <span>© HR시그널 · 매일유업 피플팀</span>
+  <span id="footer-date"></span>
+</footer>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-backdrop" id="admin-modal">
+  <div class="modal">
+    <h3>관리자 로그인</h3>
+    <p>관리자 비밀번호를 입력하세요.</p>
+    <div class="error-msg" id="login-error">비밀번호가 올바르지 않습니다.</div>
+    <input type="password" id="admin-pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAdminLogin()">취소</button>
+      <button class="btn-primary" onclick="tryLogin()">로그인</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, onValue, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+// ★ 여기에 Firebase 설정 입력
+const firebaseConfig = {
+  apiKey: "AIzaSyBIH03tDDCNSZHdq0_ru-4LnvaehECycSY",
+  authDomain: "hrsignal.firebaseapp.com",
+  databaseURL: "https://hrsignal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hrsignal",
+  storageBucket: "hrsignal.firebasestorage.app",
+  messagingSenderId: "978655131936",
+  appId: "1:978655131936:web:74ed0e629baa74e8f93f45"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window._db = db;
+window._ref = ref;
+window._get = get;
+
+// 에디션 목록 로드
+const editionsRef = ref(db, 'editions');
+onValue(editionsRef, (snapshot) => {
+  const data = snapshot.val();
+  if (!data) {
+    document.getElementById('loading').textContent = '등록된 기사가 없습니다.';
+    return;
+  }
+  const keys = Object.keys(data).sort().reverse();
+  window._editionsData = data;
+  window._editionKeys = keys;
+  renderEditionSelector(keys, data);
+  loadEdition(keys[0], data[keys[0]]);
+});
+</script>
+
+<script>
+const ADMIN_PASSWORD = 'maeil2024'; // ★ 변경하세요
+
+// ─── PANEL STATE ───
+let currentArticles = [];
+let currentIndex = -1;
+
+// ─── EDITION SELECTOR ───
+function renderEditionSelector(keys, data) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+
+  const el = document.createElement('div');
+  el.className = 'edition-selector';
+  keys.forEach((k, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'edition-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = data[k].title || k;
+    btn.onclick = () => {
+      document.querySelectorAll('.edition-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadEdition(k, data[k]);
+      closePanel();
+    };
+    el.appendChild(btn);
+  });
+
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+  content.appendChild(el);
+  content.appendChild(document.createElement('div')).id = 'edition-body';
+}
+
+// ─── LOAD EDITION ───
+function loadEdition(key, edition) {
+  document.getElementById('footer-date').textContent = edition.date || '';
+  document.getElementById('edition-label').textContent = `매일유업 피플팀 · ${edition.title || ''}`;
+
+  let html = '';
+
+  // Edition header
+  html += `
+    <div class="edition-header">
+      <div class="edition-number">HR시그널 · ${edition.title || ''}</div>
+      <div class="edition-title">${edition.intro_title || '이번 주 HR 핵심 이슈'}</div>
+      <div class="edition-date">${edition.date || ''}</div>
+      ${edition.intro ? `<p class="edition-intro">${edition.intro}</p>` : ''}
+    </div>`;
+
+  // 모든 기사 flat하게 수집 (패널 nav용)
+  currentArticles = [];
+
+  // TOP 5
+  if (edition.top5 && edition.top5.length) {
+    html += `<section class="section">
+      <div class="section-header">
+        <span class="section-title">이번 주 Top 5</span>
+        <span class="section-count">${edition.top5.length} ARTICLES</span>
+      </div>
+      <ul class="top5-list">`;
+    edition.top5.forEach((item, i) => {
+      const idx = currentArticles.length;
+      currentArticles.push({ ...item, _section: '이번 주 Top 5' });
+      const badge = item.badge || '';
+      html += `
+        <li class="top5-item" onclick="openPanel(${idx})" id="art-${idx}">
+          <span class="top5-num">0${i+1}</span>
+          <div class="top5-body">
+            <div class="top5-cat">${item.category || ''}</div>
+            <div class="top5-headline">${item.title}</div>
+            <div class="top5-meta">${item.source || ''} · ${item.date || ''}</div>
+          </div>
+          ${badge ? `<span class="top5-badge badge-${badge.type || 'hot'}">${badge.label || ''}</span>` : ''}
+        </li>`;
+    });
+    html += `</ul></section>`;
+  }
+
+  // Editor's Pick
+  if (edition.editors_pick) {
+    const ep = edition.editors_pick;
+    const idx = currentArticles.length;
+    currentArticles.push({ ...ep, _section: "Editor's Pick" });
+    html += `
+      <div class="editors-pick" onclick="openPanel(${idx})">
+        <div class="pick-label">★ EDITOR'S PICK</div>
+        <div class="pick-title">${ep.title}</div>
+        <div class="pick-desc">${ep.summary || ''}</div>
+      </div>`;
+  }
+
+  // 카테고리 섹션들
+  const sections = edition.sections || [];
+  sections.forEach(sec => {
+    if (!sec.articles || !sec.articles.length) return;
+    html += `<section class="section">
+      <div class="section-header">
+        <span class="section-title">${sec.title}</span>
+        <span class="section-count">${sec.articles.length} ARTICLES</span>
+      </div>
+      <ul class="news-list">`;
+    sec.articles.forEach(item => {
+      const idx = currentArticles.length;
+      currentArticles.push({ ...item, _section: sec.title });
+      const tags = (item.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+      html += `
+        <li class="news-item" onclick="openPanel(${idx})" id="art-${idx}">
+          <div class="news-body">
+            <div class="news-tags">${tags}</div>
+            <div class="news-headline">${item.title}</div>
+            <div class="news-snippet">${item.summary || ''}</div>
+          </div>
+          <div class="news-date">${item.date || ''}</div>
+        </li>`;
+    });
+    html += `</ul></section>`;
+  });
+
+  const body = document.getElementById('edition-body') || (() => {
+    const d = document.createElement('div');
+    d.id = 'edition-body';
+    document.getElementById('content').appendChild(d);
+    return d;
+  })();
+  body.innerHTML = html;
+}
+
+// ─── DETAIL PANEL ───
+function openPanel(idx) {
+  currentIndex = idx;
+  const item = currentArticles[idx];
+
+  document.querySelectorAll('.top5-item, .news-item, .editors-pick').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById(`art-${idx}`);
+  if (el) el.classList.add('active');
+
+  const points = (item.points || []).map(p => `<li>${p}</li>`).join('');
+
+  document.getElementById('panel-inner').innerHTML = `
+    <div class="panel-top">
+      <div class="panel-tags">
+        <span class="panel-tag panel-tag-cat">${item.category || item._section || ''}</span>
+        ${item._section ? `<span class="panel-tag panel-tag-section">${item._section}</span>` : ''}
+      </div>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div class="panel-title">${item.title}</div>
+    <div class="panel-sub">${item.sub || '이번 주 가장 많이 언급된 이슈 중 하나입니다.'}</div>
+    <hr class="panel-divider">
+    <div class="panel-meta-row">
+      <span>카테고리: <strong>${item.category || item._section || '-'}</strong></span>
+      <span>발표일: <strong>${item.date || '-'}</strong></span>
+    </div>
+    ${item.summary ? `
+      <div class="panel-summary-label">SUMMARY</div>
+      <div class="panel-summary">${item.summary}</div>` : ''}
+    ${points ? `<ul class="panel-points">${points}</ul>` : ''}
+    <div class="panel-source">
+      <span>출처 · ${item.source || '-'}</span>
+      ${item.url ? `<a class="panel-link" href="${item.url}" target="_blank">원문 보기 →</a>` : ''}
+    </div>
+    <div class="panel-nav">
+      <button class="panel-nav-btn" onclick="navPanel(-1)">← 이전 기사</button>
+      <button class="panel-nav-btn" onclick="navPanel(1)">다음 기사 →</button>
+    </div>`;
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('main').classList.add('panel-open');
+}
+
+function closePanel() {
+  document.getElementById('detail-panel').classList.remove('open');
+  document.getElementById('main').classList.remove('panel-open');
+  document.querySelectorAll('.top5-item, .news-item, .editors-pick').forEach(el => el.classList.remove('active'));
+  currentIndex = -1;
+}
+
+function navPanel(dir) {
+  const next = currentIndex + dir;
+  if (next >= 0 && next < currentArticles.length) openPanel(next);
+}
+
+// ─── ADMIN LOGIN ───
+function openAdminLogin() {
+  document.getElementById('admin-modal').classList.add('show');
+  setTimeout(() => document.getElementById('admin-pw').focus(), 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById('admin-modal').classList.remove('show');
+  document.getElementById('admin-pw').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function tryLogin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === ADMIN_PASSWORD) {
+    closeAdminLogin();
+    window.location.href = 'admin.html';
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-pw').focus();
+  }
+}
+
+// ESC to close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closePanel(); closeAdminLogin(); }
+});
+</script>
+</body>
+</html>

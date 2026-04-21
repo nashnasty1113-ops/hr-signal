@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR 시그널 관리자</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --cream-dark: #EDE7D9;
+    --cream-border: #D8D0C0;
+    --ink: #2A2218;
+    --ink-mid: #5A5040;
+    --ink-light: #8A7F6A;
+    --accent-red: #C94A2A;
+    --accent-green: #3A7A5A;
+    --accent-blue: #2A5A8A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    min-height: 100vh;
+  }
+
+  .admin-header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .admin-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .admin-logo span { color: #E07A3A; }
+
+  .header-actions { display: flex; gap: 8px; }
+
+  .btn {
+    padding: 7px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    border: none;
+    transition: opacity 0.15s;
+  }
+
+  .btn:hover { opacity: 0.85; }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: var(--cream);
+  }
+
+  .btn-white {
+    background: var(--cream);
+    color: var(--ink);
+  }
+
+  .btn-danger {
+    background: var(--accent-red);
+    color: white;
+  }
+
+  .btn-success {
+    background: var(--accent-green);
+    color: white;
+  }
+
+  /* ─── LAYOUT ─── */
+  .admin-layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 260px;
+    border-right: 1px solid var(--cream-border);
+    padding: 20px 0;
+    background: var(--cream);
+    flex-shrink: 0;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-light);
+    padding: 0 18px 8px;
+  }
+
+  .edition-item {
+    padding: 10px 18px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .edition-item:hover { background: var(--cream-dark); }
+
+  .edition-item.active {
+    border-left-color: var(--accent-red);
+    background: var(--cream-dark);
+  }
+
+  .edition-item-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .edition-item-date {
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  .add-edition-btn {
+    margin: 12px 18px 0;
+    width: calc(100% - 36px);
+    padding: 9px;
+    border: 1px dashed var(--cream-border);
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--ink-light);
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .add-edition-btn:hover {
+    border-color: var(--ink-mid);
+    color: var(--ink);
+  }
+
+  /* ─── MAIN PANEL ─── */
+  .admin-main {
+    flex: 1;
+    padding: 28px 36px;
+    overflow-y: auto;
+  }
+
+  .section-block {
+    margin-bottom: 32px;
+    background: white;
+    border: 1px solid var(--cream-border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .section-block-header {
+    padding: 14px 20px;
+    background: var(--cream-dark);
+    border-bottom: 1px solid var(--cream-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .section-block-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .section-block-body { padding: 16px 20px; }
+
+  /* ─── FORM FIELDS ─── */
+  .form-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  label {
+    font-size: 11px;
+    color: var(--ink-light);
+    letter-spacing: 0.5px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="url"],
+  select,
+  textarea {
+    padding: 8px 10px;
+    border: 1px solid var(--cream-border);
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: white;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--ink-mid);
+  }
+
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* ─── ARTICLE CARD ─── */
+  .article-card {
+    border: 1px solid var(--cream-border);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .article-card-header {
+    padding: 10px 14px;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .article-card-header:hover { background: var(--cream-dark); }
+
+  .article-card-num {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-mid);
+    margin-right: 10px;
+  }
+
+  .article-card-title-preview {
+    flex: 1;
+    font-size: 12px;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .article-card-actions { display: flex; gap: 6px; }
+
+  .btn-sm {
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid var(--cream-border);
+    background: white;
+    color: var(--ink-mid);
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.15s;
+  }
+
+  .btn-sm:hover { background: var(--cream-dark); }
+  .btn-sm.delete { border-color: #FACCCC; color: var(--accent-red); }
+  .btn-sm.delete:hover { background: #FEF0F0; }
+
+  .article-card-body {
+    padding: 14px 14px;
+    border-top: 1px solid var(--cream-border);
+    display: none;
+  }
+
+  .article-card-body.open { display: block; }
+
+  /* ─── TAGS INPUT ─── */
+  .tags-input-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 6px 8px;
+    border: 1px solid var(--cream-border);
+    border-radius: 4px;
+    background: white;
+    cursor: text;
+    min-height: 36px;
+    align-items: center;
+  }
+
+  .tag-chip {
+    background: var(--cream-dark);
+    border: 1px solid var(--cream-border);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: var(--ink-mid);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tag-chip button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-light);
+    font-size: 11px;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .tags-input {
+    border: none !important;
+    outline: none;
+    font-size: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    min-width: 80px;
+    flex: 1;
+    padding: 0 !important;
+    background: transparent;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 999;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* ─── POINTS ─── */
+  .point-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+  }
+
+  .point-row input { flex: 1; }
+
+  .btn-add-row {
+    padding: 6px 12px;
+    border: 1px dashed var(--cream-border);
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    font-size: 11px;
+    color: var(--ink-light);
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-top: 4px;
+  }
+
+  .btn-add-row:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+  /* ─── EMPTY ─── */
+  .empty-state {
+    text-align: center;
+    padding: 48px 0;
+    color: var(--ink-light);
+  }
+
+  .empty-state h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--ink-mid);
+  }
+
+  /* ─── EDITION FORM ─── */
+  .edition-form-block {
+    background: white;
+    border: 1px solid var(--cream-border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .edition-form-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--cream-border);
+  }
+</style>
+</head>
+<body>
+
+<header class="admin-header">
+  <div class="admin-logo">HR<span>시그널</span> 관리자</div>
+  <div class="header-actions">
+    <a href="index.html" class="btn btn-outline">← 뉴스레터 보기</a>
+    <button class="btn btn-white" onclick="saveAll()">저장 & 발행</button>
+  </div>
+</header>
+
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">에디션 목록</div>
+    <div id="edition-list"></div>
+    <button class="add-edition-btn" onclick="createNewEdition()">+ 새 에디션 추가</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main" id="admin-main">
+    <div class="empty-state">
+      <h3>에디션을 선택하거나 새로 만드세요</h3>
+      <p>왼쪽 사이드바에서 에디션을 선택하면 편집할 수 있습니다.</p>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, onValue, set, remove } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+// ★ 동일한 Firebase 설정
+const firebaseConfig = {
+  apiKey: "AIzaSyBIH03tDDCNSZHdq0_ru-4LnvaehECycSY",
+  authDomain: "hrsignal.firebaseapp.com",
+  databaseURL: "https://hrsignal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hrsignal",
+  storageBucket: "hrsignal.firebasestorage.app",
+  messagingSenderId: "978655131936",
+  appId: "1:978655131936:web:74ed0e629baa74e8f93f45"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window._db = db;
+window._ref = ref;
+window._set = set;
+window._remove = remove;
+
+// 데이터 로드
+const editionsRef = ref(db, 'editions');
+onValue(editionsRef, (snapshot) => {
+  window._data = snapshot.val() || {};
+  window._keys = Object.keys(window._data).sort().reverse();
+  renderSidebar();
+});
+</script>
+
+<script>
+window._data = {};
+window._keys = [];
+window._currentKey = null;
+
+// ─── SIDEBAR ───
+function renderSidebar() {
+  const list = document.getElementById('edition-list');
+  list.innerHTML = '';
+  _keys.forEach(k => {
+    const ed = _data[k];
+    const item = document.createElement('div');
+    item.className = 'edition-item' + (k === _currentKey ? ' active' : '');
+    item.innerHTML = `
+      <div class="edition-item-title">${ed.title || k}</div>
+      <div class="edition-item-date">${ed.date || ''}</div>`;
+    item.onclick = () => selectEdition(k);
+    list.appendChild(item);
+  });
+}
+
+// ─── SELECT EDITION ───
+function selectEdition(key) {
+  _currentKey = key;
+  document.querySelectorAll('.edition-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  renderEditor(_data[key]);
+}
+
+// ─── CREATE NEW EDITION ───
+function createNewEdition() {
+  const now = new Date();
+  const key = now.toISOString().split('T')[0];
+  const newEd = {
+    title: `HR시그널 #${(_keys.length + 1)}`,
+    date: key,
+    intro_title: '이번 주 HR 핵심 이슈',
+    intro: '',
+    top5: [],
+    editors_pick: null,
+    sections: [
+      { title: 'AI와 HR', articles: [] },
+      { title: '채용 트렌드', articles: [] },
+      { title: '노동법 & 정책', articles: [] }
+    ]
+  };
+  _data[key] = newEd;
+  _keys.unshift(key);
+  _currentKey = key;
+  renderSidebar();
+  renderEditor(newEd);
+  toast('새 에디션이 생성되었습니다.');
+}
+
+// ─── RENDER EDITOR ───
+function renderEditor(edition) {
+  const main = document.getElementById('admin-main');
+  const ed = JSON.parse(JSON.stringify(edition)); // deep copy
+
+  let html = `
+    <div class="edition-form-block">
+      <div class="edition-form-title">에디션 기본 정보</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>에디션 제목</label>
+          <input type="text" id="f-title" value="${ed.title || ''}" placeholder="예: HR시그널 #12">
+        </div>
+        <div class="form-group">
+          <label>발행일</label>
+          <input type="date" id="f-date" value="${ed.date || ''}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>헤드라인 타이틀</label>
+          <input type="text" id="f-intro-title" value="${ed.intro_title || ''}" placeholder="이번 주 HR 핵심 이슈">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>에디션 소개글</label>
+        <textarea id="f-intro" placeholder="이번 주 주요 내용을 간략히...">${ed.intro || ''}</textarea>
+      </div>
+    </div>`;
+
+  // TOP 5
+  html += `<div class="section-block">
+    <div class="section-block-header">
+      <span class="section-block-title">이번 주 Top 5</span>
+      <button class="btn btn-success" onclick="addArticle('top5')" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
+    </div>
+    <div class="section-block-body" id="top5-list">`;
+  (ed.top5 || []).forEach((a, i) => {
+    html += articleCard(a, 'top5', i, true);
+  });
+  html += `</div></div>`;
+
+  // Editor's Pick
+  const ep = ed.editors_pick || {};
+  html += `<div class="section-block">
+    <div class="section-block-header">
+      <span class="section-block-title">★ Editor's Pick</span>
+    </div>
+    <div class="section-block-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>제목</label>
+          <input type="text" id="ep-title" value="${ep.title || ''}" placeholder="에디터 추천 기사 제목">
+        </div>
+        <div class="form-group">
+          <label>출처</label>
+          <input type="text" id="ep-source" value="${ep.source || ''}">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>요약</label>
+        <textarea id="ep-summary">${ep.summary || ''}</textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>URL</label>
+          <input type="url" id="ep-url" value="${ep.url || ''}">
+        </div>
+        <div class="form-group">
+          <label>날짜</label>
+          <input type="text" id="ep-date" value="${ep.date || ''}">
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  // Sections
+  (ed.sections || []).forEach((sec, si) => {
+    html += `<div class="section-block">
+      <div class="section-block-header">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="text" value="${sec.title}" id="sec-title-${si}"
+            style="border:none;background:transparent;font-size:13px;font-weight:500;
+            font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
+          <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
+        </div>
+      </div>
+      <div class="section-block-body" id="sec-${si}-list">`;
+    (sec.articles || []).forEach((a, ai) => {
+      html += articleCard(a, 'sec', ai, false, si);
+    });
+    html += `</div></div>`;
+  });
+
+  // Add Section button
+  html += `<button class="add-edition-btn" style="width:100%;margin:0 0 40px;" onclick="addSection()">+ 새 섹션 추가</button>`;
+
+  main.innerHTML = html;
+  window._editingEdition = ed;
+}
+
+// ─── ARTICLE CARD HTML ───
+function articleCard(a, type, idx, isTop5, secIdx) {
+  const tags = (a.tags || []).join(',');
+  const points = (a.points || []).map((p, pi) =>
+    `<div class="point-row" id="point-${type}-${secIdx ?? ''}-${idx}-${pi}">
+      <input type="text" value="${p}" placeholder="핵심 포인트">
+      <button class="btn-sm delete" onclick="removePoint(this)">✕</button>
+    </div>`).join('');
+
+  const badgeLabel = a.badge ? a.badge.label || '' : '';
+  const badgeType = a.badge ? a.badge.type || 'hot' : 'hot';
+
+  return `<div class="article-card" id="card-${type}-${secIdx ?? ''}-${idx}">
+    <div class="article-card-header" onclick="toggleCard(this)">
+      <span class="article-card-num">${isTop5 ? '0'+(idx+1) : (idx+1)}</span>
+      <span class="article-card-title-preview">${a.title || '(제목 없음)'}</span>
+      <div class="article-card-actions">
+        <button class="btn-sm delete" onclick="deleteArticle(event,'${type}',${idx},${secIdx ?? 'null'})">삭제</button>
+      </div>
+    </div>
+    <div class="article-card-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>제목</label>
+          <input type="text" class="art-title" value="${a.title || ''}" placeholder="기사 제목">
+        </div>
+        <div class="form-group" style="max-width:120px;">
+          <label>날짜</label>
+          <input type="text" class="art-date" value="${a.date || ''}" placeholder="04.08">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>카테고리</label>
+          <input type="text" class="art-cat" value="${a.category || ''}" placeholder="AI·HR">
+        </div>
+        <div class="form-group">
+          <label>출처</label>
+          <input type="text" class="art-source" value="${a.source || ''}" placeholder="HR Korea">
+        </div>
+      </div>
+      ${isTop5 ? `<div class="form-row">
+        <div class="form-group">
+          <label>뱃지 텍스트</label>
+          <input type="text" class="art-badge-label" value="${badgeLabel}" placeholder="HOT">
+        </div>
+        <div class="form-group">
+          <label>뱃지 타입</label>
+          <select class="art-badge-type">
+            <option value="hot" ${badgeType==='hot'?'selected':''}>hot (빨강)</option>
+            <option value="new" ${badgeType==='new'?'selected':''}>new (초록)</option>
+            <option value="trend" ${badgeType==='trend'?'selected':''}>trend (파랑)</option>
+          </select>
+        </div>
+      </div>` : `<div class="form-group" style="margin-bottom:10px;">
+        <label>태그 (엔터로 추가)</label>
+        <div class="tags-input-wrap" onclick="this.querySelector('.tags-input').focus()">
+          ${(a.tags||[]).map(t=>`<span class="tag-chip">${t}<button onclick="removeTag(this)">✕</button></span>`).join('')}
+          <input class="tags-input" placeholder="태그 입력 후 엔터" onkeydown="addTag(event,this)">
+        </div>
+      </div>`}
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>부제 (패널 서브텍스트)</label>
+        <input type="text" class="art-sub" value="${a.sub || ''}" placeholder="이번 주 가장 많이 언급된 이슈">
+      </div>
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>요약</label>
+        <textarea class="art-summary" placeholder="기사 요약 (2-3문장)">${a.summary || ''}</textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>핵심 포인트</label>
+        <div class="points-list" id="points-${type}-${secIdx??''}-${idx}">
+          ${points}
+        </div>
+        <button class="btn-add-row" onclick="addPoint(this,'${type}',${idx},${secIdx??'null'})">+ 포인트 추가</button>
+      </div>
+      <div class="form-group">
+        <label>원문 URL</label>
+        <input type="url" class="art-url" value="${a.url || ''}" placeholder="https://...">
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── CARD TOGGLE ───
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+  // 제목 미리보기 업데이트
+  const input = body.querySelector('.art-title');
+  if (input) {
+    header.querySelector('.article-card-title-preview').textContent = input.value || '(제목 없음)';
+  }
+}
+
+// ─── ADD ARTICLE ───
+function addArticle(type, secIdx) {
+  const blank = { title: '', date: '', category: '', source: '', summary: '', sub: '', points: [], tags: [], url: '' };
+  if (type === 'top5') {
+    if (!window._editingEdition.top5) window._editingEdition.top5 = [];
+    const idx = window._editingEdition.top5.length;
+    window._editingEdition.top5.push(blank);
+    const html = articleCard(blank, 'top5', idx, true);
+    document.getElementById('top5-list').insertAdjacentHTML('beforeend', html);
+  } else {
+    const sec = window._editingEdition.sections[secIdx];
+    if (!sec.articles) sec.articles = [];
+    const idx = sec.articles.length;
+    sec.articles.push(blank);
+    const html = articleCard(blank, 'sec', idx, false, secIdx);
+    document.getElementById(`sec-${secIdx}-list`).insertAdjacentHTML('beforeend', html);
+  }
+}
+
+// ─── DELETE ARTICLE ───
+function deleteArticle(e, type, idx, secIdx) {
+  e.stopPropagation();
+  if (!confirm('이 기사를 삭제할까요?')) return;
+  const card = e.target.closest('.article-card');
+  card.remove();
+  toast('기사가 삭제되었습니다.');
+}
+
+// ─── ADD SECTION ───
+function addSection() {
+  if (!window._editingEdition.sections) window._editingEdition.sections = [];
+  const si = window._editingEdition.sections.length;
+  const sec = { title: '새 섹션', articles: [] };
+  window._editingEdition.sections.push(sec);
+
+  const html = `<div class="section-block">
+    <div class="section-block-header">
+      <input type="text" value="새 섹션" id="sec-title-${si}"
+        style="border:none;background:transparent;font-size:13px;font-weight:500;
+        font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
+        <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
+      </div>
+    </div>
+    <div class="section-block-body" id="sec-${si}-list"></div>
+  </div>`;
+
+  document.querySelector('.add-edition-btn').insertAdjacentHTML('beforebegin', html);
+  toast('새 섹션이 추가되었습니다.');
+}
+
+// ─── DELETE SECTION ───
+function deleteSection(si) {
+  if (!confirm('이 섹션을 삭제할까요?')) return;
+  event.target.closest('.section-block').remove();
+  toast('섹션이 삭제되었습니다.');
+}
+
+// ─── TAGS ───
+function addTag(e, input) {
+  if (e.key === 'Enter' && input.value.trim()) {
+    e.preventDefault();
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${input.value.trim()}<button onclick="removeTag(this)">✕</button>`;
+    input.before(chip);
+    input.value = '';
+  }
+}
+
+function removeTag(btn) {
+  btn.parentElement.remove();
+}
+
+// ─── POINTS ───
+function addPoint(btn, type, idx, secIdx) {
+  const container = btn.previousElementSibling;
+  const pi = container.children.length;
+  const row = document.createElement('div');
+  row.className = 'point-row';
+  row.innerHTML = `<input type="text" placeholder="핵심 포인트">
+    <button class="btn-sm delete" onclick="removePoint(this)">✕</button>`;
+  container.appendChild(row);
+}
+
+function removePoint(btn) {
+  btn.parentElement.remove();
+}
+
+// ─── SAVE ALL ───
+function saveAll() {
+  // 기본 정보 수집
+  const edition = {
+    title: document.getElementById('f-title').value,
+    date: document.getElementById('f-date').value,
+    intro_title: document.getElementById('f-intro-title').value,
+    intro: document.getElementById('f-intro').value,
+    top5: [],
+    editors_pick: null,
+    sections: []
+  };
+
+  // TOP 5 수집
+  document.querySelectorAll('#top5-list .article-card').forEach(card => {
+    const a = collectArticleFromCard(card, true);
+    edition.top5.push(a);
+  });
+
+  // Editor's Pick
+  const epTitle = document.getElementById('ep-title').value;
+  if (epTitle) {
+    edition.editors_pick = {
+      title: epTitle,
+      source: document.getElementById('ep-source').value,
+      summary: document.getElementById('ep-summary').value,
+      url: document.getElementById('ep-url').value,
+      date: document.getElementById('ep-date').value,
+    };
+  }
+
+  // Sections
+  document.querySelectorAll('.section-block').forEach((block, si) => {
+    const titleInput = block.querySelector('[id^="sec-title-"]');
+    if (!titleInput) return;
+    const secIdx = titleInput.id.replace('sec-title-', '');
+    const articles = [];
+    block.querySelectorAll('.article-card').forEach(card => {
+      articles.push(collectArticleFromCard(card, false));
+    });
+    edition.sections.push({
+      title: titleInput.value,
+      articles
+    });
+  });
+
+  // Firebase 저장
+  const key = edition.date || _currentKey;
+  if (!key) { toast('발행일을 입력해주세요.'); return; }
+
+  _set(_ref(_db, `editions/${key}`), edition)
+    .then(() => {
+      toast('✓ 저장되어 발행되었습니다!');
+      _currentKey = key;
+    })
+    .catch(err => toast('저장 실패: ' + err.message));
+}
+
+function collectArticleFromCard(card, isTop5) {
+  const a = {
+    title: card.querySelector('.art-title')?.value || '',
+    date: card.querySelector('.art-date')?.value || '',
+    category: card.querySelector('.art-cat')?.value || '',
+    source: card.querySelector('.art-source')?.value || '',
+    sub: card.querySelector('.art-sub')?.value || '',
+    summary: card.querySelector('.art-summary')?.value || '',
+    url: card.querySelector('.art-url')?.value || '',
+    points: [],
+  };
+
+  // Points
+  card.querySelectorAll('.points-list .point-row input').forEach(inp => {
+    if (inp.value.trim()) a.points.push(inp.value.trim());
+  });
+
+  if (isTop5) {
+    const label = card.querySelector('.art-badge-label')?.value;
+    const type = card.querySelector('.art-badge-type')?.value;
+    if (label) a.badge = { label, type };
+  } else {
+    a.tags = [];
+    card.querySelectorAll('.tag-chip').forEach(chip => {
+      a.tags.push(chip.textContent.replace('✕','').trim());
+    });
+  }
+
+  return a;
+}
+
+// ─── TOAST ───
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── DELETE EDITION ───
+function deleteCurrentEdition() {
+  if (!_currentKey || !confirm(`'${_data[_currentKey]?.title}' 에디션을 삭제할까요?`)) return;
+  _remove(_ref(_db, `editions/${_currentKey}`)).then(() => {
+    toast('에디션이 삭제되었습니다.');
+    _currentKey = null;
+    document.getElementById('admin-main').innerHTML = '<div class="empty-state"><h3>에디션을 선택하세요</h3></div>';
+  });
+}
+</script>
+</body>
+</html>
