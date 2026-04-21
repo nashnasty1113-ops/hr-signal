@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HR 시그널</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
 <style>
 :root {
   --cream: #F2EDE3;
@@ -67,16 +67,28 @@ body {
 }
 
 .mag-logo {
-  font-family: 'DM Serif Display', 'Noto Serif KR', serif;
-  font-size: clamp(56px, 12vw, 96px);
-  font-weight: 400;
+  font-family: 'Playfair Display', 'Noto Serif KR', serif;
+  font-size: clamp(52px, 12vw, 88px);
+  font-weight: 900;
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
   color: var(--ink);
   margin-bottom: 8px;
 }
 
-.mag-logo span { color: var(--red); font-style: italic; }
+.mag-logo .logo-hr {
+  font-weight: 900;
+  font-style: normal;
+  color: var(--ink);
+}
+
+.mag-logo .logo-signal {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700;
+  color: var(--red);
+  font-style: normal;
+  letter-spacing: -2px;
+}
 
 .mag-sub {
   font-size: 10px;
@@ -379,7 +391,7 @@ body {
 <!-- 본문 -->
 <div class="wrap">
   <div class="mag-header">
-    <div class="mag-logo">hr<span>시그널</span></div>
+    <div class="mag-logo"><span class="logo-hr">HR</span><span class="logo-signal">시그널</span></div>
     <div class="mag-sub">KOREAN HR WEEKLY · EDITORIAL DIGEST</div>
     <div class="mag-date" id="mag-date">—</div>
   </div>
