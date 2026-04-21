@@ -4,699 +4,407 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HR 시그널</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #F5F0E8;
-    --cream-dark: #EDE7D9;
-    --cream-border: #D8D0C0;
-    --ink: #2A2218;
-    --ink-mid: #5A5040;
-    --ink-light: #8A7F6A;
-    --accent-red: #C94A2A;
-    --accent-orange: #E07A3A;
-    --accent-green: #3A7A5A;
-    --accent-blue: #2A5A8A;
-    --panel-width: 420px;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--cream);
-    color: var(--ink);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 13px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-
-  /* ─── HEADER ─── */
-  .site-header {
-    border-bottom: 2px solid var(--ink);
-    padding: 18px 32px 14px;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    background: var(--cream);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .site-logo {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--ink);
-    text-decoration: none;
-  }
-
-  .site-logo span {
-    color: var(--accent-red);
-  }
-
-  .site-meta {
-    font-size: 11px;
-    color: var(--ink-light);
-    text-align: right;
-  }
-
-  .admin-link {
-    font-size: 11px;
-    color: var(--ink-light);
-    text-decoration: none;
-    border-bottom: 1px solid var(--cream-border);
-    cursor: pointer;
-  }
-
-  .admin-link:hover { color: var(--ink); }
-
-  /* ─── LAYOUT ─── */
-  .layout {
-    display: flex;
-    min-height: calc(100vh - 60px);
-  }
-
-  .main-content {
-    flex: 1;
-    max-width: 900px;
-    padding: 28px 40px 80px;
-    transition: margin-right 0.35s ease;
-  }
-
-  .main-content.panel-open {
-    margin-right: var(--panel-width);
-  }
-
-  /* ─── EDITION HEADER ─── */
-  .edition-header {
-    border-bottom: 1px solid var(--cream-border);
-    padding-bottom: 20px;
-    margin-bottom: 32px;
-  }
-
-  .edition-number {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--ink-light);
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .edition-title {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-
-  .edition-date {
-    font-size: 11px;
-    color: var(--ink-light);
-  }
-
-  .edition-intro {
-    font-size: 13px;
-    color: var(--ink-mid);
-    line-height: 1.8;
-    margin-top: 12px;
-  }
-
-  /* ─── SECTION ─── */
-  .section {
-    margin-bottom: 40px;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 2px solid var(--ink);
-    padding-top: 10px;
-    margin-bottom: 16px;
-  }
-
-  .section-title {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-
-  .section-count {
-    font-size: 10px;
-    color: var(--ink-light);
-    letter-spacing: 1px;
-  }
-
-  /* ─── TOP 5 ─── */
-  .top5-list { list-style: none; }
-
-  .top5-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--cream-border);
-    cursor: pointer;
-    transition: background 0.15s;
-    border-radius: 4px;
-    padding-left: 4px;
-    padding-right: 8px;
-  }
-
-  .top5-item:hover { background: var(--cream-dark); }
-  .top5-item.active { background: var(--cream-dark); }
-
-  .top5-num {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--cream-border);
-    min-width: 36px;
-    line-height: 1;
-    padding-top: 2px;
-  }
-
-  .top5-item:nth-child(1) .top5-num { color: var(--ink); }
-  .top5-item:nth-child(2) .top5-num { color: var(--ink-mid); }
-  .top5-item:nth-child(3) .top5-num { color: var(--ink-light); }
-
-  .top5-body { flex: 1; }
-
-  .top5-cat {
-    font-size: 10px;
-    color: var(--accent-red);
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-  }
-
-  .top5-headline {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.5;
-    margin-bottom: 3px;
-  }
-
-  .top5-meta {
-    font-size: 11px;
-    color: var(--ink-light);
-  }
-
-  .top5-badge {
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    white-space: nowrap;
-    align-self: flex-start;
-    margin-top: 4px;
-  }
-
-  .badge-hot { background: #FDEEE9; color: var(--accent-red); }
-  .badge-new { background: #E9F3EE; color: var(--accent-green); }
-  .badge-trend { background: #E9EFF8; color: var(--accent-blue); }
-
-  /* ─── EDITOR'S PICK ─── */
-  .editors-pick {
-    background: var(--ink);
-    color: var(--cream);
-    border-radius: 6px;
-    padding: 20px 22px;
-    margin-bottom: 40px;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
-  .editors-pick:hover { opacity: 0.92; }
-
-  .pick-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--accent-orange);
-    margin-bottom: 8px;
-  }
-
-  .pick-title {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    line-height: 1.4;
-  }
-
-  .pick-desc {
-    font-size: 12px;
-    color: #C0B8A8;
-    line-height: 1.7;
-  }
-
-  /* ─── NEWS LIST ─── */
-  .news-list { list-style: none; }
-
-  .news-item {
-    display: flex;
-    gap: 12px;
-    padding: 13px 0;
-    border-bottom: 1px solid var(--cream-border);
-    cursor: pointer;
-    border-radius: 4px;
-    padding-left: 4px;
-    padding-right: 8px;
-    transition: background 0.15s;
-  }
-
-  .news-item:hover { background: var(--cream-dark); }
-  .news-item.active { background: var(--cream-dark); }
-
-  .news-body { flex: 1; }
-
-  .news-tags {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 4px;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-size: 10px;
-    padding: 1px 7px;
-    border: 1px solid var(--cream-border);
-    border-radius: 10px;
-    color: var(--ink-light);
-  }
-
-  .news-headline {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.5;
-    margin-bottom: 3px;
-  }
-
-  .news-snippet {
-    font-size: 12px;
-    color: var(--ink-light);
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .news-date {
-    font-size: 11px;
-    color: var(--ink-light);
-    white-space: nowrap;
-    padding-top: 2px;
-  }
-
-  /* ─── DETAIL PANEL ─── */
-  .detail-panel {
-    width: var(--panel-width);
-    background: var(--cream);
-    border-left: 1px solid var(--cream-border);
-    position: fixed;
-    top: 60px;
-    right: 0;
-    bottom: 0;
-    transform: translateX(100%);
-    transition: transform 0.35s ease;
-    overflow-y: auto;
-    z-index: 90;
-  }
-
-  .detail-panel.open {
-    transform: translateX(0);
-  }
-
-  .panel-inner {
-    padding: 24px 26px 60px;
-  }
-
-  .panel-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .panel-tags {
-    display: flex;
-    gap: 6px;
-  }
-
-  .panel-tag {
-    font-size: 10px;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-weight: 500;
-  }
-
-  .panel-tag-cat {
-    background: var(--accent-red);
-    color: white;
-  }
-
-  .panel-tag-section {
-    background: var(--cream-dark);
-    color: var(--ink-mid);
-    border: 1px solid var(--cream-border);
-  }
-
-  .panel-close {
-    width: 28px; height: 28px;
-    border: 1px solid var(--cream-border);
-    border-radius: 50%;
-    background: none;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    color: var(--ink-mid);
-    transition: background 0.15s;
-  }
-
-  .panel-close:hover { background: var(--cream-dark); }
-
-  .panel-title {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.4;
-    margin-bottom: 10px;
-    color: var(--ink);
-  }
-
-  .panel-sub {
-    font-size: 12px;
-    color: var(--ink-light);
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-
-  .panel-divider {
-    border: none;
-    border-top: 1px solid var(--cream-border);
-    margin: 16px 0;
-  }
-
-  .panel-meta-row {
-    display: flex;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--ink-light);
-    margin-bottom: 16px;
-  }
-
-  .panel-meta-row strong {
-    color: var(--ink);
-    font-weight: 500;
-  }
-
-  .panel-summary-label {
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    color: var(--ink-light);
-    margin-bottom: 8px;
-  }
-
-  .panel-summary {
-    font-size: 13px;
-    color: var(--ink-mid);
-    line-height: 1.8;
-    margin-bottom: 20px;
-  }
-
-  .panel-points {
-    list-style: none;
-    margin-bottom: 20px;
-  }
-
-  .panel-points li {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--cream-border);
-    font-size: 13px;
-    color: var(--ink-mid);
-    line-height: 1.6;
-    padding-left: 14px;
-    position: relative;
-  }
-
-  .panel-points li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--accent-red);
-    font-size: 10px;
-  }
-
-  .panel-source {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--ink-light);
-    margin-top: 16px;
-  }
-
-  .panel-link {
-    color: var(--accent-blue);
-    text-decoration: none;
-    font-size: 12px;
-    border-bottom: 1px solid currentColor;
-  }
-
-  .panel-link:hover { opacity: 0.7; }
-
-  .panel-nav {
-    display: flex;
-    gap: 8px;
-    margin-top: 24px;
-  }
-
-  .panel-nav-btn {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid var(--cream-border);
-    border-radius: 4px;
-    background: none;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--ink-mid);
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: background 0.15s;
-  }
-
-  .panel-nav-btn:hover { background: var(--cream-dark); }
-
-  /* ─── FOOTER ─── */
-  footer {
-    border-top: 1px solid var(--cream-border);
-    padding: 20px 32px;
-    font-size: 11px;
-    color: var(--ink-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  /* ─── EDITION SELECTOR ─── */
-  .edition-selector {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .edition-btn {
-    padding: 5px 14px;
-    border: 1px solid var(--cream-border);
-    border-radius: 14px;
-    background: none;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--ink-mid);
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: all 0.15s;
-  }
-
-  .edition-btn:hover { border-color: var(--ink-light); }
-  .edition-btn.active {
-    background: var(--ink);
-    color: var(--cream);
-    border-color: var(--ink);
-  }
-
-  /* ─── LOADING / EMPTY ─── */
-  .loading {
-    text-align: center;
-    padding: 60px 0;
-    color: var(--ink-light);
-    font-size: 13px;
-  }
-
-  /* ─── MODAL (Admin Login) ─── */
-  .modal-backdrop {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(42,34,24,0.55);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .modal-backdrop.show { display: flex; }
-
-  .modal {
-    background: var(--cream);
-    border-radius: 8px;
-    padding: 32px 28px;
-    width: 320px;
-    border: 1px solid var(--cream-border);
-  }
-
-  .modal h3 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 17px;
-    margin-bottom: 6px;
-    color: var(--ink);
-  }
-
-  .modal p {
-    font-size: 12px;
-    color: var(--ink-light);
-    margin-bottom: 20px;
-  }
-
-  .modal input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--cream-border);
-    border-radius: 4px;
-    background: white;
-    font-size: 13px;
-    font-family: 'Noto Sans KR', sans-serif;
-    margin-bottom: 12px;
-    outline: none;
-  }
-
-  .modal input:focus { border-color: var(--ink-mid); }
-
-  .modal-btns {
-    display: flex;
-    gap: 8px;
-  }
-
-  .btn-primary {
-    flex: 1;
-    padding: 10px;
-    background: var(--ink);
-    color: var(--cream);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: opacity 0.15s;
-  }
-
-  .btn-primary:hover { opacity: 0.85; }
-
-  .btn-cancel {
-    padding: 10px 16px;
-    border: 1px solid var(--cream-border);
-    border-radius: 4px;
-    background: none;
-    cursor: pointer;
-    font-size: 13px;
-    color: var(--ink-mid);
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-
-  .error-msg {
-    font-size: 12px;
-    color: var(--accent-red);
-    margin-bottom: 10px;
-    display: none;
-  }
-
-  /* ─── MOBILE BACK BTN ─── */
-  .panel-back-btn {
-    display: none;
-    align-items: center;
-    gap: 6px;
-    background: none;
-    border: none;
-    font-size: 13px;
-    color: var(--ink-mid);
-    font-family: 'Noto Sans KR', sans-serif;
-    cursor: pointer;
-    padding: 0;
-    margin-bottom: 16px;
-  }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 768px) {
-    :root { --panel-width: 100vw; }
-
-    .main-content { padding: 20px 16px 80px; }
-    .main-content.panel-open { margin-right: 0; }
-
-    .detail-panel { top: 0; z-index: 150; }
-    .panel-inner { padding: 20px 18px 60px; }
-
-    .panel-back-btn { display: flex; }
-    .panel-close { display: none; }
-
-    .top5-headline, .news-headline {
-      white-space: normal;
-      word-break: keep-all;
-    }
-
-    .top5-num { font-size: 18px; min-width: 28px; }
-    .site-header { padding: 14px 16px 12px; }
-    .panel-title { font-size: 17px; }
-  }
+:root {
+  --cream: #F2EDE3;
+  --cream-dark: #E8E1D4;
+  --cream-border: #D4CBB8;
+  --ink: #1E1A12;
+  --ink-mid: #52493A;
+  --ink-light: #8A7F6A;
+  --red: #C94A2A;
+  --orange: #E07A3A;
+  --green: #3A7A5A;
+  --blue: #2A5A8A;
+  --max-w: 760px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ─── 상단 바 ─── */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 32px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ink-light);
+  border-bottom: 1px solid var(--cream-border);
+}
+
+.topbar-live { display: flex; align-items: center; gap: 6px; }
+.live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+/* ─── 메인 래퍼 ─── */
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ─── 매거진 헤더 ─── */
+.mag-header {
+  text-align: center;
+  padding: 40px 0 24px;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 32px;
+}
+
+.mag-logo {
+  font-family: 'DM Serif Display', 'Noto Serif KR', serif;
+  font-size: clamp(56px, 12vw, 96px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -2px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.mag-logo span { color: var(--red); font-style: italic; }
+
+.mag-sub {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--ink-light);
+  margin-bottom: 6px;
+}
+
+.mag-date { font-size: 12px; color: var(--ink-mid); }
+
+/* ─── 에디션 셀렉터 ─── */
+.edition-selector {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.edition-btn {
+  padding: 4px 14px;
+  border: 1px solid var(--cream-border);
+  border-radius: 20px;
+  background: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--ink-mid);
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+
+.edition-btn:hover { border-color: var(--ink-light); }
+.edition-btn.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+/* ─── EDITOR'S NOTE ─── */
+.editors-note {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 0 24px;
+  padding: 28px 0;
+  border-top: 1px solid var(--cream-border);
+  border-bottom: 1px solid var(--cream-border);
+  margin-bottom: 48px;
+}
+
+.note-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ink-light);
+  padding-top: 3px;
+}
+
+.note-body { font-size: 13px; color: var(--ink-mid); line-height: 1.9; }
+.note-sig { font-size: 12px; color: var(--ink-light); margin-top: 10px; font-style: italic; }
+
+/* ─── 섹션 헤더 ─── */
+.sec-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.sec-header-left { display: flex; align-items: baseline; gap: 12px; }
+.sec-symbol { font-size: 11px; color: var(--ink-light); letter-spacing: 1px; }
+.sec-title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 700; }
+.sec-count { font-size: 10px; color: var(--ink-light); letter-spacing: 1px; }
+.sec-desc { font-size: 11px; color: var(--ink-light); margin: 6px 0 20px; font-style: italic; }
+
+/* ─── TOP 5 ─── */
+.top5-list { list-style: none; margin-bottom: 48px; }
+
+.top5-item {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: start;
+  gap: 0 16px;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--cream-border);
+  cursor: pointer;
+  transition: background 0.15s;
+  border-radius: 2px;
+}
+
+.top5-item:hover { background: var(--cream-dark); }
+.top5-item.active { background: var(--cream-dark); }
+
+.top5-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--red);
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.top5-item:nth-child(2) .top5-num { color: var(--ink-mid); }
+.top5-item:nth-child(3) .top5-num,
+.top5-item:nth-child(4) .top5-num,
+.top5-item:nth-child(5) .top5-num { color: var(--cream-border); }
+
+.top5-cat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.top5-cat { font-size: 10px; color: var(--ink-light); }
+.top5-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--cream-border); }
+.top5-date-sm { font-size: 10px; color: var(--ink-light); }
+.top5-headline { font-size: 15px; font-weight: 500; line-height: 1.5; word-break: keep-all; }
+
+.top5-badge {
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.top5-badge::before { content:''; width:5px; height:5px; border-radius:50%; }
+.badge-hot { background:#FDEEE9; color:var(--red); }
+.badge-hot::before { background:var(--red); }
+.badge-new { background:#E9F3EE; color:var(--green); }
+.badge-new::before { background:var(--green); }
+.badge-trend { color:var(--blue); }
+.badge-trend::before { background:var(--blue); }
+
+/* ─── NEWS LIST ─── */
+.news-list { list-style: none; margin-bottom: 48px; }
+
+.news-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px 4px;
+  border-bottom: 1px solid var(--cream-border);
+  cursor: pointer;
+  transition: background 0.15s;
+  border-radius: 2px;
+}
+
+.news-item:hover { background: var(--cream-dark); }
+.news-item.active { background: var(--cream-dark); }
+
+.news-body { flex: 1; }
+.news-tags { display:flex; gap:4px; margin-bottom:5px; flex-wrap:wrap; }
+.tag { font-size:10px; padding:1px 8px; border:1px solid var(--cream-border); border-radius:10px; color:var(--ink-light); }
+.news-headline { font-size:14px; font-weight:500; line-height:1.5; margin-bottom:4px; word-break:keep-all; }
+.news-snippet { font-size:12px; color:var(--ink-light); line-height:1.6; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.news-meta { font-size:10px; color:var(--ink-light); white-space:nowrap; padding-top:2px; text-align:right; min-width:40px; }
+
+/* ─── EDITOR'S PICK ─── */
+.pick-block {
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 4px;
+  padding: 24px 28px;
+  margin-bottom: 48px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.pick-block:hover { opacity: 0.92; }
+.pick-label { font-size:10px; letter-spacing:2px; color:var(--orange); margin-bottom:10px; }
+.pick-title { font-family:'Noto Serif KR',serif; font-size:18px; font-weight:700; margin-bottom:10px; line-height:1.5; }
+.pick-desc { font-size:12px; color:#B8B0A0; line-height:1.8; }
+
+/* ─── 푸터 ─── */
+.site-footer {
+  border-top: 1px solid var(--cream-border);
+  padding: 20px 32px;
+  font-size: 11px;
+  color: var(--ink-light);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.loading { text-align:center; padding:80px 0; color:var(--ink-light); }
+
+/* ════════════════════════════
+   OVERLAY MODAL
+════════════════════════════ */
+.overlay-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(30,26,18,0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.overlay-backdrop.show { display: flex; }
+
+.overlay-modal {
+  background: var(--cream);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from { transform:translateY(20px); opacity:0; }
+  to { transform:translateY(0); opacity:1; }
+}
+
+.modal-inner { padding: 28px 32px 36px; }
+
+.modal-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.modal-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.modal-tag { font-size:10px; padding:3px 10px; border-radius:12px; font-weight:500; }
+.modal-tag-cat { background:var(--red); color:white; }
+.modal-tag-sec { background:var(--cream-dark); color:var(--ink-mid); border:1px solid var(--cream-border); }
+
+.modal-close {
+  width:30px; height:30px;
+  border:1px solid var(--cream-border);
+  border-radius:50%;
+  background:none;
+  cursor:pointer;
+  font-size:14px;
+  color:var(--ink-mid);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  transition:background 0.15s;
+}
+
+.modal-close:hover { background:var(--cream-dark); }
+
+.modal-title { font-family:'Noto Serif KR',serif; font-size:20px; font-weight:700; line-height:1.4; margin-bottom:8px; word-break:keep-all; }
+.modal-sub { font-size:12px; color:var(--ink-light); margin-bottom:18px; line-height:1.6; }
+.modal-divider { border:none; border-top:1px solid var(--cream-border); margin:14px 0; }
+.modal-meta { display:flex; gap:20px; font-size:12px; color:var(--ink-light); margin-bottom:16px; flex-wrap:wrap; }
+.modal-meta strong { color:var(--ink); font-weight:500; }
+.modal-summary-label { font-size:10px; letter-spacing:2px; color:var(--ink-light); margin-bottom:8px; }
+.modal-summary { font-size:13px; color:var(--ink-mid); line-height:1.9; margin-bottom:18px; }
+
+.modal-points { list-style:none; margin-bottom:20px; }
+.modal-points li { padding:9px 0 9px 16px; border-bottom:1px solid var(--cream-border); font-size:13px; color:var(--ink-mid); line-height:1.6; position:relative; }
+.modal-points li::before { content:'—'; position:absolute; left:0; color:var(--red); font-size:10px; top:12px; }
+
+.modal-source { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--ink-light); margin-top:16px; }
+.modal-link { color:var(--blue); text-decoration:none; font-size:12px; border-bottom:1px solid currentColor; }
+.modal-link:hover { opacity:0.7; }
+
+.modal-nav { display:flex; gap:8px; margin-top:20px; }
+.modal-nav-btn { flex:1; padding:10px; border:1px solid var(--cream-border); border-radius:4px; background:none; cursor:pointer; font-size:12px; color:var(--ink-mid); font-family:'Noto Sans KR',sans-serif; transition:background 0.15s; }
+.modal-nav-btn:hover { background:var(--cream-dark); }
+.modal-nav-btn:disabled { opacity:0.35; cursor:default; }
+
+/* ─── 관리자 모달 ─── */
+.admin-modal-backdrop { display:none; position:fixed; inset:0; background:rgba(30,26,18,0.55); backdrop-filter:blur(3px); z-index:300; align-items:center; justify-content:center; }
+.admin-modal-backdrop.show { display:flex; }
+.admin-modal { background:var(--cream); border-radius:8px; padding:32px 28px; width:320px; border:1px solid var(--cream-border); }
+.admin-modal h3 { font-family:'Noto Serif KR',serif; font-size:17px; margin-bottom:6px; }
+.admin-modal p { font-size:12px; color:var(--ink-light); margin-bottom:18px; }
+.admin-modal input { width:100%; padding:10px 12px; border:1px solid var(--cream-border); border-radius:4px; background:white; font-size:13px; font-family:'Noto Sans KR',sans-serif; margin-bottom:10px; outline:none; }
+.admin-modal input:focus { border-color:var(--ink-mid); }
+.modal-btns { display:flex; gap:8px; }
+.btn-primary { flex:1; padding:10px; background:var(--ink); color:var(--cream); border:none; border-radius:4px; cursor:pointer; font-size:13px; font-family:'Noto Sans KR',sans-serif; }
+.btn-cancel { padding:10px 16px; border:1px solid var(--cream-border); border-radius:4px; background:none; cursor:pointer; font-size:13px; color:var(--ink-mid); font-family:'Noto Sans KR',sans-serif; }
+.error-msg { font-size:12px; color:var(--red); margin-bottom:8px; display:none; }
+
+/* ─── 반응형 ─── */
+@media (max-width: 640px) {
+  .wrap { padding: 0 16px; }
+  .topbar { padding: 10px 16px; }
+  .mag-header { padding: 28px 0 18px; }
+  .editors-note { grid-template-columns: 1fr; gap: 8px 0; }
+  .top5-item { grid-template-columns: 40px 1fr auto; }
+  .top5-num { font-size: 28px; }
+  .modal-inner { padding: 20px 18px 28px; }
+  .overlay-backdrop { padding: 0; align-items: flex-end; }
+  .overlay-modal { max-height: 92vh; border-radius: 12px 12px 0 0; }
+  .site-footer { flex-direction: column; gap: 4px; }
+}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="site-header">
-  <a class="site-logo" href="#">HR<span>시그널</span></a>
-  <div class="site-meta">
-    <span id="edition-label">매일유업 피플팀</span><br>
-    <a class="admin-link" onclick="openAdminLogin()">관리자 ↗</a>
+<!-- 상단 바 -->
+<div class="topbar">
+  <div class="topbar-live">
+    <div class="live-dot"></div>
+    <span>LIVE SIGNAL</span>
   </div>
-</header>
-
-<!-- LAYOUT -->
-<div class="layout">
-  <main class="main-content" id="main">
-    <div class="loading" id="loading">불러오는 중...</div>
-    <div id="content" style="display:none"></div>
-  </main>
-
-  <!-- DETAIL PANEL -->
-  <aside class="detail-panel" id="detail-panel">
-    <div class="panel-inner" id="panel-inner">
-      <!-- JS로 채워짐 -->
-    </div>
-  </aside>
+  <div style="display:flex;gap:20px;align-items:center;">
+    <span id="issue-label">ISSUE NO. —</span>
+    <span onclick="openAdminLogin()" style="font-size:10px;letter-spacing:1px;color:var(--ink-light);cursor:pointer;border-bottom:1px solid var(--cream-border);">관리자 ↗</span>
+  </div>
 </div>
 
-<footer>
+<!-- 본문 -->
+<div class="wrap">
+  <div class="mag-header">
+    <div class="mag-logo">hr<span>시그널</span></div>
+    <div class="mag-sub">KOREAN HR WEEKLY · EDITORIAL DIGEST</div>
+    <div class="mag-date" id="mag-date">—</div>
+  </div>
+
+  <div class="edition-selector" id="edition-selector" style="display:none"></div>
+
+  <div id="loading" class="loading">불러오는 중...</div>
+  <div id="content" style="display:none"></div>
+</div>
+
+<footer class="site-footer">
   <span>© HR시그널 · 매일유업 피플팀</span>
   <span id="footer-date"></span>
 </footer>
 
-<!-- ADMIN LOGIN MODAL -->
-<div class="modal-backdrop" id="admin-modal">
-  <div class="modal">
+<!-- 기사 오버레이 -->
+<div class="overlay-backdrop" id="overlay" onclick="handleBackdropClick(event)">
+  <div class="overlay-modal" id="overlay-modal">
+    <div class="modal-inner" id="modal-inner"></div>
+  </div>
+</div>
+
+<!-- 관리자 로그인 -->
+<div class="admin-modal-backdrop" id="admin-modal">
+  <div class="admin-modal">
     <h3>관리자 로그인</h3>
     <p>관리자 비밀번호를 입력하세요.</p>
     <div class="error-msg" id="login-error">비밀번호가 올바르지 않습니다.</div>
@@ -708,12 +416,10 @@
   </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
-// ★ 여기에 Firebase 설정 입력
 const firebaseConfig = {
   apiKey: "AIzaSyBIH03tDDCNSZHdq0_ru-4LnvaehECycSY",
   authDomain: "hrsignal.firebaseapp.com",
@@ -727,216 +433,190 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window._db = db;
-window._ref = ref;
-window._get = get;
-
-// 에디션 목록 로드
-const editionsRef = ref(db, 'editions');
-onValue(editionsRef, (snapshot) => {
+onValue(ref(db, 'editions'), (snapshot) => {
   const data = snapshot.val();
-  if (!data) {
-    document.getElementById('loading').textContent = '등록된 기사가 없습니다.';
-    return;
-  }
+  if (!data) { document.getElementById('loading').textContent = '등록된 기사가 없습니다.'; return; }
   const keys = Object.keys(data).sort().reverse();
   window._editionsData = data;
   window._editionKeys = keys;
-  renderEditionSelector(keys, data);
-  loadEdition(keys[0], data[keys[0]]);
+  initPage(keys, data);
 });
 </script>
 
 <script>
-const ADMIN_PASSWORD = 'maeil2024'; // ★ 변경하세요
-
-// ─── PANEL STATE ───
+const ADMIN_PASSWORD = 'maeil2024';
 let currentArticles = [];
 let currentIndex = -1;
 
-// ─── EDITION SELECTOR ───
-function renderEditionSelector(keys, data) {
+function initPage(keys, data) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = 'block';
 
-  const el = document.createElement('div');
-  el.className = 'edition-selector';
-  keys.forEach((k, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'edition-btn' + (i === 0 ? ' active' : '');
-    btn.textContent = data[k].title || k;
-    btn.onclick = () => {
-      document.querySelectorAll('.edition-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      loadEdition(k, data[k]);
-      closePanel();
-    };
-    el.appendChild(btn);
-  });
+  const sel = document.getElementById('edition-selector');
+  if (keys.length > 1) {
+    sel.style.display = 'flex';
+    keys.forEach((k, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'edition-btn' + (i === 0 ? ' active' : '');
+      btn.textContent = data[k].title || k;
+      btn.onclick = () => {
+        document.querySelectorAll('.edition-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderEdition(data[k]);
+        closeModal();
+      };
+      sel.appendChild(btn);
+    });
+  }
 
-  const content = document.getElementById('content');
-  content.innerHTML = '';
-  content.appendChild(el);
-  content.appendChild(document.createElement('div')).id = 'edition-body';
+  renderEdition(data[keys[0]]);
 }
 
-// ─── LOAD EDITION ───
-function loadEdition(key, edition) {
+function renderEdition(edition) {
+  currentArticles = [];
+
+  const num = (edition.title || '').replace(/[^0-9]/g, '');
+  document.getElementById('issue-label').textContent = num ? `ISSUE NO. ${num.padStart(3,'0')}` : 'HR시그널';
+  document.getElementById('mag-date').textContent = edition.date || '';
   document.getElementById('footer-date').textContent = edition.date || '';
-  document.getElementById('edition-label').textContent = `매일유업 피플팀 · ${edition.title || ''}`;
 
   let html = '';
 
-  // Edition header
-  html += `
-    <div class="edition-header">
-      <div class="edition-number">HR시그널 · ${edition.title || ''}</div>
-      <div class="edition-title">${edition.intro_title || '이번 주 HR 핵심 이슈'}</div>
-      <div class="edition-date">${edition.date || ''}</div>
-      ${edition.intro ? `<p class="edition-intro">${edition.intro}</p>` : ''}
+  if (edition.intro) {
+    html += `<div class="editors-note">
+      <div class="note-label">EDITOR'S NOTE</div>
+      <div class="note-body">${edition.intro}<div class="note-sig">— 편집자 K.</div></div>
     </div>`;
+  }
 
-  // 모든 기사 flat하게 수집 (패널 nav용)
-  currentArticles = [];
-
-  // TOP 5
   if (edition.top5 && edition.top5.length) {
-    html += `<section class="section">
-      <div class="section-header">
-        <span class="section-title">이번 주 Top 5</span>
-        <span class="section-count">${edition.top5.length} ARTICLES</span>
+    html += `<div class="sec-header">
+      <div class="sec-header-left">
+        <span class="sec-symbol">§ 00</span>
+        <span class="sec-title">이번 주 Top 5</span>
       </div>
-      <ul class="top5-list">`;
+      <span class="sec-count">${edition.top5.length.toString().padStart(2,'0')} 건</span>
+    </div>
+    <div class="sec-desc">인급량·정책 임팩트 기준 편집자 선정</div>
+    <ul class="top5-list">`;
     edition.top5.forEach((item, i) => {
       const idx = currentArticles.length;
       currentArticles.push({ ...item, _section: '이번 주 Top 5' });
-      const badge = item.badge || '';
-      html += `
-        <li class="top5-item" onclick="openPanel(${idx})" id="art-${idx}">
-          <span class="top5-num">0${i+1}</span>
-          <div class="top5-body">
-            <div class="top5-cat">${item.category || ''}</div>
-            <div class="top5-headline">${item.title}</div>
-            <div class="top5-meta">${item.source || ''} · ${item.date || ''}</div>
+      const badge = item.badge;
+      html += `<li class="top5-item" onclick="openModal(${idx})" id="art-${idx}">
+        <span class="top5-num">${String(i+1).padStart(2,'0')}</span>
+        <div class="top5-body">
+          <div class="top5-cat-row">
+            <span class="top5-cat">${item.category||''}</span>
+            ${item.date?`<span class="top5-dot"></span><span class="top5-date-sm">${item.date}</span>`:''}
           </div>
-          ${badge ? `<span class="top5-badge badge-${badge.type || 'hot'}">${badge.label || ''}</span>` : ''}
-        </li>`;
+          <div class="top5-headline">${item.title}</div>
+        </div>
+        ${badge?`<span class="top5-badge badge-${badge.type||'hot'}">${badge.label||''}</span>`:''}
+      </li>`;
     });
-    html += `</ul></section>`;
+    html += `</ul>`;
   }
 
-  // Editor's Pick
   if (edition.editors_pick) {
     const ep = edition.editors_pick;
     const idx = currentArticles.length;
     currentArticles.push({ ...ep, _section: "Editor's Pick" });
-    html += `
-      <div class="editors-pick" onclick="openPanel(${idx})">
-        <div class="pick-label">★ EDITOR'S PICK</div>
-        <div class="pick-title">${ep.title}</div>
-        <div class="pick-desc">${ep.summary || ''}</div>
-      </div>`;
+    html += `<div class="pick-block" onclick="openModal(${idx})">
+      <div class="pick-label">★ EDITOR'S PICK</div>
+      <div class="pick-title">${ep.title}</div>
+      ${ep.summary?`<div class="pick-desc">${ep.summary}</div>`:''}
+    </div>`;
   }
 
-  // 카테고리 섹션들
-  const sections = edition.sections || [];
-  sections.forEach(sec => {
+  (edition.sections||[]).forEach((sec, si) => {
     if (!sec.articles || !sec.articles.length) return;
-    html += `<section class="section">
-      <div class="section-header">
-        <span class="section-title">${sec.title}</span>
-        <span class="section-count">${sec.articles.length} ARTICLES</span>
+    html += `<div class="sec-header" style="margin-top:8px;">
+      <div class="sec-header-left">
+        <span class="sec-symbol">§ ${String(si+1).padStart(2,'0')}</span>
+        <span class="sec-title">${sec.title}</span>
       </div>
-      <ul class="news-list">`;
+      <span class="sec-count">${sec.articles.length.toString().padStart(2,'0')} 건</span>
+    </div>
+    <div class="sec-desc"></div>
+    <ul class="news-list">`;
     sec.articles.forEach(item => {
       const idx = currentArticles.length;
       currentArticles.push({ ...item, _section: sec.title });
-      const tags = (item.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-      html += `
-        <li class="news-item" onclick="openPanel(${idx})" id="art-${idx}">
-          <div class="news-body">
-            <div class="news-tags">${tags}</div>
-            <div class="news-headline">${item.title}</div>
-            <div class="news-snippet">${item.summary || ''}</div>
-          </div>
-          <div class="news-date">${item.date || ''}</div>
-        </li>`;
+      const tags = (item.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+      html += `<li class="news-item" onclick="openModal(${idx})" id="art-${idx}">
+        <div class="news-body">
+          ${tags?`<div class="news-tags">${tags}</div>`:''}
+          <div class="news-headline">${item.title}</div>
+          ${item.summary?`<div class="news-snippet">${item.summary}</div>`:''}
+        </div>
+        <div class="news-meta">${item.date||''}</div>
+      </li>`;
     });
-    html += `</ul></section>`;
+    html += `</ul>`;
   });
 
-  const body = document.getElementById('edition-body') || (() => {
-    const d = document.createElement('div');
-    d.id = 'edition-body';
-    document.getElementById('content').appendChild(d);
-    return d;
-  })();
-  body.innerHTML = html;
+  document.getElementById('content').innerHTML = html;
 }
 
-// ─── DETAIL PANEL ───
-function openPanel(idx) {
-  // 같은 기사 재클릭 시 패널 닫기
-  if (currentIndex === idx) {
-    closePanel();
-    return;
-  }
-
+function openModal(idx) {
+  if (currentIndex === idx) { closeModal(); return; }
   currentIndex = idx;
   const item = currentArticles[idx];
 
-  document.querySelectorAll('.top5-item, .news-item, .editors-pick').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.top5-item,.news-item,.pick-block').forEach(el => el.classList.remove('active'));
   const el = document.getElementById(`art-${idx}`);
   if (el) el.classList.add('active');
 
-  const points = (item.points || []).map(p => `<li>${p}</li>`).join('');
+  const points = (item.points||[]).map(p=>`<li>${p}</li>`).join('');
 
-  document.getElementById('panel-inner').innerHTML = `
-    <button class="panel-back-btn" onclick="closePanel()">← 목록으로</button>
-    <div class="panel-top">
-      <div class="panel-tags">
-        <span class="panel-tag panel-tag-cat">${item.category || item._section || ''}</span>
-        ${item._section ? `<span class="panel-tag panel-tag-section">${item._section}</span>` : ''}
+  document.getElementById('modal-inner').innerHTML = `
+    <div class="modal-top">
+      <div class="modal-tags">
+        <span class="modal-tag modal-tag-cat">${item.category||item._section||''}</span>
+        ${item._section?`<span class="modal-tag modal-tag-sec">${item._section}</span>`:''}
       </div>
-      <button class="panel-close" onclick="closePanel()">✕</button>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="panel-title">${item.title}</div>
-    <div class="panel-sub">${item.sub || '이번 주 가장 많이 언급된 이슈 중 하나입니다.'}</div>
-    <hr class="panel-divider">
-    <div class="panel-meta-row">
-      <span>카테고리: <strong>${item.category || item._section || '-'}</strong></span>
-      <span>발표일: <strong>${item.date || '-'}</strong></span>
+    <div class="modal-title">${item.title}</div>
+    <div class="modal-sub">${item.sub||'이번 주 가장 많이 언급된 이슈 중 하나입니다.'}</div>
+    <hr class="modal-divider">
+    <div class="modal-meta">
+      <span>카테고리: <strong>${item.category||item._section||'-'}</strong></span>
+      <span>발표일: <strong>${item.date||'-'}</strong></span>
+      <span>출처: <strong>${item.source||'-'}</strong></span>
     </div>
-    ${item.summary ? `
-      <div class="panel-summary-label">SUMMARY</div>
-      <div class="panel-summary">${item.summary}</div>` : ''}
-    ${points ? `<ul class="panel-points">${points}</ul>` : ''}
-    <div class="panel-source">
-      <span>출처 · ${item.source || '-'}</span>
-      ${item.url ? `<a class="panel-link" href="${item.url}" target="_blank">원문 보기 →</a>` : ''}
+    ${item.summary?`<div class="modal-summary-label">SUMMARY</div><div class="modal-summary">${item.summary}</div>`:''}
+    ${points?`<ul class="modal-points">${points}</ul>`:''}
+    <div class="modal-source">
+      <span></span>
+      ${item.url?`<a class="modal-link" href="${item.url}" target="_blank">원문 보기 →</a>`:''}
     </div>
-    <div class="panel-nav">
-      <button class="panel-nav-btn" onclick="navPanel(-1)">← 이전 기사</button>
-      <button class="panel-nav-btn" onclick="navPanel(1)">다음 기사 →</button>
+    <div class="modal-nav">
+      <button class="modal-nav-btn" onclick="navModal(-1)" ${idx===0?'disabled':''}>← 이전 기사</button>
+      <button class="modal-nav-btn" onclick="navModal(1)" ${idx===currentArticles.length-1?'disabled':''}>다음 기사 →</button>
     </div>`;
 
-  document.getElementById('detail-panel').classList.add('open');
-  document.getElementById('main').classList.add('panel-open');
+  document.getElementById('overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
 }
 
-function closePanel() {
-  document.getElementById('detail-panel').classList.remove('open');
-  document.getElementById('main').classList.remove('panel-open');
-  document.querySelectorAll('.top5-item, .news-item, .editors-pick').forEach(el => el.classList.remove('active'));
+function closeModal() {
+  document.getElementById('overlay').classList.remove('show');
+  document.body.style.overflow = '';
+  document.querySelectorAll('.top5-item,.news-item,.pick-block').forEach(el => el.classList.remove('active'));
   currentIndex = -1;
 }
 
-function navPanel(dir) {
-  const next = currentIndex + dir;
-  if (next >= 0 && next < currentArticles.length) openPanel(next);
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
 }
 
-// ─── ADMIN LOGIN ───
+function navModal(dir) {
+  const next = currentIndex + dir;
+  if (next >= 0 && next < currentArticles.length) openModal(next);
+}
+
 function openAdminLogin() {
   document.getElementById('admin-modal').classList.add('show');
   setTimeout(() => document.getElementById('admin-pw').focus(), 100);
@@ -960,9 +640,8 @@ function tryLogin() {
   }
 }
 
-// ESC to close
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closePanel(); closeAdminLogin(); }
+  if (e.key === 'Escape') { closeModal(); closeAdminLogin(); }
 });
 </script>
 </body>
