@@ -81,8 +81,8 @@
 
   .main-content {
     flex: 1;
-    max-width: 680px;
-    padding: 32px 32px 80px;
+    max-width: 900px;
+    padding: 28px 40px 80px;
     transition: margin-right 0.35s ease;
   }
 
@@ -624,11 +624,42 @@
     display: none;
   }
 
+  /* ─── MOBILE BACK BTN ─── */
+  .panel-back-btn {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: var(--ink-mid);
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+
   /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
     :root { --panel-width: 100vw; }
+
+    .main-content { padding: 20px 16px 80px; }
     .main-content.panel-open { margin-right: 0; }
-    .detail-panel { top: 0; }
+
+    .detail-panel { top: 0; z-index: 150; }
+    .panel-inner { padding: 20px 18px 60px; }
+
+    .panel-back-btn { display: flex; }
+    .panel-close { display: none; }
+
+    .top5-headline, .news-headline {
+      white-space: normal;
+      word-break: keep-all;
+    }
+
+    .top5-num { font-size: 18px; min-width: 28px; }
+    .site-header { padding: 14px 16px 12px; }
+    .panel-title { font-size: 17px; }
   }
 </style>
 </head>
@@ -845,6 +876,12 @@ function loadEdition(key, edition) {
 
 // ─── DETAIL PANEL ───
 function openPanel(idx) {
+  // 같은 기사 재클릭 시 패널 닫기
+  if (currentIndex === idx) {
+    closePanel();
+    return;
+  }
+
   currentIndex = idx;
   const item = currentArticles[idx];
 
@@ -855,6 +892,7 @@ function openPanel(idx) {
   const points = (item.points || []).map(p => `<li>${p}</li>`).join('');
 
   document.getElementById('panel-inner').innerHTML = `
+    <button class="panel-back-btn" onclick="closePanel()">← 목록으로</button>
     <div class="panel-top">
       <div class="panel-tags">
         <span class="panel-tag panel-tag-cat">${item.category || item._section || ''}</span>
