@@ -418,6 +418,7 @@
   <div class="admin-logo">HR<span>시그널</span> 관리자</div>
   <div class="header-actions">
     <a href="index.html" class="btn btn-outline">← 뉴스레터 보기</a>
+    <button class="btn btn-danger" onclick="deleteCurrentEdition()">에디션 삭제</button>
     <button class="btn btn-white" onclick="saveAll()">저장 & 발행</button>
   </div>
 </header>
@@ -486,20 +487,50 @@ function renderSidebar() {
     const ed = _data[k];
     const item = document.createElement('div');
     item.className = 'edition-item' + (k === _currentKey ? ' active' : '');
+    item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
     item.innerHTML = `
-      <div class="edition-item-title">${ed.title || k}</div>
-      <div class="edition-item-date">${ed.date || ''}</div>`;
-    item.onclick = () => selectEdition(k);
+      <div onclick="selectEditionByKey('${k}')" style="flex:1;cursor:pointer;">
+        <div class="edition-item-title">${ed.title || k}</div>
+        <div class="edition-item-date">${ed.date || ''}</div>
+      </div>
+      <button onclick="deleteEdition('${k}')" title="에디션 삭제"
+        style="background:none;border:none;cursor:pointer;color:#8A7F6A;font-size:14px;
+        padding:4px 6px;border-radius:3px;flex-shrink:0;line-height:1;"
+        onmouseover="this.style.color='#C94A2A';this.style.background='#FDEEE9'"
+        onmouseout="this.style.color='#8A7F6A';this.style.background='none'">✕</button>`;
     list.appendChild(item);
   });
 }
 
-// ─── SELECT EDITION ───
-function selectEdition(key) {
+function selectEditionByKey(key) {
   _currentKey = key;
   document.querySelectorAll('.edition-item').forEach(el => el.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  const items = document.querySelectorAll('.edition-item');
+  items.forEach(el => {
+    if (el.querySelector(`[onclick="selectEditionByKey('${key}')"]`)) el.classList.add('active');
+  });
   renderEditor(_data[key]);
+}
+
+function deleteEdition(key) {
+  const title = _data[key]?.title || key;
+  if (!confirm(`"${title}" 에디션을 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.`)) return;
+  _remove(_ref(_db, `editions/${key}`)).then(() => {
+    toast(`"${title}" 에디션이 삭제되었습니다.`);
+    if (_currentKey === key) {
+      _currentKey = null;
+      document.getElementById('admin-main').innerHTML = `
+        <div class="empty-state">
+          <h3>에디션을 선택하거나 새로 만드세요</h3>
+          <p>왼쪽 사이드바에서 에디션을 선택하면 편집할 수 있습니다.</p>
+        </div>`;
+    }
+  }).catch(err => toast('삭제 실패: ' + err.message));
+}
+
+// ─── SELECT EDITION ───
+function selectEdition(key) {
+  selectEditionByKey(key);
 }
 
 // ─── CREATE NEW EDITION ───
