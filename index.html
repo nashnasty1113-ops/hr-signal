@@ -585,8 +585,10 @@ function openModal(idx) {
   document.getElementById('modal-inner').innerHTML = `
     <div class="modal-top">
       <div class="modal-tags">
-        <span class="modal-tag modal-tag-cat">${item.category||item._section||''}</span>
-        ${item._section && item._section !== item.category?`<span class="modal-tag modal-tag-sec">${item._section}</span>`:''}
+        ${(item.tags && item.tags.length)
+          ? item.tags.map(t=>`<span class="modal-tag modal-tag-sec">${t}</span>`).join('')
+          : `<span class="modal-tag modal-tag-cat">${item.category||item._section||''}</span>
+             ${item._section && item._section !== item.category?`<span class="modal-tag modal-tag-sec">${item._section}</span>`:''}`}
       </div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
