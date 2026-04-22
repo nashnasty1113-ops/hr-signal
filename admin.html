@@ -393,6 +393,215 @@
     color: var(--ink-mid);
   }
 
+  /* ─── TOP5 PANEL ─── */
+  .top5-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 320px;
+  }
+
+  .top5-pool {
+    border-right: 1px solid var(--cream-border);
+    padding: 16px;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+
+  .top5-selected {
+    padding: 16px;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+
+  .top5-panel-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-light);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .top5-panel-label strong {
+    font-size: 12px;
+    color: var(--ink-mid);
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  .pool-section-group {
+    margin-bottom: 14px;
+  }
+
+  .pool-section-name {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--cream-border);
+    margin-bottom: 6px;
+  }
+
+  .pool-article-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.13s;
+    background: white;
+  }
+
+  .pool-article-item:hover {
+    border-color: var(--cream-border);
+    background: var(--cream-dark);
+  }
+
+  .pool-article-item.in-top5 {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .pool-article-item.in-top5:hover {
+    background: white;
+    border-color: transparent;
+  }
+
+  .pool-article-text {
+    flex: 1;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--ink);
+    word-break: keep-all;
+  }
+
+  .pool-article-meta {
+    font-size: 10px;
+    color: var(--ink-light);
+    white-space: nowrap;
+  }
+
+  .pool-add-btn {
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Noto Sans KR', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .pool-add-btn:hover { opacity: 0.85; }
+
+  .top5-selected-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--cream-border);
+    border-radius: 5px;
+    margin-bottom: 8px;
+    background: white;
+    cursor: grab;
+  }
+
+  .top5-selected-item:active { cursor: grabbing; }
+  .top5-selected-item.drag-over { border-color: var(--accent-red); background: #FEF0F0; }
+
+  .top5-rank-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent-red);
+    line-height: 1;
+    min-width: 28px;
+    padding-top: 2px;
+  }
+
+  .top5-selected-item:nth-child(2) .top5-rank-num { color: var(--ink-mid); }
+  .top5-selected-item:nth-child(n+3) .top5-rank-num { color: var(--cream-border); }
+
+  .top5-selected-body { flex: 1; }
+
+  .top5-selected-title {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+    word-break: keep-all;
+    margin-bottom: 4px;
+  }
+
+  .top5-selected-sec {
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  .top5-selected-badge {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .top5-badge-input {
+    font-size: 11px;
+    padding: 3px 7px;
+    border: 1px solid var(--cream-border);
+    border-radius: 3px;
+    background: white;
+    width: 80px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .top5-badge-select {
+    font-size: 11px;
+    padding: 3px 6px;
+    border: 1px solid var(--cream-border);
+    border-radius: 3px;
+    background: white;
+    width: 80px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .top5-remove-btn {
+    background: none;
+    border: 1px solid #FACCCC;
+    color: var(--accent-red);
+    border-radius: 3px;
+    padding: 3px 7px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .top5-remove-btn:hover { background: #FEF0F0; }
+
+  .top5-empty-msg {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--ink-light);
+    font-size: 12px;
+    border: 1px dashed var(--cream-border);
+    border-radius: 5px;
+  }
+
+  .top5-drag-hint {
+    font-size: 10px;
+    color: var(--ink-light);
+    text-align: center;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+
   /* ─── EDITION FORM ─── */
   .edition-form-block {
     background: white;
@@ -614,17 +823,24 @@ function renderEditor(edition) {
       </div>
     </div>`;
 
-  // TOP 5
+  // TOP 5 — 선정 패널 (기사는 섹션에서 골라서 추가)
   html += `<div class="section-block">
     <div class="section-block-header">
       <span class="section-block-title">이번 주 Top 5</span>
-      <button class="btn btn-success" onclick="addArticle('top5')" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
+      <span style="font-size:11px;color:var(--ink-light);">섹션 기사 중 선택 → 드래그로 순서 변경</span>
     </div>
-    <div class="section-block-body" id="top5-list">`;
-  (ed.top5 || []).forEach((a, i) => {
-    html += articleCard(a, 'top5', i, true);
-  });
-  html += `</div></div>`;
+    <div class="top5-panel">
+      <div class="top5-pool" id="top5-pool">
+        <div class="top5-panel-label">기사 풀 <strong id="pool-count">섹션을 먼저 추가하세요</strong></div>
+        <div id="pool-articles-list"></div>
+      </div>
+      <div class="top5-selected">
+        <div class="top5-panel-label">선정된 Top 5 <strong id="top5-count">0 / 5</strong></div>
+        <div id="top5-selected-list"></div>
+        <div class="top5-drag-hint">↕ 드래그로 순서 변경</div>
+      </div>
+    </div>
+  </div>`;
 
   // Editor's Pick
   const ep = ed.editors_pick || {};
@@ -686,6 +902,21 @@ function renderEditor(edition) {
 
   main.innerHTML = html;
   window._editingEdition = ed;
+  // Top5 패널 렌더: 기존 top5 항목을 섹션 기사와 제목 매칭
+  const rawTop5 = ed.top5 || [];
+  window._top5Selected = rawTop5.map(t5 => {
+    let matched = null;
+    (ed.sections || []).forEach((sec, si) => {
+      (sec.articles || []).forEach((art, ai) => {
+        if (!matched && art.title === t5.title) {
+          matched = { ...art, _secIdx: si, _artIdx: ai, badge: t5.badge || null };
+        }
+      });
+    });
+    // 매칭 안 되면 orphan으로 보관 (섹션 삭제된 경우)
+    return matched || { ...t5, _secIdx: -1, _artIdx: -1 };
+  });
+  renderTop5Panel();
 }
 
 // ─── ARTICLE CARD HTML ───
@@ -799,6 +1030,7 @@ function addArticle(type, secIdx) {
     sec.articles.push(blank);
     const html = articleCard(blank, 'sec', idx, false, secIdx);
     document.getElementById(`sec-${secIdx}-list`).insertAdjacentHTML('beforeend', html);
+    renderPoolArticles();
   }
 }
 
@@ -807,6 +1039,13 @@ function deleteArticle(e, type, idx, secIdx) {
   e.stopPropagation();
   if (!confirm('이 기사를 삭제할까요?')) return;
   const card = e.target.closest('.article-card');
+  // Top5에서도 해당 기사 제거
+  if (type === 'sec') {
+    window._top5Selected = (window._top5Selected || []).filter(
+      s => !(s._secIdx == secIdx && s._artIdx == idx)
+    );
+    renderTop5Panel();
+  }
   card.remove();
   toast('기사가 삭제되었습니다.');
 }
@@ -873,6 +1112,163 @@ function removePoint(btn) {
   btn.parentElement.remove();
 }
 
+// ─── TOP5 PANEL ───
+window._top5Selected = []; // { title, date, category, source, sub, summary, url, points, tags, badge, _secIdx, _artIdx }
+window._dragSrcIdx = null;
+
+function renderTop5Panel() {
+  renderPoolArticles();
+  renderTop5Selected();
+}
+
+function renderPoolArticles() {
+  const poolEl = document.getElementById('pool-articles-list');
+  const countEl = document.getElementById('pool-count');
+  if (!poolEl) return;
+
+  const sections = window._editingEdition.sections || [];
+  // 현재 top5에 선정된 기사 식별자 목록
+  const selectedKeys = window._top5Selected.map(s => `${s._secIdx}-${s._artIdx}`);
+
+  let html = '';
+  let total = 0;
+
+  sections.forEach((sec, si) => {
+    const arts = sec.articles || [];
+    if (!arts.length) return;
+    html += `<div class="pool-section-group">
+      <div class="pool-section-name">§ ${sec.title}</div>`;
+    arts.forEach((a, ai) => {
+      total++;
+      const key = `${si}-${ai}`;
+      const inTop5 = selectedKeys.includes(key);
+      html += `<div class="pool-article-item ${inTop5 ? 'in-top5' : ''}" data-si="${si}" data-ai="${ai}">
+        <div class="pool-article-text">${a.title || '(제목 없음)'}</div>
+        <div class="pool-article-meta">${a.date || ''}</div>
+        ${inTop5
+          ? `<span style="font-size:10px;color:var(--accent-green);padding:3px 8px;">✓ 선정됨</span>`
+          : `<button class="pool-add-btn" onclick="addToTop5(${si},${ai})">+ Top5</button>`}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  if (!total) {
+    html = `<div style="text-align:center;padding:24px;color:var(--ink-light);font-size:12px;">
+      섹션에 기사를 먼저 추가하세요
+    </div>`;
+    countEl.textContent = '섹션 기사 없음';
+  } else {
+    countEl.textContent = `${total}개 기사`;
+  }
+
+  poolEl.innerHTML = html;
+}
+
+function renderTop5Selected() {
+  const el = document.getElementById('top5-selected-list');
+  const countEl = document.getElementById('top5-count');
+  if (!el) return;
+
+  countEl.textContent = `${window._top5Selected.length} / 5`;
+
+  if (!window._top5Selected.length) {
+    el.innerHTML = `<div class="top5-empty-msg">왼쪽에서 기사를 선택하세요</div>`;
+    return;
+  }
+
+  let html = '';
+  window._top5Selected.forEach((item, i) => {
+    const sec = (window._editingEdition.sections || [])[item._secIdx];
+    const secName = sec ? sec.title : '섹션';
+    const badgeLabel = item.badge ? item.badge.label || '' : '';
+    const badgeType = item.badge ? item.badge.type || 'hot' : 'hot';
+    html += `<div class="top5-selected-item" draggable="true"
+        ondragstart="dragStart(event,${i})"
+        ondragover="dragOver(event,${i})"
+        ondrop="dragDrop(event,${i})"
+        ondragleave="dragLeave(event)"
+        ondragend="dragEnd(event)">
+      <div class="top5-rank-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="top5-selected-body">
+        <div class="top5-selected-title">${item.title || '(제목 없음)'}</div>
+        <div class="top5-selected-sec">${secName} · ${item.date || ''}</div>
+      </div>
+      <div class="top5-selected-badge">
+        <input class="top5-badge-input" type="text" placeholder="뱃지 (HOT 등)"
+          value="${badgeLabel}"
+          onchange="updateTop5Badge(${i},'label',this.value)">
+        <select class="top5-badge-select" onchange="updateTop5Badge(${i},'type',this.value)">
+          <option value="hot" ${badgeType==='hot'?'selected':''}>🔴 hot</option>
+          <option value="new" ${badgeType==='new'?'selected':''}>🟢 new</option>
+          <option value="trend" ${badgeType==='trend'?'selected':''}>🔵 trend</option>
+        </select>
+        <button class="top5-remove-btn" onclick="removeFromTop5(${i})">✕ 해제</button>
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function addToTop5(si, ai) {
+  if (window._top5Selected.length >= 5) {
+    toast('Top5는 최대 5개까지 선정할 수 있습니다.'); return;
+  }
+  const sec = (window._editingEdition.sections || [])[si];
+  if (!sec) return;
+  const art = (sec.articles || [])[ai];
+  if (!art) return;
+
+  window._top5Selected.push({ ...art, _secIdx: si, _artIdx: ai, badge: null });
+  renderTop5Panel();
+  toast(`"${art.title || '기사'}"가 Top5에 추가되었습니다.`);
+}
+
+function removeFromTop5(rank) {
+  window._top5Selected.splice(rank, 1);
+  renderTop5Panel();
+}
+
+function updateTop5Badge(rank, field, val) {
+  const item = window._top5Selected[rank];
+  if (!item.badge) item.badge = { label: '', type: 'hot' };
+  item.badge[field] = val;
+}
+
+// ─── DRAG & DROP (Top5 순서 변경) ───
+function dragStart(e, idx) {
+  window._dragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.style.opacity = '0.5';
+}
+
+function dragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+
+function dragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function dragDrop(e, idx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const src = window._dragSrcIdx;
+  if (src === null || src === idx) return;
+  const moved = window._top5Selected.splice(src, 1)[0];
+  window._top5Selected.splice(idx, 0, moved);
+  renderTop5Selected();
+}
+
+function dragEnd(e) {
+  e.currentTarget.style.opacity = '';
+  document.querySelectorAll('.top5-selected-item').forEach(el => el.classList.remove('drag-over'));
+  window._dragSrcIdx = null;
+}
+
 // ─── SAVE ALL ───
 function saveAll() {
   // 기본 정보 수집
@@ -886,10 +1282,31 @@ function saveAll() {
     sections: []
   };
 
-  // TOP 5 수집
-  document.querySelectorAll('#top5-list .article-card').forEach(card => {
-    const a = collectArticleFromCard(card, true);
-    edition.top5.push(a);
+  // TOP 5 — _top5Selected에서 수집 (섹션 기사 데이터 + 뱃지)
+  (window._top5Selected || []).forEach(item => {
+    const sec = (edition.sections.length ? null : null); // placeholder
+    // 섹션 기사 최신값을 DOM에서 읽기
+    const secIdx = item._secIdx;
+    const artIdx = item._artIdx;
+    const secBlock = document.querySelector(`[id="sec-${secIdx}-list"]`);
+    let artData = { ...item };
+    if (secBlock) {
+      const cards = secBlock.querySelectorAll('.article-card');
+      const card = cards[artIdx];
+      if (card) artData = { ...artData, ...collectArticleFromCard(card, false) };
+    }
+    const top5Entry = {
+      title: artData.title || '',
+      date: artData.date || '',
+      category: artData.category || '',
+      source: artData.source || '',
+      sub: artData.sub || '',
+      summary: artData.summary || '',
+      url: artData.url || '',
+      points: artData.points || [],
+    };
+    if (item.badge && item.badge.label) top5Entry.badge = item.badge;
+    edition.top5.push(top5Entry);
   });
 
   // Editor's Pick
