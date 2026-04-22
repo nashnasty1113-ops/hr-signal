@@ -586,7 +586,7 @@ function openModal(idx) {
     <div class="modal-top">
       <div class="modal-tags">
         <span class="modal-tag modal-tag-cat">${item.category||item._section||''}</span>
-        ${item._section?`<span class="modal-tag modal-tag-sec">${item._section}</span>`:''}
+        ${item._section && item._section !== item.category?`<span class="modal-tag modal-tag-sec">${item._section}</span>`:''}
       </div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
