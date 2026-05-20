@@ -733,7 +733,10 @@ function articleCard(a, type, idx, isTop5, secIdx) {
       ${dragHandle}
       <span class="article-card-num">${isTop5?'0'+(idx+1):(idx+1)}</span>
       <span class="article-card-title-preview">${a.title||'(제목 없음)'}</span>
-      <div class="article-card-actions"><button class="btn-sm delete" onclick="deleteArticle(event,'${type}',${idx},${secIdx??'null'})">삭제</button></div>
+      <div class="article-card-actions">
+        <button class="btn-sm" style="background:var(--accent-green);color:white;border-color:var(--accent-green);" onclick="applyCardEdit(event,this)">✓ 적용</button>
+        <button class="btn-sm delete" onclick="deleteArticle(event,'${type}',${idx},${secIdx??'null'})">삭제</button>
+      </div>
     </div>
     <div class="article-card-body">
       <div class="form-row">
@@ -768,10 +771,6 @@ function articleCard(a, type, idx, isTop5, secIdx) {
         <button class="btn-add-row" onclick="addPoint(this,'${type}',${idx},${secIdx??'null'})">+ 포인트 추가</button>
       </div>
       <div class="form-group"><label>원문 URL</label><input type="url" class="art-url" value="${a.url||''}" placeholder="https://..."></div>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--cream-border);">
-        <button type="button" class="btn-sm" onclick="closeCard(this)">닫기</button>
-        <button type="button" class="btn-sm" style="background:var(--accent-green);color:white;border-color:var(--accent-green);" onclick="applyCardEdit(this)">✓ 적용</button>
-      </div>
     </div>
   </div>`;
 }
@@ -786,7 +785,8 @@ function closeCard(btn) {
   if (input) header.querySelector('.article-card-title-preview').textContent = input.value || '(제목 없음)';
 }
 
-function applyCardEdit(btn) {
+function applyCardEdit(e, btn) {
+  e.stopPropagation(); // 카드 토글 방지
   const card = btn.closest('.article-card');
   const header = card.querySelector('.article-card-header');
   const body = card.querySelector('.article-card-body');
@@ -932,20 +932,13 @@ window._dragCard = null;
 window._autoScrollTimer = null;
 
 function articleDragStart(e, cardEl) {
-  // 편집 중(펼쳐진) 카드는 드래그 금지
-  const body = cardEl.querySelector('.article-card-body');
-  if (body && body.classList.contains('open')) {
-    e.preventDefault();
-    return;
-  }
-  // 핸들에서만 드래그 허용 — 다른 곳(input, textarea 등)에서 시작하면 막기
+  // 핸들에서만 드래그 허용
   const handle = cardEl.querySelector('.drag-handle');
-  if (!handle) { e.preventDefault(); return; }
-  // e.target이 handle 또는 그 자손인지 확인
-  if (!handle.contains(e.target) && e.target !== handle) {
+  if (!handle || (!handle.contains(e.target) && e.target !== handle)) {
     e.preventDefault();
     return;
   }
+  // 편집 중이어도 핸들에서 시작하면 허용 — 데이터는 DOM에서 수집하므로 최신 입력값 유지
   window._dragCard = cardEl;
   cardEl.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
@@ -1004,9 +997,18 @@ function sectionDrop(e, bodyEl, targetSi) {
   if (!srcSiMatch) { window._dragCard = null; return; }
 
   const artData = collectArticleFromCard(card, false);
+  const wasOpen = card.querySelector('.article-card-body')?.classList.contains('open');
   const targetCards = bodyEl.querySelectorAll('.article-card');
   const newAi = targetCards.length;
   bodyEl.insertAdjacentHTML('beforeend', articleCard(artData, 'sec', newAi, false, targetSi));
+  // 편집 중이었으면 새 카드도 펼쳐진 상태로
+  if (wasOpen) {
+    const newCard = bodyEl.querySelector('.article-card:last-child');
+    if (newCard) {
+      newCard.querySelector('.article-card-body').classList.add('open');
+      newCard.classList.add('is-editing');
+    }
+  }
 
   card.remove();
   renderPoolArticles();
