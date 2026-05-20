@@ -621,9 +621,16 @@ function initPage(keys, data) {
       if (item.category) cats.add(item.category);
       _allArticles.push({ ...item, _edKey: k, _edTitle: edTitle, _section: section });
     };
-    (ed.top5 || []).forEach(i => collectItem(i, '이번 주 Top 5'));
-    if (ed.editors_pick) collectItem(ed.editors_pick, "Editor's Pick");
+    // 섹션 기사 먼저 수집 (중복 기준이 되는 원본)
     (ed.sections || []).forEach(sec => (sec.articles || []).forEach(i => collectItem(i, sec.title)));
+    // Top5 / Editor's Pick은 이미 섹션에 있는 제목이면 건너뜀
+    const sectionTitles = new Set(_allArticles.filter(a => a._edKey === k).map(a => a.title));
+    (ed.top5 || []).forEach(i => {
+      if (!sectionTitles.has(i.title)) collectItem(i, '이번 주 Top 5');
+    });
+    if (ed.editors_pick && !sectionTitles.has(ed.editors_pick.title)) {
+      collectItem(ed.editors_pick, "Editor's Pick");
+    }
   });
 
   const edSel = document.getElementById('archive-filter-edition');
@@ -633,7 +640,7 @@ function initPage(keys, data) {
     opt.textContent = data[k].title || k;
     edSel.appendChild(opt);
   });
-  // 카테고리 필터: 고정 목록 사용 (HTML에 정의됨)
+  // 카테고리 필터: HTML에 고정 목록으로 정의
 
   renderEdition(data[keys[0]]);
 }
