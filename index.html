@@ -523,6 +523,15 @@ body {
       <span class="archive-filter-label" style="margin-left:8px;">카테고리</span>
       <select class="archive-filter-select" id="archive-filter-cat" onchange="runArchiveSearch()">
         <option value="">전체</option>
+        <option value="노사관계">노사관계</option>
+        <option value="노동법/정책">노동법/정책</option>
+        <option value="채용/퇴직">채용/퇴직</option>
+        <option value="조직/문화">조직/문화</option>
+        <option value="보상/복리후생">보상/복리후생</option>
+        <option value="교육/개발">교육/개발</option>
+        <option value="AI/디지털HR">AI/디지털HR</option>
+        <option value="글로벌HR">글로벌HR</option>
+        <option value="기타">기타</option>
       </select>
       <span class="archive-result-info" id="archive-result-info"></span>
     </div>
@@ -624,12 +633,7 @@ function initPage(keys, data) {
     opt.textContent = data[k].title || k;
     edSel.appendChild(opt);
   });
-  const catSel = document.getElementById('archive-filter-cat');
-  [...cats].sort().forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c; opt.textContent = c;
-    catSel.appendChild(opt);
-  });
+  // 카테고리 필터: 고정 목록 사용 (HTML에 정의됨)
 
   renderEdition(data[keys[0]]);
 }
