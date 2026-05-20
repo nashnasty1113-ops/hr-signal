@@ -159,27 +159,57 @@
   .edition-form-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--cream-border); }
 
   /* ─── 기사 드래그 ─── */
-  .article-card[draggable="true"] { cursor: grab; }
-  .article-card[draggable="true"]:active { cursor: grabbing; }
   .article-card.dragging { opacity: 0.4; border: 1px dashed var(--accent-blue); }
+  .article-card.is-editing { cursor: default; }
   .section-block-body.drag-over-section {
     background: #EEF4FF;
-    border: 2px dashed var(--accent-blue);
+    outline: 2px dashed var(--accent-blue);
+    outline-offset: -2px;
     border-radius: 4px;
     min-height: 48px;
   }
-  .article-drop-indicator {
-    height: 3px; background: var(--accent-blue);
-    border-radius: 2px; margin: 2px 0;
-    display: none;
-  }
-  .article-drop-indicator.show { display: block; }
   .drag-handle {
-    color: var(--ink-light); font-size: 13px;
-    padding: 0 6px 0 2px; cursor: grab; user-select: none;
-    flex-shrink: 0;
+    color: var(--cream-border); font-size: 15px;
+    padding: 0 8px 0 0; cursor: grab; user-select: none;
+    flex-shrink: 0; transition: color .12s;
+    line-height: 1;
   }
-  .drag-handle:hover { color: var(--ink); }
+  .drag-handle:hover { color: var(--ink-mid); }
+  .article-card.is-editing .drag-handle { cursor: not-allowed; color: var(--cream-border); opacity: 0.4; }
+
+  /* ─── 섹션 헤더 버튼 레이아웃 ─── */
+  .section-block-header {
+    padding: 12px 16px;
+    background: var(--cream-dark);
+    border-bottom: 1px solid var(--cream-border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .sec-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+  .sec-header-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .btn-add-article {
+    padding: 6px 14px; font-size: 12px;
+    background: var(--accent-green); color: white;
+    border: none; border-radius: 4px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: nowrap; transition: opacity .15s;
+  }
+  .btn-add-article:hover { opacity: .85; }
+  .btn-del-section {
+    padding: 6px 10px; font-size: 12px;
+    background: none; color: var(--accent-red);
+    border: 1px solid #FACCCC; border-radius: 4px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: nowrap; transition: background .15s;
+  }
+  .btn-del-section:hover { background: #FEF0F0; }
+
+  /* ─── 저장 버튼 강조 ─── */
+  .btn-save {
+    background: var(--accent-red); color: white;
+    font-weight: 600; letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(201,74,42,0.35);
+  }
+  .btn-save:hover { opacity: .9; }
 
   /* ─── JSON 뷰어 모달 ─── */
   .json-viewer-modal {
@@ -266,7 +296,7 @@
   <div class="header-actions">
     <a href="index.html" class="btn btn-outline">← 뉴스레터 보기</a>
     <button class="btn btn-blue" onclick="openJsonViewer()">{ } JSON 보기/편집</button>
-    <button class="btn btn-white" onclick="saveAll()">저장 & 발행</button>
+    <button class="btn btn-save" onclick="saveAll()">💾 저장 & 발행</button>
   </div>
 </header>
 
@@ -379,6 +409,7 @@ window._jsonTab = 'view';
 const SEC_CATS = ['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'];
 
 document.addEventListener('dragend', () => {
+  stopAutoScroll();
   if (window._dragCard) {
     window._dragCard.classList.remove('dragging');
     window._dragCard = null;
@@ -654,14 +685,16 @@ function renderEditor(edition) {
     }).join('');
     html += `<div class="section-block">
       <div class="section-block-header">
-        <select id="sec-title-${si}" class="sec-title-select" onchange="onSectionTitleChange(this)"
-          style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
-          <option value="">-- 섹션 선택 --</option>
-          ${optionsHtml}
-        </select>
-        <div style="display:flex;gap:6px;">
-          <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
-          <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
+        <div class="sec-header-left">
+          <select id="sec-title-${si}" class="sec-title-select" onchange="onSectionTitleChange(this)"
+            style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;max-width:200px;">
+            <option value="">-- 섹션 선택 --</option>
+            ${optionsHtml}
+          </select>
+        </div>
+        <div class="sec-header-right">
+          <button class="btn-add-article" onclick="addArticle('sec',${si})">+ 기사 추가</button>
+          <button class="btn-del-section" onclick="deleteSection(${si})">섹션 삭제</button>
         </div>
       </div>
       <div class="section-block-body" id="sec-${si}-list"
@@ -735,13 +768,58 @@ function articleCard(a, type, idx, isTop5, secIdx) {
         <button class="btn-add-row" onclick="addPoint(this,'${type}',${idx},${secIdx??'null'})">+ 포인트 추가</button>
       </div>
       <div class="form-group"><label>원문 URL</label><input type="url" class="art-url" value="${a.url||''}" placeholder="https://..."></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--cream-border);">
+        <button type="button" class="btn-sm" onclick="closeCard(this)">닫기</button>
+        <button type="button" class="btn-sm" style="background:var(--accent-green);color:white;border-color:var(--accent-green);" onclick="applyCardEdit(this)">✓ 적용</button>
+      </div>
     </div>
   </div>`;
 }
 
+function closeCard(btn) {
+  const card = btn.closest('.article-card');
+  const header = card.querySelector('.article-card-header');
+  const body = card.querySelector('.article-card-body');
+  body.classList.remove('open');
+  card.classList.remove('is-editing');
+  const input = body.querySelector('.art-title');
+  if (input) header.querySelector('.article-card-title-preview').textContent = input.value || '(제목 없음)';
+}
+
+function applyCardEdit(btn) {
+  const card = btn.closest('.article-card');
+  const header = card.querySelector('.article-card-header');
+  const body = card.querySelector('.article-card-body');
+  // 헤더 미리보기 업데이트
+  const titleInput = body.querySelector('.art-title');
+  if (titleInput) header.querySelector('.article-card-title-preview').textContent = titleInput.value || '(제목 없음)';
+  // Top5 pool 갱신 — DOM에서 읽어 _editingEdition.sections 메모리 동기화
+  syncSectionsFromDom();
+  renderPoolArticles();
+  toast('적용되었습니다. 헤더의 저장 & 발행으로 최종 저장하세요.');
+}
+
+// DOM에 있는 섹션/기사 데이터를 _editingEdition.sections에 동기화
+function syncSectionsFromDom() {
+  const sections = [];
+  document.querySelectorAll('.section-block').forEach((block) => {
+    const titleInput = block.querySelector('[id^="sec-title-"]');
+    if (!titleInput) return;
+    const articles = [];
+    block.querySelectorAll('.article-card').forEach(card => {
+      articles.push(collectArticleFromCard(card, false));
+    });
+    sections.push({ title: titleInput.value, articles });
+  });
+  if (window._editingEdition) window._editingEdition.sections = sections;
+}
+
 function toggleCard(header) {
+  const card = header.closest('.article-card');
   const body = header.nextElementSibling;
+  const isOpening = !body.classList.contains('open');
   body.classList.toggle('open');
+  if (card) card.classList.toggle('is-editing', isOpening);
   const input = body.querySelector('.art-title');
   if (input) header.querySelector('.article-card-title-preview').textContent = input.value || '(제목 없음)';
 }
@@ -759,6 +837,7 @@ function addArticle(type, secIdx) {
     const idx = sec.articles.length;
     sec.articles.push(blank);
     document.getElementById(`sec-${secIdx}-list`).insertAdjacentHTML('beforeend', articleCard(blank,'sec',idx,false,secIdx));
+    syncSectionsFromDom();
     renderPoolArticles();
   }
 }
@@ -786,14 +865,16 @@ function addSection() {
   }).join('');
   const html = `<div class="section-block">
     <div class="section-block-header">
-      <select id="sec-title-${si}" class="sec-title-select" onchange="onSectionTitleChange(this)"
-        style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
-        <option value="">-- 섹션 선택 --</option>
-        ${optionsHtml}
-      </select>
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
-        <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
+      <div class="sec-header-left">
+        <select id="sec-title-${si}" class="sec-title-select" onchange="onSectionTitleChange(this)"
+          style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;max-width:200px;">
+          <option value="">-- 섹션 선택 --</option>
+          ${optionsHtml}
+        </select>
+      </div>
+      <div class="sec-header-right">
+        <button class="btn-add-article" onclick="addArticle('sec',${si})">+ 기사 추가</button>
+        <button class="btn-del-section" onclick="deleteSection(${si})">섹션 삭제</button>
       </div>
     </div>
     <div class="section-block-body" id="sec-${si}-list"
@@ -848,58 +929,88 @@ function refreshAllSectionSelects() {
 
 /* ════ 기사 드래그 앤 드롭 (섹션 간 이동) ════ */
 window._dragCard = null;
+window._autoScrollTimer = null;
 
 function articleDragStart(e, cardEl) {
+  // 편집 중(펼쳐진) 카드는 드래그 금지
+  const body = cardEl.querySelector('.article-card-body');
+  if (body && body.classList.contains('open')) {
+    e.preventDefault();
+    return;
+  }
+  // 핸들에서만 드래그 허용 — 다른 곳(input, textarea 등)에서 시작하면 막기
+  const handle = cardEl.querySelector('.drag-handle');
+  if (!handle) { e.preventDefault(); return; }
+  // e.target이 handle 또는 그 자손인지 확인
+  if (!handle.contains(e.target) && e.target !== handle) {
+    e.preventDefault();
+    return;
+  }
   window._dragCard = cardEl;
   cardEl.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('text/plain', '');
-  // 헤더 클릭(토글) 방지
-  e.stopPropagation();
 }
 
 function sectionDragOver(e, bodyEl) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'move';
   bodyEl.classList.add('drag-over-section');
+  // 자동 스크롤
+  autoScrollOnDrag(e.clientY);
 }
 
 function sectionDragLeave(e, bodyEl) {
-  // 자식 요소로 이동할 때 flicker 방지
   if (!bodyEl.contains(e.relatedTarget)) {
     bodyEl.classList.remove('drag-over-section');
   }
 }
 
+// 자동 스크롤: 화면 상단/하단 80px 안에 들어오면 스크롤
+function autoScrollOnDrag(clientY) {
+  const ZONE = 80;
+  const SPEED = 12;
+  const main = document.getElementById('admin-main');
+  if (!main) return;
+  const rect = main.getBoundingClientRect();
+
+  if (window._autoScrollTimer) { clearInterval(window._autoScrollTimer); window._autoScrollTimer = null; }
+
+  if (clientY < rect.top + ZONE) {
+    // 위로 스크롤
+    window._autoScrollTimer = setInterval(() => { main.scrollTop -= SPEED; }, 16);
+  } else if (clientY > rect.bottom - ZONE) {
+    // 아래로 스크롤
+    window._autoScrollTimer = setInterval(() => { main.scrollTop += SPEED; }, 16);
+  }
+}
+
+function stopAutoScroll() {
+  if (window._autoScrollTimer) { clearInterval(window._autoScrollTimer); window._autoScrollTimer = null; }
+}
+
 function sectionDrop(e, bodyEl, targetSi) {
   e.preventDefault();
+  stopAutoScroll();
   bodyEl.classList.remove('drag-over-section');
   const card = window._dragCard;
   if (!card) return;
   card.classList.remove('dragging');
 
-  // 원래 섹션 인덱스 파악 (id: sec-{si}-list)
   const srcBody = card.closest('.section-block-body');
-  if (!srcBody || srcBody === bodyEl) { window._dragCard = null; return; } // 같은 섹션이면 무시
+  if (!srcBody || srcBody === bodyEl) { window._dragCard = null; return; }
 
   const srcSiMatch = srcBody.id.match(/^sec-(\d+)-list$/);
   if (!srcSiMatch) { window._dragCard = null; return; }
-  const srcSi = parseInt(srcSiMatch[1]);
 
-  // 기사 데이터 수집
   const artData = collectArticleFromCard(card, false);
-
-  // 타겟 섹션에 카드 추가
   const targetCards = bodyEl.querySelectorAll('.article-card');
   const newAi = targetCards.length;
   bodyEl.insertAdjacentHTML('beforeend', articleCard(artData, 'sec', newAi, false, targetSi));
 
-  // 원본 카드 제거
   card.remove();
-
-  // Top5 pool 갱신
   renderPoolArticles();
-  toast(`기사를 이동했습니다.`);
+  toast('기사를 이동했습니다.');
   window._dragCard = null;
 }
 
@@ -1004,6 +1115,7 @@ function dragDrop(e,idx){e.preventDefault();e.currentTarget.classList.remove('dr
 function dragEnd(e){e.currentTarget.style.opacity='';document.querySelectorAll('.top5-selected-item').forEach(el=>el.classList.remove('drag-over'));window._dragSrcIdx=null;}
 
 function saveAll() {
+  syncSectionsFromDom();
   const edition={
     title:document.getElementById('f-title').value,
     date:document.getElementById('f-date').value,
@@ -1022,17 +1134,23 @@ function saveAll() {
   });
   const epTitle=document.getElementById('ep-title').value;
   if(epTitle){edition.editors_pick={title:epTitle,source:document.getElementById('ep-source').value,summary:document.getElementById('ep-summary').value,url:document.getElementById('ep-url').value,date:document.getElementById('ep-date').value};}
-  document.querySelectorAll('.section-block').forEach((block,si)=>{
+  document.querySelectorAll('.section-block').forEach((block)=>{
     const titleInput=block.querySelector('[id^="sec-title-"]');
     if(!titleInput)return;
     const articles=[];
     block.querySelectorAll('.article-card').forEach(card=>{articles.push(collectArticleFromCard(card,false));});
     edition.sections.push({title:titleInput.value,articles});
   });
-  const key=edition.date||_currentKey;
-  if(!key){toast('발행일을 입력해주세요.');return;}
+  // Firebase key는 항상 _currentKey 유지 (날짜 변경해도 key는 안 바뀜)
+  const key = _currentKey;
+  if(!key){toast('에디션을 먼저 선택해주세요.');return;}
   _set(_ref(_db,`editions/${key}`),edition)
-    .then(()=>{toast('✓ 저장되어 발행되었습니다!');_currentKey=key;})
+    .then(()=>{
+      toast('✓ 저장되어 발행되었습니다!');
+      // 사이드바 날짜 표시 즉시 갱신
+      if(window._data[key]) window._data[key] = edition;
+      renderSidebar();
+    })
     .catch(err=>toast('저장 실패: '+err.message));
 }
 
