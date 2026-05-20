@@ -637,7 +637,8 @@ function renderEditor(edition) {
       <div class="form-group" style="max-width:180px;"><label>발행일</label><input type="date" id="f-date" value="${ed.date||''}"></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>기간</label><input type="text" id="f-period" value="${ed.period||''}" placeholder="예: 2026년 4월 19일 ~ 4월 25일"></div>
+      <div class="form-group"><label>기간 시작일</label><input type="date" id="f-period-start" value="${ed.period_start||''}"></div>
+      <div class="form-group"><label>기간 종료일</label><input type="date" id="f-period-end" value="${ed.period_end||''}"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>헤드라인 타이틀</label><input type="text" id="f-intro-title" value="${ed.intro_title||''}" placeholder="이번 주 HR 핵심 이슈"></div>
@@ -1119,12 +1120,28 @@ function dragLeave(e){e.currentTarget.classList.remove('drag-over');}
 function dragDrop(e,idx){e.preventDefault();e.currentTarget.classList.remove('drag-over');const src=window._dragSrcIdx;if(src===null||src===idx)return;const moved=window._top5Selected.splice(src,1)[0];window._top5Selected.splice(idx,0,moved);renderTop5Selected();}
 function dragEnd(e){e.currentTarget.style.opacity='';document.querySelectorAll('.top5-selected-item').forEach(el=>el.classList.remove('drag-over'));window._dragSrcIdx=null;}
 
+// '2026-04-19' → '2026년 4월 19일' 형식으로 변환
+function formatPeriod(start, end) {
+  const fmt = (d) => {
+    if (!d) return '';
+    const [y, m, day] = d.split('-');
+    return `${y}년 ${parseInt(m)}월 ${parseInt(day)}일`;
+  };
+  if (start && end) return `${fmt(start)} ~ ${fmt(end)}`;
+  if (start) return fmt(start);
+  return '';
+}
+
 function saveAll() {
   syncSectionsFromDom();
+  const periodStart = document.getElementById('f-period-start').value;
+  const periodEnd   = document.getElementById('f-period-end').value;
   const edition={
     title:document.getElementById('f-title').value,
     date:document.getElementById('f-date').value,
-    period:document.getElementById('f-period').value,
+    period_start: periodStart,
+    period_end:   periodEnd,
+    period: formatPeriod(periodStart, periodEnd),
     intro_title:document.getElementById('f-intro-title').value,
     intro:document.getElementById('f-intro').value,
     top5:[],editors_pick:null,sections:[]
