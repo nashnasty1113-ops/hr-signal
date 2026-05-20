@@ -572,7 +572,7 @@ function renderSidebar() {
     item.innerHTML = `
       <div onclick="selectEditionByKey('${k}')" style="flex:1;cursor:pointer;">
         <div class="edition-item-title">${ed.title || k}</div>
-        <div class="edition-item-date">${ed.date || ''}</div>
+        <div class="edition-item-date">${ed.period || ed.date || ''}</div>
       </div>
       <button onclick="deleteEdition('${k}')" title="에디션 삭제"
         style="background:none;border:none;cursor:pointer;color:#8A7F6A;font-size:14px;
@@ -633,8 +633,11 @@ function renderEditor(edition) {
   let html = `<div class="edition-form-block">
     <div class="edition-form-title">에디션 기본 정보</div>
     <div class="form-row">
-      <div class="form-group"><label>에디션 제목</label><input type="text" id="f-title" value="${ed.title||''}" placeholder="예: HR시그널 #12"></div>
-      <div class="form-group"><label>발행일</label><input type="date" id="f-date" value="${ed.date||''}"></div>
+      <div class="form-group"><label>에디션 제목</label><input type="text" id="f-title" value="${ed.title||''}" placeholder="예: 4월 4주차"></div>
+      <div class="form-group" style="max-width:180px;"><label>발행일</label><input type="date" id="f-date" value="${ed.date||''}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>기간</label><input type="text" id="f-period" value="${ed.period||''}" placeholder="예: 2026년 4월 19일 ~ 4월 25일"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>헤드라인 타이틀</label><input type="text" id="f-intro-title" value="${ed.intro_title||''}" placeholder="이번 주 HR 핵심 이슈"></div>
@@ -1121,6 +1124,7 @@ function saveAll() {
   const edition={
     title:document.getElementById('f-title').value,
     date:document.getElementById('f-date').value,
+    period:document.getElementById('f-period').value,
     intro_title:document.getElementById('f-intro-title').value,
     intro:document.getElementById('f-intro').value,
     top5:[],editors_pick:null,sections:[]
