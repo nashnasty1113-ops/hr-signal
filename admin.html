@@ -158,6 +158,29 @@
   .edition-form-block { background: white; border: 1px solid var(--cream-border); border-radius: 6px; padding: 20px; margin-bottom: 24px; }
   .edition-form-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--cream-border); }
 
+  /* ─── 기사 드래그 ─── */
+  .article-card[draggable="true"] { cursor: grab; }
+  .article-card[draggable="true"]:active { cursor: grabbing; }
+  .article-card.dragging { opacity: 0.4; border: 1px dashed var(--accent-blue); }
+  .section-block-body.drag-over-section {
+    background: #EEF4FF;
+    border: 2px dashed var(--accent-blue);
+    border-radius: 4px;
+    min-height: 48px;
+  }
+  .article-drop-indicator {
+    height: 3px; background: var(--accent-blue);
+    border-radius: 2px; margin: 2px 0;
+    display: none;
+  }
+  .article-drop-indicator.show { display: block; }
+  .drag-handle {
+    color: var(--ink-light); font-size: 13px;
+    padding: 0 6px 0 2px; cursor: grab; user-select: none;
+    flex-shrink: 0;
+  }
+  .drag-handle:hover { color: var(--ink); }
+
   /* ─── JSON 뷰어 모달 ─── */
   .json-viewer-modal {
     display: none; position: fixed; inset: 0;
@@ -353,6 +376,15 @@ window._keys = [];
 window._currentKey = null;
 window._jsonScope = 'current'; // 'current' | 'all'
 window._jsonTab = 'view';
+const SEC_CATS = ['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'];
+
+document.addEventListener('dragend', () => {
+  if (window._dragCard) {
+    window._dragCard.classList.remove('dragging');
+    window._dragCard = null;
+  }
+  document.querySelectorAll('.drag-over-section').forEach(el => el.classList.remove('drag-over-section'));
+});
 
 /* ════ JSON 뷰어 ════ */
 
@@ -614,18 +646,28 @@ function renderEditor(edition) {
   </div>`;
 
   (ed.sections||[]).forEach((sec, si) => {
+    // 현재 다른 섹션에서 이미 사용 중인 카테고리 목록 (자기 자신 제외)
+    const usedByOthers = (ed.sections||[]).filter((_,i)=>i!==si).map(s=>s.title).filter(Boolean);
+    const optionsHtml = SEC_CATS.map(c => {
+      const disabled = usedByOthers.includes(c) ? 'disabled style="color:#ccc;"' : '';
+      return `<option value="${c}" ${sec.title===c?'selected':''} ${disabled}>${c}${usedByOthers.includes(c)?' (사용 중)':''}</option>`;
+    }).join('');
     html += `<div class="section-block">
       <div class="section-block-header">
-        <select id="sec-title-${si}" class="sec-title-select" style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
+        <select id="sec-title-${si}" class="sec-title-select" onchange="onSectionTitleChange(this)"
+          style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
           <option value="">-- 섹션 선택 --</option>
-          ${['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'].map(c=>`<option value="${c}" ${sec.title===c?'selected':''}>${c}</option>`).join('')}
+          ${optionsHtml}
         </select>
         <div style="display:flex;gap:6px;">
           <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
           <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
         </div>
       </div>
-      <div class="section-block-body" id="sec-${si}-list">`;
+      <div class="section-block-body" id="sec-${si}-list"
+        ondragover="sectionDragOver(event,this)"
+        ondragleave="sectionDragLeave(event,this)"
+        ondrop="sectionDrop(event,this,${si})">`;
     (sec.articles||[]).forEach((a, ai) => { html += articleCard(a,'sec',ai,false,si); });
     html += `</div></div>`;
   });
@@ -651,8 +693,11 @@ function articleCard(a, type, idx, isTop5, secIdx) {
   const badgeType  = a.badge ? a.badge.type||'hot' : 'hot';
   const points = (a.points||[]).map((p,pi) =>
     `<div class="point-row"><input type="text" value="${p}" placeholder="핵심 포인트"><button class="btn-sm delete" onclick="removePoint(this)">✕</button></div>`).join('');
-  return `<div class="article-card" id="card-${type}-${secIdx??''}-${idx}">
+  const draggableAttr = (type==='sec') ? 'draggable="true" ondragstart="articleDragStart(event,this)"' : '';
+  const dragHandle    = (type==='sec') ? `<span class="drag-handle" title="드래그로 섹션 이동">⠿</span>` : '';
+  return `<div class="article-card" id="card-${type}-${secIdx??''}-${idx}" ${draggableAttr}>
     <div class="article-card-header" onclick="toggleCard(this)">
+      ${dragHandle}
       <span class="article-card-num">${isTop5?'0'+(idx+1):(idx+1)}</span>
       <span class="article-card-title-preview">${a.title||'(제목 없음)'}</span>
       <div class="article-card-actions"><button class="btn-sm delete" onclick="deleteArticle(event,'${type}',${idx},${secIdx??'null'})">삭제</button></div>
@@ -732,27 +777,130 @@ function deleteArticle(e, type, idx, secIdx) {
 function addSection() {
   if (!window._editingEdition.sections) window._editingEdition.sections=[];
   const si = window._editingEdition.sections.length;
-  window._editingEdition.sections.push({title:'새 섹션',articles:[]});
+  window._editingEdition.sections.push({title:'',articles:[]});
+  // 이미 사용 중인 카테고리 계산
+  const used = window._editingEdition.sections.slice(0,si).map(s=>s.title).filter(Boolean);
+  const optionsHtml = SEC_CATS.map(c => {
+    const disabled = used.includes(c) ? 'disabled style="color:#ccc;"' : '';
+    return `<option value="${c}" ${disabled}>${c}${used.includes(c)?' (사용 중)':''}</option>`;
+  }).join('');
   const html = `<div class="section-block">
     <div class="section-block-header">
-      <select id="sec-title-${si}" class="sec-title-select" style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
+      <select id="sec-title-${si}" class="sec-title-select" onchange="onSectionTitleChange(this)"
+        style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
         <option value="">-- 섹션 선택 --</option>
-        ${['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'].map(c=>`<option value="${c}">${c}</option>`).join('')}
+        ${optionsHtml}
       </select>
       <div style="display:flex;gap:6px;">
         <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
         <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
       </div>
     </div>
-    <div class="section-block-body" id="sec-${si}-list"></div>
+    <div class="section-block-body" id="sec-${si}-list"
+      ondragover="sectionDragOver(event,this)"
+      ondragleave="sectionDragLeave(event,this)"
+      ondrop="sectionDrop(event,this,${si})"></div>
   </div>`;
   document.querySelector('.add-edition-btn').insertAdjacentHTML('beforebegin', html);
+  // 다른 섹션들의 드롭다운도 갱신
+  refreshAllSectionSelects();
   toast('새 섹션이 추가되었습니다.');
 }
 
 function deleteSection(si) {
   if (!confirm('이 섹션을 삭제할까요?')) return;
-  event.target.closest('.section-block').remove(); toast('섹션이 삭제되었습니다.');
+  event.target.closest('.section-block').remove();
+  refreshAllSectionSelects();
+  toast('섹션이 삭제되었습니다.');
+}
+
+/* ════ 섹션 중복 방지 ════ */
+function onSectionTitleChange(selectEl) {
+  const newVal = selectEl.value;
+  const allSelects = [...document.querySelectorAll('.sec-title-select')];
+  // 자기 자신 제외 다른 셀렉트에서 같은 값이 있으면 막기
+  const usedByOthers = allSelects
+    .filter(s => s !== selectEl)
+    .map(s => s.value)
+    .filter(Boolean);
+  if (usedByOthers.includes(newVal)) {
+    toast(`"${newVal}" 섹션은 이미 사용 중입니다.`);
+    selectEl.value = ''; // 선택 되돌리기
+    return;
+  }
+  refreshAllSectionSelects();
+}
+
+function refreshAllSectionSelects() {
+  const allSelects = [...document.querySelectorAll('.sec-title-select')];
+  const usedAll = allSelects.map(s => s.value).filter(Boolean);
+  allSelects.forEach(sel => {
+    const myVal = sel.value;
+    const usedByOthers = usedAll.filter(v => v !== myVal);
+    [...sel.options].forEach(opt => {
+      if (!opt.value) return;
+      const isUsed = usedByOthers.includes(opt.value);
+      opt.disabled = isUsed;
+      opt.textContent = opt.value + (isUsed ? ' (사용 중)' : '');
+    });
+  });
+}
+
+/* ════ 기사 드래그 앤 드롭 (섹션 간 이동) ════ */
+window._dragCard = null;
+
+function articleDragStart(e, cardEl) {
+  window._dragCard = cardEl;
+  cardEl.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', '');
+  // 헤더 클릭(토글) 방지
+  e.stopPropagation();
+}
+
+function sectionDragOver(e, bodyEl) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  bodyEl.classList.add('drag-over-section');
+}
+
+function sectionDragLeave(e, bodyEl) {
+  // 자식 요소로 이동할 때 flicker 방지
+  if (!bodyEl.contains(e.relatedTarget)) {
+    bodyEl.classList.remove('drag-over-section');
+  }
+}
+
+function sectionDrop(e, bodyEl, targetSi) {
+  e.preventDefault();
+  bodyEl.classList.remove('drag-over-section');
+  const card = window._dragCard;
+  if (!card) return;
+  card.classList.remove('dragging');
+
+  // 원래 섹션 인덱스 파악 (id: sec-{si}-list)
+  const srcBody = card.closest('.section-block-body');
+  if (!srcBody || srcBody === bodyEl) { window._dragCard = null; return; } // 같은 섹션이면 무시
+
+  const srcSiMatch = srcBody.id.match(/^sec-(\d+)-list$/);
+  if (!srcSiMatch) { window._dragCard = null; return; }
+  const srcSi = parseInt(srcSiMatch[1]);
+
+  // 기사 데이터 수집
+  const artData = collectArticleFromCard(card, false);
+
+  // 타겟 섹션에 카드 추가
+  const targetCards = bodyEl.querySelectorAll('.article-card');
+  const newAi = targetCards.length;
+  bodyEl.insertAdjacentHTML('beforeend', articleCard(artData, 'sec', newAi, false, targetSi));
+
+  // 원본 카드 제거
+  card.remove();
+
+  // Top5 pool 갱신
+  renderPoolArticles();
+  toast(`기사를 이동했습니다.`);
+  window._dragCard = null;
 }
 
 function addTag(e, input) {
