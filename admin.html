@@ -3,327 +3,571 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HR 시그널 관리자</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<title>HR 시그널</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #F5F0E8;
-    --cream-dark: #EDE7D9;
-    --cream-border: #D8D0C0;
-    --ink: #2A2218;
-    --ink-mid: #5A5040;
-    --ink-light: #8A7F6A;
-    --accent-red: #C94A2A;
-    --accent-green: #3A7A5A;
-    --accent-blue: #2A5A8A;
-  }
+:root {
+  --navy:        #1A3F7A;
+  --navy-dark:   #122D58;
+  --navy-mid:    #2A5299;
+  --navy-light:  #EEF3FB;
+  --accent:      #4A90D9;
+  --white:       #FFFFFF;
+  --bg:          #F6F8FC;
+  --border:      #DDE4F0;
+  --ink:         #111827;
+  --ink-mid:     #374151;
+  --ink-light:   #6B7280;
+  --red:         #DC2626;
+  --green:       #16A34A;
+  --orange:      #EA580C;
+  --max-w:       720px;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  body {
-    background: var(--cream);
-    color: var(--ink);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 13px;
-    min-height: 100vh;
-  }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+}
 
-  .admin-header {
-    background: var(--ink);
-    color: var(--cream);
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+/* ─── 상단 바 ─── */
+.topbar {
+  background: var(--navy-dark);
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 28px;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+.topbar-live { display:flex; align-items:center; gap:6px; }
+.live-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:#F87171;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+.admin-link {
+  font-size:10px; letter-spacing:1px;
+  color:rgba(255,255,255,0.4);
+  cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,0.15);
+  transition:color .15s;
+}
+.admin-link:hover { color:rgba(255,255,255,0.75); }
 
-  .admin-logo { font-family: 'Noto Serif KR', serif; font-size: 17px; font-weight: 700; }
-  .admin-logo span { color: #E07A3A; }
-  .header-actions { display: flex; gap: 8px; }
+/* ─── 헤더 ─── */
+.mag-header {
+  background: var(--navy);
+  padding: 36px 24px 28px;
+  text-align: center;
+}
+.mag-logo {
+  font-family: 'Playfair Display', 'Noto Serif KR', serif;
+  font-size: clamp(48px,11vw,80px);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: -1px;
+}
+.mag-logo .sig { color: #93C5FD; }
+.mag-sub {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 8px;
+}
+.header-rule {
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy-dark) 0%, var(--accent) 50%, var(--navy-dark) 100%);
+}
 
-  .btn {
-    padding: 7px 16px; border-radius: 4px; cursor: pointer;
-    font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
-    border: none; transition: opacity 0.15s;
-  }
-  .btn:hover { opacity: 0.85; }
-  .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: var(--cream); }
-  .btn-white   { background: var(--cream); color: var(--ink); }
-  .btn-danger  { background: var(--accent-red); color: white; }
-  .btn-success { background: var(--accent-green); color: white; }
-  .btn-blue    { background: var(--accent-blue); color: white; }
+/* ─── 탭 네비게이션 ─── */
+.tab-nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  padding: 0 24px;
+}
+.tab-btn {
+  padding: 12px 20px 10px;
+  border: none; background: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; font-weight: 500;
+  color: var(--ink-light);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color .15s, border-color .15s;
+}
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); font-weight: 600; }
 
-  .admin-layout { display: flex; min-height: calc(100vh - 56px); }
+/* ─── 날짜 바 (이번 주 탭) ─── */
+.meta-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.meta-date { font-size:12px; color:var(--ink-light); }
 
-  /* ─── SIDEBAR ─── */
-  .sidebar { width: 260px; border-right: 1px solid var(--cream-border); padding: 20px 0; background: var(--cream); flex-shrink: 0; }
-  .sidebar-label { font-size: 10px; letter-spacing: 2px; color: var(--ink-light); padding: 0 18px 8px; }
-  .edition-item { padding: 10px 18px; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; }
-  .edition-item:hover { background: var(--cream-dark); }
-  .edition-item.active { border-left-color: var(--accent-red); background: var(--cream-dark); }
-  .edition-item-title { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .edition-item-date  { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
-  .add-edition-btn {
-    margin: 12px 18px 0; width: calc(100% - 36px); padding: 9px;
-    border: 1px dashed var(--cream-border); border-radius: 4px;
-    background: none; cursor: pointer; font-size: 12px; color: var(--ink-light);
-    font-family: 'Noto Sans KR', sans-serif; text-align: center; transition: all 0.15s;
-  }
-  .add-edition-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+/* ─── 본문 래퍼 ─── */
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 20px;
+}
 
-  /* ─── MAIN PANEL ─── */
-  .admin-main { flex: 1; padding: 28px 36px; overflow-y: auto; }
-  .section-block { margin-bottom: 32px; background: white; border: 1px solid var(--cream-border); border-radius: 6px; overflow: hidden; }
-  .section-block-header { padding: 14px 20px; background: var(--cream-dark); border-bottom: 1px solid var(--cream-border); display: flex; align-items: center; justify-content: space-between; }
-  .section-block-title { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .section-block-body { padding: 16px 20px; }
+/* ─── EDITOR'S NOTE ─── */
+.editors-note {
+  background: var(--white);
+  border-left: 3px solid var(--navy);
+  border-radius: 0 6px 6px 0;
+  padding: 20px 24px;
+  margin: 28px 0 36px;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 0 20px;
+}
+.note-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--navy);
+  font-weight: 700;
+  padding-top: 2px;
+}
+.note-body { font-size:13px; color:var(--ink-mid); line-height:1.9; }
+.note-sig  { font-size:12px; color:var(--ink-light); margin-top:8px; font-style:italic; }
 
-  .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
-  .form-group { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-  label { font-size: 11px; color: var(--ink-light); letter-spacing: 0.5px; }
+/* ─── 섹션 헤더 ─── */
+.sec-header {
+  display:flex; align-items:baseline; justify-content:space-between;
+  padding-bottom:9px;
+  border-bottom:2px solid var(--navy);
+  margin-bottom:4px;
+}
+.sec-header-left { display:flex; align-items:baseline; gap:10px; }
+.sec-symbol { font-size:10px; color:var(--ink-light); letter-spacing:1px; }
+.sec-title  { font-family:'Noto Serif KR',serif; font-size:19px; font-weight:700; color:var(--navy); }
+.sec-count  { font-size:10px; color:var(--ink-light); letter-spacing:1px; }
+.sec-desc   { font-size:11px; color:var(--ink-light); margin:5px 0 18px; font-style:italic; }
 
-  input[type="text"], input[type="date"], input[type="url"], select, textarea {
-    padding: 8px 10px; border: 1px solid var(--cream-border); border-radius: 4px;
-    font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
-    background: white; color: var(--ink); outline: none; transition: border-color 0.15s; width: 100%;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--ink-mid); }
-  textarea { resize: vertical; min-height: 70px; }
+/* ─── TOP 5 ─── */
+.top5-list { list-style:none; margin-bottom:40px; }
+.top5-item {
+  display:grid;
+  grid-template-columns:48px 1fr auto;
+  align-items:start;
+  gap:0 14px;
+  padding:16px 12px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  border-radius:4px;
+  transition:background .12s;
+}
+.top5-item:hover  { background:var(--navy-light); }
+.top5-item.active { background:var(--navy-light); }
+.top5-num {
+  font-family:'Playfair Display',serif;
+  font-size:32px; font-weight:700;
+  color:var(--navy); line-height:1;
+  padding-top:3px;
+}
+.top5-item:nth-child(2) .top5-num { color:var(--ink-light); }
+.top5-item:nth-child(3) .top5-num,
+.top5-item:nth-child(4) .top5-num,
+.top5-item:nth-child(5) .top5-num { color:var(--border); }
+.top5-cat-row { display:flex; align-items:center; gap:5px; margin-bottom:3px; flex-wrap:wrap; }
+.top5-cat    { font-size:10px; color:var(--ink-light); }
+.top5-dot    { width:3px; height:3px; border-radius:50%; background:var(--border); flex-shrink:0; }
+.top5-date-sm{ font-size:10px; color:var(--ink-light); }
+.top5-source { font-size:10px; color:var(--ink-light); }
+.top5-headline { font-size:15px; font-weight:600; line-height:1.5; word-break:keep-all; color:var(--ink); }
 
-  .article-card { border: 1px solid var(--cream-border); border-radius: 5px; margin-bottom: 10px; overflow: hidden; }
-  .article-card-header { padding: 10px 14px; background: var(--cream); display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
-  .article-card-header:hover { background: var(--cream-dark); }
-  .article-card-num { font-size: 11px; font-weight: 500; color: var(--ink-mid); margin-right: 10px; }
-  .article-card-title-preview { flex: 1; font-size: 12px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .article-card-actions { display: flex; gap: 6px; }
-  .btn-sm { padding: 4px 10px; font-size: 11px; border-radius: 3px; cursor: pointer; border: 1px solid var(--cream-border); background: white; color: var(--ink-mid); font-family: 'Noto Sans KR', sans-serif; transition: background 0.15s; }
-  .btn-sm:hover { background: var(--cream-dark); }
-  .btn-sm.delete { border-color: #FACCCC; color: var(--accent-red); }
-  .btn-sm.delete:hover { background: #FEF0F0; }
-  .article-card-body { padding: 14px 14px; border-top: 1px solid var(--cream-border); display: none; }
-  .article-card-body.open { display: block; }
+.badge {
+  font-size:9px; padding:2px 8px; border-radius:10px;
+  white-space:nowrap; align-self:flex-start; margin-top:6px;
+  display:flex; align-items:center; gap:3px; font-weight:600;
+}
+.badge::before { content:''; width:5px; height:5px; border-radius:50%; }
+.badge-hot   { background:#FEE2E2; color:var(--red); }
+.badge-hot::before { background:var(--red); }
+.badge-new   { background:#DCFCE7; color:var(--green); }
+.badge-new::before { background:var(--green); }
+.badge-trend { background:var(--navy-light); color:var(--navy); }
+.badge-trend::before { background:var(--navy); }
 
-  .tags-input-wrap { display: flex; flex-wrap: wrap; gap: 5px; padding: 6px 8px; border: 1px solid var(--cream-border); border-radius: 4px; background: white; cursor: text; min-height: 36px; align-items: center; }
-  .tag-chip { background: var(--cream-dark); border: 1px solid var(--cream-border); border-radius: 10px; padding: 2px 8px; font-size: 11px; color: var(--ink-mid); display: flex; align-items: center; gap: 4px; }
-  .tag-chip button { background: none; border: none; cursor: pointer; color: var(--ink-light); font-size: 11px; padding: 0; line-height: 1; }
-  .tags-input { border: none !important; outline: none; font-size: 12px; font-family: 'Noto Sans KR', sans-serif; min-width: 80px; flex: 1; padding: 0 !important; background: transparent; }
+/* ─── NEWS LIST ─── */
+.news-list { list-style:none; margin-bottom:40px; }
+.news-item {
+  display:flex; gap:14px;
+  padding:15px 12px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer; border-radius:4px;
+  transition:background .12s;
+}
+.news-item:hover  { background:var(--navy-light); }
+.news-item.active { background:var(--navy-light); }
+.news-body { flex:1; }
+.news-tags { display:flex; gap:4px; margin-bottom:5px; flex-wrap:wrap; }
+.tag {
+  font-size:10px; padding:2px 8px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--navy); background:var(--navy-light);
+  font-weight:500;
+}
+.news-headline {
+  font-size:14px; font-weight:600;
+  line-height:1.55; margin-bottom:4px;
+  word-break:keep-all; color:var(--ink);
+}
+.news-snippet {
+  font-size:12px; color:var(--ink-light); line-height:1.65;
+  display:-webkit-box; -webkit-line-clamp:2;
+  -webkit-box-orient:vertical; overflow:hidden;
+}
+.news-source-row {
+  margin-top:5px;
+  display:flex; align-items:center; gap:5px;
+}
+.news-source-cat  { font-size:10px; color:var(--ink-light); }
+.news-source-dot  { width:3px; height:3px; border-radius:50%; background:var(--border); flex-shrink:0; }
+.news-source-name { font-size:10px; color:var(--ink-light); }
+.news-meta { font-size:10px; color:var(--ink-light); white-space:nowrap; padding-top:2px; text-align:right; min-width:44px; }
 
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--ink); color: var(--cream); padding: 12px 20px; border-radius: 6px; font-size: 13px; transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; }
-  .toast.show { transform: translateY(0); opacity: 1; }
+/* ─── EDITOR'S PICK ─── */
+.pick-block {
+  background:var(--navy);
+  border-radius:6px;
+  padding:22px 26px;
+  margin-bottom:40px;
+  cursor:pointer;
+  transition:opacity .15s;
+  position:relative; overflow:hidden;
+}
+.pick-block::before {
+  content:'';
+  position:absolute; top:0; left:0;
+  width:4px; height:100%;
+  background:#93C5FD;
+}
+.pick-block:hover { opacity:.92; }
+.pick-label  { font-size:9px; letter-spacing:2px; color:#93C5FD; margin-bottom:8px; font-weight:700; }
+.pick-title  { font-family:'Noto Serif KR',serif; font-size:17px; font-weight:700; margin-bottom:8px; line-height:1.5; color:var(--white); }
+.pick-desc   { font-size:12px; color:rgba(255,255,255,0.65); line-height:1.8; }
+.pick-source { font-size:10px; color:rgba(255,255,255,0.4); margin-top:8px; }
 
-  .point-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: center; }
-  .point-row input { flex: 1; }
-  .btn-add-row { padding: 6px 12px; border: 1px dashed var(--cream-border); border-radius: 4px; background: none; cursor: pointer; font-size: 11px; color: var(--ink-light); font-family: 'Noto Sans KR', sans-serif; margin-top: 4px; }
-  .btn-add-row:hover { border-color: var(--ink-mid); color: var(--ink); }
+/* ─── 아카이브 탭 ─── */
+.archive-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+.archive-search-row {
+  display: flex; gap: 8px; margin-bottom: 14px;
+}
+.archive-search-input {
+  flex: 1; padding: 10px 14px;
+  border: 1px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+  background: var(--white); color: var(--ink); outline: none;
+  transition: border-color .15s;
+}
+.archive-search-input:focus { border-color: var(--navy); }
+.archive-search-input::placeholder { color: var(--ink-light); }
+.archive-search-btn {
+  padding: 10px 18px;
+  background: var(--navy); color: var(--white);
+  border: none; border-radius: 6px;
+  font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: background .15s; white-space: nowrap;
+}
+.archive-search-btn:hover { background: var(--navy-dark); }
+.archive-filter-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.archive-filter-label { font-size: 11px; color: var(--ink-light); }
+.archive-filter-select {
+  padding: 5px 24px 5px 8px;
+  border: 1px solid var(--border); border-radius: 4px;
+  background: var(--white); font-size: 11px;
+  font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+  outline: none; cursor: pointer; appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%236B7280'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 7px center;
+  transition: border-color .15s;
+}
+.archive-filter-select:focus { border-color: var(--navy); }
+.archive-result-info {
+  font-size: 11px; color: var(--ink-light); margin-left: auto;
+}
 
-  .empty-state { text-align: center; padding: 48px 0; color: var(--ink-light); }
-  .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--ink-mid); }
+/* 에디션 그룹 */
+.archive-edition-group { margin-bottom: 4px; }
+.archive-edition-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--navy-light);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background .12s;
+  user-select: none;
+}
+.archive-edition-header:hover { background: #dce7f8; }
+.archive-edition-title { font-size: 13px; font-weight: 600; color: var(--navy); flex: 1; }
+.archive-edition-date  { font-size: 11px; color: var(--ink-light); }
+.archive-edition-cnt   { font-size: 11px; color: var(--navy); background: var(--white); padding: 1px 7px; border-radius: 10px; }
+.archive-edition-arrow { font-size: 11px; color: var(--ink-light); transition: transform .2s; }
+.archive-edition-arrow.open { transform: rotate(180deg); }
 
-  /* ─── TOP5 ─── */
-  .top5-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 320px; }
-  .top5-pool { border-right: 1px solid var(--cream-border); padding: 16px; max-height: 520px; overflow-y: auto; }
-  .top5-selected { padding: 16px; max-height: 520px; overflow-y: auto; }
-  .top5-panel-label { font-size: 10px; letter-spacing: 2px; color: var(--ink-light); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-  .top5-panel-label strong { font-size: 12px; color: var(--ink-mid); letter-spacing: 0; font-weight: 500; }
-  .pool-section-group { margin-bottom: 14px; }
-  .pool-section-name { font-size: 10px; letter-spacing: 1px; color: var(--ink-light); padding: 4px 0; border-bottom: 1px solid var(--cream-border); margin-bottom: 6px; }
-  .pool-article-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 4px; border: 1px solid transparent; margin-bottom: 4px; cursor: pointer; transition: all 0.13s; background: white; }
-  .pool-article-item:hover { border-color: var(--cream-border); background: var(--cream-dark); }
-  .pool-article-item.in-top5 { opacity: 0.45; cursor: default; }
-  .pool-article-item.in-top5:hover { background: white; border-color: transparent; }
-  .pool-article-text { flex: 1; font-size: 12px; line-height: 1.4; color: var(--ink); word-break: keep-all; }
-  .pool-article-meta { font-size: 10px; color: var(--ink-light); white-space: nowrap; }
-  .pool-add-btn { background: var(--accent-green); color: white; border: none; border-radius: 3px; padding: 3px 8px; font-size: 11px; cursor: pointer; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; flex-shrink: 0; }
-  .pool-add-btn:hover { opacity: 0.85; }
-  .top5-selected-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--cream-border); border-radius: 5px; margin-bottom: 8px; background: white; cursor: grab; }
-  .top5-selected-item:active { cursor: grabbing; }
-  .top5-selected-item.drag-over { border-color: var(--accent-red); background: #FEF0F0; }
-  .top5-rank-num { font-size: 22px; font-weight: 700; color: var(--accent-red); line-height: 1; min-width: 28px; padding-top: 2px; }
-  .top5-selected-item:nth-child(2) .top5-rank-num { color: var(--ink-mid); }
-  .top5-selected-item:nth-child(n+3) .top5-rank-num { color: var(--cream-border); }
-  .top5-selected-body { flex: 1; }
-  .top5-selected-title { font-size: 12px; font-weight: 500; line-height: 1.4; color: var(--ink); word-break: keep-all; margin-bottom: 4px; }
-  .top5-selected-sec { font-size: 10px; color: var(--ink-light); }
-  .top5-selected-badge { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; flex-shrink: 0; }
-  .top5-badge-input { font-size: 11px; padding: 3px 7px; border: 1px solid var(--cream-border); border-radius: 3px; background: white; width: 80px; font-family: 'Noto Sans KR', sans-serif; }
-  .top5-badge-select { font-size: 11px; padding: 3px 6px; border: 1px solid var(--cream-border); border-radius: 3px; background: white; width: 80px; font-family: 'Noto Sans KR', sans-serif; }
-  .top5-remove-btn { background: none; border: 1px solid #FACCCC; color: var(--accent-red); border-radius: 3px; padding: 3px 7px; font-size: 11px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
-  .top5-remove-btn:hover { background: #FEF0F0; }
-  .top5-empty-msg { text-align: center; padding: 32px 16px; color: var(--ink-light); font-size: 12px; border: 1px dashed var(--cream-border); border-radius: 5px; }
-  .top5-drag-hint { font-size: 10px; color: var(--ink-light); text-align: center; margin-top: 8px; letter-spacing: 0.5px; }
+.archive-edition-body { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 5px 5px; margin-bottom: 8px; overflow: hidden; }
+.archive-edition-body.open { display: block; }
 
-  .edition-form-block { background: white; border: 1px solid var(--cream-border); border-radius: 6px; padding: 20px; margin-bottom: 24px; }
-  .edition-form-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--cream-border); }
+/* 아카이브 기사 행 */
+.archive-article-row {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.archive-article-row:last-child { border-bottom: none; }
+.archive-article-row:hover { background: var(--navy-light); }
+.archive-article-cat  { font-size: 10px; color: var(--ink-light); white-space: nowrap; min-width: 52px; }
+.archive-article-title {
+  flex: 1; font-size: 13px; font-weight: 500;
+  color: var(--ink); line-height: 1.5; word-break: keep-all;
+}
+.archive-article-title mark {
+  background: #FEF08A; color: var(--ink); border-radius: 2px; padding: 0 1px;
+}
+.archive-article-date { font-size: 10px; color: var(--ink-light); white-space: nowrap; }
 
-  /* ─── JSON 뷰어 모달 ─── */
-  .json-viewer-modal {
-    display: none; position: fixed; inset: 0;
-    background: rgba(42,34,24,0.6); z-index: 400;
-    align-items: center; justify-content: center; padding: 20px;
-  }
-  .json-viewer-modal.show { display: flex; }
-  .json-viewer-box {
-    background: #1E1E2E; border-radius: 8px;
-    width: 100%; max-width: 760px; max-height: 90vh;
-    display: flex; flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    overflow: hidden;
-  }
-  .json-viewer-header {
-    background: #2A2A3E; padding: 14px 18px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid #3A3A50; flex-shrink: 0;
-  }
-  .json-viewer-title { font-size: 13px; font-weight: 500; color: #C9C9E0; letter-spacing: 0.5px; }
-  .json-viewer-actions { display: flex; gap: 8px; align-items: center; }
-  .json-viewer-btn {
-    padding: 6px 14px; border-radius: 4px; cursor: pointer;
-    font-size: 12px; font-family: 'Noto Sans KR', sans-serif; border: none;
-    transition: opacity .15s;
-  }
-  .json-viewer-btn:hover { opacity: 0.85; }
-  .jvb-scope { background: #3A3A50; color: #C9C9E0; font-size: 11px; }
-  .jvb-scope.active { background: #5A5A7A; color: white; }
-  .jvb-copy     { background: #3A7A5A; color: white; }
-  .jvb-download { background: #2A5A8A; color: white; }
-  .jvb-close    { background: none; border: 1px solid #4A4A60 !important; color: #8A8AAA; font-size: 14px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; padding: 0; }
+/* 검색 결과 없음 */
+.archive-empty {
+  text-align: center; padding: 56px 0;
+  font-size: 13px; color: var(--ink-light); line-height: 2;
+}
+.archive-empty-icon { font-size: 28px; display: block; margin-bottom: 8px; }
 
-  .json-viewer-tabs {
-    display: flex; gap: 0; background: #252535; border-bottom: 1px solid #3A3A50; flex-shrink: 0;
-  }
-  .json-tab-btn {
-    padding: 8px 16px; font-size: 11px; color: #7A7A9A;
-    background: none; border: none; cursor: pointer;
-    border-bottom: 2px solid transparent; font-family: 'Noto Sans KR', sans-serif;
-    transition: all .15s;
-  }
-  .json-tab-btn:hover { color: #C9C9E0; }
-  .json-tab-btn.active { color: #E07A3A; border-bottom-color: #E07A3A; }
+/* ─── 푸터 ─── */
+.site-footer {
+  background:var(--navy-dark);
+  padding:18px 28px;
+  font-size:11px;
+  color:rgba(255,255,255,0.4);
+  display:flex; justify-content:space-between;
+  margin-top:40px;
+}
 
-  .json-viewer-body { flex: 1; overflow: auto; position: relative; }
-  .json-code {
-    padding: 20px; font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 12.5px; line-height: 1.7; color: #CDD6F4;
-    white-space: pre; tab-size: 2; min-height: 100%;
-    background: #1E1E2E;
-  }
-  /* JSON 문법 색상 */
-  .json-key    { color: #89DCEB; }
-  .json-str    { color: #A6E3A1; }
-  .json-num    { color: #FAB387; }
-  .json-bool   { color: #CBA6F7; }
-  .json-null   { color: #7F849C; }
-  .json-punct  { color: #7F849C; }
+.loading { text-align:center; padding:80px 0; color:var(--ink-light); }
 
-  /* 편집 모드 */
-  .json-editor {
-    width: 100%; height: 100%; min-height: 400px;
-    padding: 20px; font-family: 'Consolas','Monaco',monospace;
-    font-size: 12.5px; line-height: 1.7; color: #CDD6F4;
-    background: #1E1E2E; border: none; outline: none; resize: none;
-    tab-size: 2;
-  }
-  .json-editor-toolbar {
-    background: #252535; padding: 10px 18px;
-    display: flex; align-items: center; gap: 10px;
-    border-top: 1px solid #3A3A50; flex-shrink: 0;
-  }
-  .json-editor-status { font-size: 11px; color: #7A7A9A; flex: 1; }
-  .json-editor-status.error { color: #F38BA8; }
-  .json-editor-status.ok    { color: #A6E3A1; }
+/* ════ OVERLAY MODAL ════ */
+.overlay-backdrop {
+  display:none; position:fixed; inset:0;
+  background:rgba(17,24,39,0.6);
+  backdrop-filter:blur(4px);
+  z-index:200; align-items:center; justify-content:center; padding:20px;
+}
+.overlay-backdrop.show { display:flex; }
+.overlay-modal {
+  background:var(--white);
+  border-radius:8px; width:100%; max-width:580px;
+  max-height:88vh; overflow-y:auto;
+  animation:slideUp .22s ease;
+  border-top:4px solid var(--navy);
+  box-shadow:0 20px 60px rgba(17,24,39,0.2);
+}
+@keyframes slideUp { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+.modal-inner { padding:26px 30px 34px; }
+.modal-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.modal-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.modal-tag { font-size:10px; padding:3px 10px; border-radius:12px; font-weight:600; }
+.modal-tag-cat { background:var(--navy); color:white; }
+.modal-tag-sec { background:var(--navy-light); color:var(--navy); border:1px solid var(--border); }
+
+.modal-close {
+  width:30px; height:30px;
+  border:1px solid var(--border); border-radius:50%;
+  background:none; cursor:pointer; font-size:14px;
+  color:var(--ink-light);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:background .12s;
+}
+.modal-close:hover { background:var(--navy-light); }
+
+.modal-title { font-family:'Noto Serif KR',serif; font-size:20px; font-weight:700; line-height:1.4; margin-bottom:6px; word-break:keep-all; color:var(--ink); }
+.modal-sub   { font-size:12px; color:var(--ink-light); margin-bottom:16px; line-height:1.6; }
+.modal-divider { border:none; border-top:1px solid var(--border); margin:12px 0; }
+.modal-meta  { display:flex; gap:18px; font-size:12px; color:var(--ink-light); margin-bottom:14px; flex-wrap:wrap; }
+.modal-meta strong { color:var(--ink); font-weight:600; }
+.modal-summary-label { font-size:9px; letter-spacing:2px; color:var(--navy); margin-bottom:7px; font-weight:700; }
+.modal-summary { font-size:13px; color:var(--ink-mid); line-height:1.9; margin-bottom:16px; }
+
+.modal-points { list-style:none; margin-bottom:18px; }
+.modal-points li {
+  padding:9px 0 9px 16px;
+  border-bottom:1px solid var(--border);
+  font-size:13px; color:var(--ink-mid); line-height:1.65; position:relative;
+}
+.modal-points li::before { content:'—'; position:absolute; left:0; color:var(--navy); font-size:10px; top:12px; }
+
+.modal-source { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--ink-light); margin-top:14px; }
+.modal-link { color:var(--navy-mid); text-decoration:none; font-size:12px; border-bottom:1px solid currentColor; }
+.modal-link:hover { opacity:.7; }
+
+.modal-nav { display:flex; gap:8px; margin-top:18px; }
+.modal-nav-btn {
+  flex:1; padding:10px;
+  border:1px solid var(--border); border-radius:4px;
+  background:none; cursor:pointer; font-size:12px; color:var(--ink-mid);
+  font-family:'Noto Sans KR',sans-serif; transition:all .12s;
+}
+.modal-nav-btn:hover { background:var(--navy-light); color:var(--navy); border-color:var(--navy); }
+.modal-nav-btn:disabled { opacity:.3; cursor:default; }
+
+/* ─── 관리자 모달 ─── */
+.admin-modal-backdrop { display:none; position:fixed; inset:0; background:rgba(17,24,39,0.55); backdrop-filter:blur(3px); z-index:300; align-items:center; justify-content:center; }
+.admin-modal-backdrop.show { display:flex; }
+.admin-modal { background:var(--white); border-radius:8px; padding:30px 26px; width:320px; border:1px solid var(--border); border-top:4px solid var(--navy); box-shadow:0 10px 40px rgba(17,24,39,0.15); }
+.admin-modal h3 { font-family:'Noto Serif KR',serif; font-size:17px; margin-bottom:5px; color:var(--navy); }
+.admin-modal p { font-size:12px; color:var(--ink-light); margin-bottom:16px; }
+.admin-modal input { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:4px; background:var(--bg); font-size:13px; font-family:'Noto Sans KR',sans-serif; margin-bottom:10px; outline:none; }
+.admin-modal input:focus { border-color:var(--navy); }
+.modal-btns { display:flex; gap:8px; }
+.btn-primary { flex:1; padding:10px; background:var(--navy); color:var(--white); border:none; border-radius:4px; cursor:pointer; font-size:13px; font-family:'Noto Sans KR',sans-serif; }
+.btn-primary:hover { background:var(--navy-dark); }
+.btn-cancel { padding:10px 16px; border:1px solid var(--border); border-radius:4px; background:none; cursor:pointer; font-size:13px; color:var(--ink-mid); font-family:'Noto Sans KR',sans-serif; }
+.error-msg { font-size:12px; color:var(--red); margin-bottom:8px; display:none; }
+
+/* ─── 반응형 ─── */
+@media (max-width:640px) {
+  .wrap { padding:0 14px; }
+  .topbar { padding:9px 16px; }
+  .mag-header { padding:24px 16px 20px; }
+  .editors-note { grid-template-columns:1fr; gap:8px 0; }
+  .top5-item { grid-template-columns:38px 1fr auto; }
+  .top5-num { font-size:26px; }
+  .modal-inner { padding:18px 16px 26px; }
+  .overlay-backdrop { padding:0; align-items:flex-end; }
+  .overlay-modal { max-height:92vh; border-radius:12px 12px 0 0; }
+  .site-footer { flex-direction:column; gap:4px; }
+  .meta-bar { flex-direction:column; gap:4px; align-items:flex-start; padding:10px 16px; }
+  .archive-wrap { padding:16px 14px; }
+  .archive-filter-select { max-width:100%; }
+}
 </style>
 </head>
 <body>
 
-<header class="admin-header">
-  <div class="admin-logo">HR<span>시그널</span> 관리자</div>
-  <div class="header-actions">
-    <a href="index.html" class="btn btn-outline">← 뉴스레터 보기</a>
-    <button class="btn btn-blue" onclick="openJsonViewer()">{ } JSON 보기/편집</button>
-    <button class="btn btn-white" onclick="saveAll()">저장 & 발행</button>
+<!-- 상단 바 -->
+<div class="topbar">
+  <div class="topbar-live">
+    <div class="live-dot"></div>
+    <span>LIVE SIGNAL</span>
   </div>
-</header>
-
-<div class="admin-layout">
-  <aside class="sidebar">
-    <div class="sidebar-label">에디션 목록</div>
-    <div id="edition-list"></div>
-    <button class="add-edition-btn" onclick="createNewEdition()">+ 새 에디션 추가</button>
-    <button class="add-edition-btn" onclick="showJsonUpload()" style="margin-top:6px;border-color:#C94A2A;color:#C94A2A;">↑ JSON으로 업로드</button>
-  </aside>
-
-  <main class="admin-main" id="admin-main">
-    <div class="empty-state">
-      <h3>에디션을 선택하거나 새로 만드세요</h3>
-      <p>왼쪽 사이드바에서 에디션을 선택하면 편집할 수 있습니다.</p>
-    </div>
-  </main>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- JSON 업로드 모달 -->
-<div style="display:none;position:fixed;inset:0;background:rgba(42,34,24,0.55);z-index:300;align-items:center;justify-content:center;" id="json-modal">
-  <div style="background:#F5F0E8;border-radius:8px;padding:28px;width:560px;max-width:95vw;border:1px solid #D8D0C0;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-      <div>
-        <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:#2A2218;">JSON으로 에디션 추가</div>
-        <div style="font-size:12px;color:#8A7F6A;margin-top:3px;">기존 에디션은 유지되고 새 에디션만 추가됩니다.</div>
-      </div>
-      <button onclick="closeJsonUpload()" style="background:none;border:1px solid #D8D0C0;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:14px;color:#5A5040;">✕</button>
-    </div>
-    <textarea id="json-input" placeholder='제가 드린 JSON을 여기에 붙여넣으세요.'
-      style="width:100%;height:220px;padding:12px;border:1px solid #D8D0C0;border-radius:4px;font-size:12px;font-family:monospace;background:white;color:#2A2218;resize:vertical;outline:none;"></textarea>
-    <div id="json-error" style="font-size:12px;color:#C94A2A;margin-top:6px;display:none;"></div>
-    <div style="display:flex;gap:8px;margin-top:12px;">
-      <button onclick="closeJsonUpload()" style="padding:10px 16px;border:1px solid #D8D0C0;border-radius:4px;background:none;cursor:pointer;font-size:13px;color:#5A5040;font-family:'Noto Sans KR',sans-serif;">취소</button>
-      <button onclick="uploadJson()" style="flex:1;padding:10px;background:#2A2218;color:#F5F0E8;border:none;border-radius:4px;cursor:pointer;font-size:13px;font-family:'Noto Sans KR',sans-serif;">업로드</button>
-    </div>
+  <div style="display:flex;gap:20px;align-items:center;">
+    <span id="issue-label" style="font-size:10px;letter-spacing:2px;">ISSUE NO. —</span>
+    <span class="admin-link" onclick="openAdminLogin()">관리자 ↗</span>
   </div>
 </div>
 
-<!-- ★ JSON 뷰어/편집 모달 -->
-<div class="json-viewer-modal" id="json-viewer-modal">
-  <div class="json-viewer-box">
-    <div class="json-viewer-header">
-      <span class="json-viewer-title" id="jv-title">JSON 데이터</span>
-      <div class="json-viewer-actions">
-        <!-- 범위 토글 -->
-        <button class="json-viewer-btn jvb-scope active" id="jv-scope-current" onclick="setJsonScope('current')">현재 에디션</button>
-        <button class="json-viewer-btn jvb-scope" id="jv-scope-all" onclick="setJsonScope('all')">전체</button>
-        <!-- 탭 -->
-        <button class="json-viewer-btn jvb-copy" onclick="copyJson()">복사</button>
-        <button class="json-viewer-btn jvb-download" onclick="downloadJson()">다운로드</button>
-        <button class="json-viewer-btn jvb-close" onclick="closeJsonViewer()">✕</button>
-      </div>
+<!-- 헤더 -->
+<div class="mag-header">
+  <div class="mag-logo">HR<span class="sig">시그널</span></div>
+  <div class="mag-sub">KOREAN HR WEEKLY · EDITORIAL DIGEST</div>
+</div>
+<div class="header-rule"></div>
+
+<!-- 탭 네비게이션 -->
+<nav class="tab-nav">
+  <button class="tab-btn active" id="tab-latest" onclick="switchTab('latest')">이번 주 호</button>
+  <button class="tab-btn" id="tab-archive" onclick="switchTab('archive')">지난 호 아카이브</button>
+</nav>
+
+<!-- 이번 주 탭 -->
+<div id="pane-latest">
+  <div class="meta-bar">
+    <span class="meta-date" id="mag-date">—</span>
+  </div>
+  <div class="wrap" style="padding-top:8px;">
+    <div id="loading" class="loading">불러오는 중...</div>
+    <div id="content" style="display:none"></div>
+  </div>
+</div>
+
+<!-- 아카이브 탭 -->
+<div id="pane-archive" style="display:none;">
+  <div class="archive-wrap">
+    <div class="archive-search-row">
+      <input class="archive-search-input" id="archive-search" type="text"
+        placeholder="기사 제목, 키워드, 카테고리 검색..."
+        oninput="runArchiveSearch()" onkeydown="if(event.key==='Enter')runArchiveSearch()">
+      <button class="archive-search-btn" onclick="runArchiveSearch()">검색</button>
     </div>
-    <!-- 보기 / 편집 탭 -->
-    <div class="json-viewer-tabs">
-      <button class="json-tab-btn active" id="jv-tab-view" onclick="switchJsonTab('view')">👁 보기</button>
-      <button class="json-tab-btn" id="jv-tab-edit" onclick="switchJsonTab('edit')">✏️ 편집 후 저장</button>
+    <div class="archive-filter-row">
+      <span class="archive-filter-label">호수</span>
+      <select class="archive-filter-select" id="archive-filter-edition" onchange="runArchiveSearch()">
+        <option value="">전체</option>
+      </select>
+      <span class="archive-filter-label" style="margin-left:8px;">카테고리</span>
+      <select class="archive-filter-select" id="archive-filter-cat" onchange="runArchiveSearch()">
+        <option value="">전체</option>
+        <option value="노사관계">노사관계</option>
+        <option value="노동법/정책">노동법/정책</option>
+        <option value="채용/퇴직">채용/퇴직</option>
+        <option value="조직/문화">조직/문화</option>
+        <option value="보상/복리후생">보상/복리후생</option>
+        <option value="교육/개발">교육/개발</option>
+        <option value="AI/디지털HR">AI/디지털HR</option>
+        <option value="글로벌HR">글로벌HR</option>
+        <option value="기타">기타</option>
+      </select>
+      <span class="archive-result-info" id="archive-result-info"></span>
     </div>
-    <!-- 보기 패널 -->
-    <div class="json-viewer-body" id="jv-panel-view">
-      <div class="json-code" id="jv-code"></div>
-    </div>
-    <!-- 편집 패널 -->
-    <div class="json-viewer-body" id="jv-panel-edit" style="display:none;flex-direction:column;">
-      <textarea class="json-editor" id="jv-editor" oninput="validateJsonEditor()" spellcheck="false"></textarea>
-      <div class="json-editor-toolbar">
-        <span class="json-editor-status" id="jv-editor-status">JSON을 직접 수정하세요.</span>
-        <button class="json-viewer-btn" style="background:#3A7A5A;color:white;" onclick="applyJsonEdit()">Firebase에 저장</button>
-        <button class="json-viewer-btn" style="background:#3A3A50;color:#C9C9E0;" onclick="formatJsonEditor()">포맷 정렬</button>
-      </div>
+    <div id="archive-body"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span>© HR시그널 · 매일유업 피플팀</span>
+  <span id="footer-date"></span>
+</footer>
+
+<!-- 기사 오버레이 -->
+<div class="overlay-backdrop" id="overlay" onclick="handleBackdropClick(event)">
+  <div class="overlay-modal">
+    <div class="modal-inner" id="modal-inner"></div>
+  </div>
+</div>
+
+<!-- 관리자 로그인 -->
+<div class="admin-modal-backdrop" id="admin-modal">
+  <div class="admin-modal">
+    <h3>관리자 로그인</h3>
+    <p>관리자 비밀번호를 입력하세요.</p>
+    <div class="error-msg" id="login-error">비밀번호가 올바르지 않습니다.</div>
+    <input type="password" id="admin-pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAdminLogin()">취소</button>
+      <button class="btn-primary" onclick="tryLogin()">로그인</button>
     </div>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, set, remove } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBIH03tDDCNSZHdq0_ru-4LnvaehECycSY",
@@ -337,576 +581,338 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-window._db = db; window._ref = ref; window._set = set; window._remove = remove;
 
-const editionsRef = ref(db, 'editions');
-onValue(editionsRef, (snapshot) => {
-  window._data = snapshot.val() || {};
-  window._keys = Object.keys(window._data).sort().reverse();
-  renderSidebar();
+onValue(ref(db, 'editions'), (snapshot) => {
+  const data = snapshot.val();
+  if (!data) { document.getElementById('loading').textContent = '등록된 기사가 없습니다.'; return; }
+  const keys = Object.keys(data).sort().reverse();
+  window._editionsData = data;
+  window._editionKeys = keys;
+  initPage(keys, data);
 });
 </script>
 
 <script>
-window._data = {};
-window._keys = [];
-window._currentKey = null;
-window._jsonScope = 'current'; // 'current' | 'all'
-window._jsonTab = 'view';
+const ADMIN_PASSWORD = 'maeil2024';
+let currentArticles = [];
+let currentIndex = -1;
+let _allArticles = [];
 
-/* ════ JSON 뷰어 ════ */
-
-function openJsonViewer() {
-  if (_jsonScope === 'current' && !_currentKey) {
-    toast('에디션을 먼저 선택해 주세요.'); return;
-  }
-  document.getElementById('json-viewer-modal').classList.add('show');
-  refreshJsonViewer();
+/* ════ 탭 전환 ════ */
+function switchTab(tab) {
+  document.getElementById('pane-latest').style.display  = tab === 'latest'  ? '' : 'none';
+  document.getElementById('pane-archive').style.display = tab === 'archive' ? '' : 'none';
+  document.getElementById('tab-latest').classList.toggle('active',  tab === 'latest');
+  document.getElementById('tab-archive').classList.toggle('active', tab === 'archive');
+  if (tab === 'archive') renderArchive();
 }
 
-function closeJsonViewer() {
-  document.getElementById('json-viewer-modal').classList.remove('show');
-}
+/* ════ 초기화 ════ */
+function initPage(keys, data) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
 
-function setJsonScope(scope) {
-  _jsonScope = scope;
-  document.getElementById('jv-scope-current').classList.toggle('active', scope === 'current');
-  document.getElementById('jv-scope-all').classList.toggle('active', scope === 'all');
-  refreshJsonViewer();
-}
-
-function switchJsonTab(tab) {
-  _jsonTab = tab;
-  document.getElementById('jv-tab-view').classList.toggle('active', tab === 'view');
-  document.getElementById('jv-tab-edit').classList.toggle('active', tab === 'edit');
-  document.getElementById('jv-panel-view').style.display = tab === 'view' ? '' : 'none';
-  document.getElementById('jv-panel-edit').style.display = tab === 'edit' ? 'flex' : 'none';
-  if (tab === 'edit') {
-    // 에디터에 현재 JSON 채우기
-    const data = getJsonData();
-    document.getElementById('jv-editor').value = JSON.stringify(data, null, 2);
-    validateJsonEditor();
-  }
-}
-
-function getJsonData() {
-  if (_jsonScope === 'all') {
-    return { editions: _data };
-  } else {
-    return { editions: { [_currentKey]: _data[_currentKey] } };
-  }
-}
-
-function refreshJsonViewer() {
-  const data = getJsonData();
-  const label = _jsonScope === 'all'
-    ? `전체 에디션 (${_keys.length}개)`
-    : `${_data[_currentKey]?.title || _currentKey}`;
-  document.getElementById('jv-title').textContent = `{ } ${label}`;
-
-  // 보기 탭 렌더
-  document.getElementById('jv-code').innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
-
-  // 편집 탭도 열려있으면 갱신
-  if (_jsonTab === 'edit') {
-    document.getElementById('jv-editor').value = JSON.stringify(data, null, 2);
-    validateJsonEditor();
-  }
-}
-
-// JSON 문법 하이라이팅
-function syntaxHighlight(json) {
-  json = json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
-    let cls = 'json-num';
-    if (/^"/.test(match)) {
-      cls = /:$/.test(match) ? 'json-key' : 'json-str';
-    } else if (/true|false/.test(match)) {
-      cls = 'json-bool';
-    } else if (/null/.test(match)) {
-      cls = 'json-null';
-    }
-    return `<span class="${cls}">${match}</span>`;
+  _allArticles = [];
+  const cats = new Set();
+  keys.forEach(k => {
+    const ed = data[k];
+    const edTitle = ed.title || k;
+    const collectItem = (item, section) => {
+      if (item.category) cats.add(item.category);
+      _allArticles.push({ ...item, _edKey: k, _edTitle: edTitle, _section: section });
+    };
+    (ed.top5 || []).forEach(i => collectItem(i, '이번 주 Top 5'));
+    if (ed.editors_pick) collectItem(ed.editors_pick, "Editor's Pick");
+    (ed.sections || []).forEach(sec => (sec.articles || []).forEach(i => collectItem(i, sec.title)));
   });
+
+  const edSel = document.getElementById('archive-filter-edition');
+  keys.forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = data[k].title || k;
+    edSel.appendChild(opt);
+  });
+  // 카테고리 필터: 고정 목록 사용 (HTML에 정의됨)
+
+  renderEdition(data[keys[0]]);
 }
 
-function copyJson() {
-  const data = getJsonData();
-  navigator.clipboard.writeText(JSON.stringify(data, null, 2))
-    .then(() => toast('✓ JSON이 클립보드에 복사되었습니다.'))
-    .catch(() => toast('복사 실패 — 수동으로 선택해 주세요.'));
-}
+/* ════ 이번 주 에디션 렌더 ════ */
+function renderEdition(edition) {
+  currentArticles = [];
+  const num = (edition.title || '').replace(/[^0-9]/g, '');
+  document.getElementById('issue-label').textContent = num ? `ISSUE NO. ${num.padStart(3,'0')}` : 'HR시그널';
+  document.getElementById('mag-date').textContent = edition.date || '';
+  document.getElementById('footer-date').textContent = edition.date || '';
 
-function downloadJson() {
-  const data = getJsonData();
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  const label = _jsonScope === 'all' ? 'hrsignal_all' : (_currentKey || 'edition');
-  a.download = `${label}.json`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast('JSON 파일 다운로드 시작');
-}
+  let html = '';
 
-/* ── 편집 모드 ── */
-function validateJsonEditor() {
-  const statusEl = document.getElementById('jv-editor-status');
-  const val = document.getElementById('jv-editor').value.trim();
-  if (!val) { statusEl.textContent = 'JSON을 입력해 주세요.'; statusEl.className = 'json-editor-status'; return false; }
-  try {
-    JSON.parse(val);
-    statusEl.textContent = '✓ 유효한 JSON입니다.';
-    statusEl.className = 'json-editor-status ok';
-    return true;
-  } catch(e) {
-    statusEl.textContent = '✗ ' + e.message;
-    statusEl.className = 'json-editor-status error';
-    return false;
-  }
-}
-
-function formatJsonEditor() {
-  const el = document.getElementById('jv-editor');
-  try {
-    el.value = JSON.stringify(JSON.parse(el.value), null, 2);
-    validateJsonEditor();
-  } catch(e) { toast('포맷 실패: JSON이 올바르지 않습니다.'); }
-}
-
-function applyJsonEdit() {
-  if (!validateJsonEditor()) { toast('JSON 오류를 먼저 수정해 주세요.'); return; }
-  const parsed = JSON.parse(document.getElementById('jv-editor').value);
-  const editions = parsed.editions || parsed;
-
-  if (typeof editions !== 'object' || !Object.keys(editions).length) {
-    toast('editions 데이터를 찾을 수 없습니다.'); return;
+  if (edition.intro) {
+    html += `<div class="editors-note">
+      <div class="note-label">EDITOR'S<br>NOTE</div>
+      <div class="note-body">${edition.intro}<div class="note-sig">— 편집자 K.</div></div>
+    </div>`;
   }
 
-  if (!confirm(`Firebase에 저장할까요?\n범위: ${_jsonScope === 'all' ? '전체 에디션 (덮어씀)' : '현재 에디션만'}`)) return;
-
-  const saveScope = _jsonScope === 'all'
-    ? _set(_ref(_db, 'editions'), editions)
-    : _set(_ref(_db, `editions/${_currentKey}`), editions[_currentKey] || editions);
-
-  saveScope
-    .then(() => {
-      toast('✓ Firebase에 저장되었습니다!');
-      closeJsonViewer();
-    })
-    .catch(err => toast('저장 실패: ' + err.message));
-}
-
-/* ════ 사이드바 ════ */
-function renderSidebar() {
-  const list = document.getElementById('edition-list');
-  list.innerHTML = '';
-  _keys.forEach(k => {
-    const ed = _data[k];
-    const item = document.createElement('div');
-    item.className = 'edition-item' + (k === _currentKey ? ' active' : '');
-    item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
-    item.innerHTML = `
-      <div onclick="selectEditionByKey('${k}')" style="flex:1;cursor:pointer;">
-        <div class="edition-item-title">${ed.title || k}</div>
-        <div class="edition-item-date">${ed.date || ''}</div>
+  /* ── Top 5 ── */
+  if (edition.top5 && edition.top5.length) {
+    html += `<div class="sec-header">
+      <div class="sec-header-left">
+        <span class="sec-symbol">§ 00</span>
+        <span class="sec-title">이번 주 Top 5</span>
       </div>
-      <button onclick="deleteEdition('${k}')" title="에디션 삭제"
-        style="background:none;border:none;cursor:pointer;color:#8A7F6A;font-size:14px;
-        padding:4px 6px;border-radius:3px;flex-shrink:0;line-height:1;"
-        onmouseover="this.style.color='#C94A2A';this.style.background='#FDEEE9'"
-        onmouseout="this.style.color='#8A7F6A';this.style.background='none'">✕</button>`;
-    list.appendChild(item);
-  });
-}
-
-function selectEditionByKey(key) {
-  _currentKey = key;
-  document.querySelectorAll('.edition-item').forEach(el => el.classList.remove('active'));
-  const items = document.querySelectorAll('.edition-item');
-  items.forEach(el => {
-    if (el.querySelector(`[onclick="selectEditionByKey('${key}')"]`)) el.classList.add('active');
-  });
-  renderEditor(_data[key]);
-  // 뷰어가 열려있으면 갱신
-  if (document.getElementById('json-viewer-modal').classList.contains('show')) refreshJsonViewer();
-}
-
-function deleteEdition(key) {
-  const title = _data[key]?.title || key;
-  if (!confirm(`"${title}" 에디션을 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.`)) return;
-  _remove(_ref(_db, `editions/${key}`)).then(() => {
-    toast(`"${title}" 에디션이 삭제되었습니다.`);
-    if (_currentKey === key) {
-      _currentKey = null;
-      document.getElementById('admin-main').innerHTML = `<div class="empty-state"><h3>에디션을 선택하거나 새로 만드세요</h3><p>왼쪽 사이드바에서 에디션을 선택하면 편집할 수 있습니다.</p></div>`;
-    }
-  }).catch(err => toast('삭제 실패: ' + err.message));
-}
-
-function createNewEdition() {
-  const now = new Date();
-  const key = now.toISOString().split('T')[0];
-  const newEd = {
-    title: `HR시그널 #${(_keys.length + 1)}`,
-    date: key, intro_title: '이번 주 HR 핵심 이슈', intro: '',
-    top5: [], editors_pick: null,
-    sections: [
-      { title: 'AI와 HR', articles: [] },
-      { title: '채용 트렌드', articles: [] },
-      { title: '노동법 & 정책', articles: [] }
-    ]
-  };
-  _data[key] = newEd; _keys.unshift(key); _currentKey = key;
-  renderSidebar(); renderEditor(newEd);
-  toast('새 에디션이 생성되었습니다.');
-}
-
-/* ════ 에디터 렌더 (기존과 동일) ════ */
-function renderEditor(edition) {
-  const main = document.getElementById('admin-main');
-  const ed = JSON.parse(JSON.stringify(edition));
-
-  let html = `<div class="edition-form-block">
-    <div class="edition-form-title">에디션 기본 정보</div>
-    <div class="form-row">
-      <div class="form-group"><label>에디션 제목</label><input type="text" id="f-title" value="${ed.title||''}" placeholder="예: HR시그널 #12"></div>
-      <div class="form-group"><label>발행일</label><input type="date" id="f-date" value="${ed.date||''}"></div>
+      <span class="sec-count">${edition.top5.length.toString().padStart(2,'0')} 건</span>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label>헤드라인 타이틀</label><input type="text" id="f-intro-title" value="${ed.intro_title||''}" placeholder="이번 주 HR 핵심 이슈"></div>
-    </div>
-    <div class="form-group"><label>에디션 소개글</label><textarea id="f-intro" placeholder="이번 주 주요 내용을 간략히...">${ed.intro||''}</textarea></div>
-  </div>`;
-
-  html += `<div class="section-block">
-    <div class="section-block-header">
-      <span class="section-block-title">이번 주 Top 5</span>
-      <span style="font-size:11px;color:var(--ink-light);">섹션 기사 중 선택 → 드래그로 순서 변경</span>
-    </div>
-    <div class="top5-panel">
-      <div class="top5-pool" id="top5-pool">
-        <div class="top5-panel-label">기사 풀 <strong id="pool-count">섹션을 먼저 추가하세요</strong></div>
-        <div id="pool-articles-list"></div>
-      </div>
-      <div class="top5-selected">
-        <div class="top5-panel-label">선정된 Top 5 <strong id="top5-count">0 / 5</strong></div>
-        <div id="top5-selected-list"></div>
-        <div class="top5-drag-hint">↕ 드래그로 순서 변경</div>
-      </div>
-    </div>
-  </div>`;
-
-  const ep = ed.editors_pick || {};
-  html += `<div class="section-block">
-    <div class="section-block-header"><span class="section-block-title">★ Editor's Pick</span></div>
-    <div class="section-block-body">
-      <div class="form-row">
-        <div class="form-group"><label>제목</label><input type="text" id="ep-title" value="${ep.title||''}" placeholder="에디터 추천 기사 제목"></div>
-        <div class="form-group"><label>출처</label><input type="text" id="ep-source" value="${ep.source||''}"></div>
-      </div>
-      <div class="form-group" style="margin-bottom:10px;"><label>요약</label><textarea id="ep-summary">${ep.summary||''}</textarea></div>
-      <div class="form-row">
-        <div class="form-group"><label>URL</label><input type="url" id="ep-url" value="${ep.url||''}"></div>
-        <div class="form-group"><label>날짜</label><input type="text" id="ep-date" value="${ep.date||''}"></div>
-      </div>
-    </div>
-  </div>`;
-
-  (ed.sections||[]).forEach((sec, si) => {
-    html += `<div class="section-block">
-      <div class="section-block-header">
-        <input type="text" value="${sec.title}" id="sec-title-${si}" style="border:none;background:transparent;font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
-        <div style="display:flex;gap:6px;">
-          <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
-          <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
+    <div class="sec-desc">인급량·정책 임팩트 기준 편집자 선정</div>
+    <ul class="top5-list">`;
+    edition.top5.forEach((item, i) => {
+      const idx = currentArticles.length;
+      currentArticles.push({ ...item, _section: '이번 주 Top 5' });
+      const badge = item.badge;
+      html += `<li class="top5-item" onclick="openModal(${idx})" id="art-${idx}">
+        <span class="top5-num">${String(i+1).padStart(2,'0')}</span>
+        <div>
+          <div class="top5-cat-row">
+            <span class="top5-cat">${item.category||''}</span>
+            ${item.source ? `<span class="top5-dot"></span><span class="top5-source">${item.source}</span>` : ''}
+            ${item.date ? `<span class="top5-dot"></span><span class="top5-date-sm">${item.date}</span>` : ''}
+          </div>
+          <div class="top5-headline">${item.title}</div>
         </div>
+        ${badge ? `<span class="badge badge-${badge.type||'hot'}">${badge.label||''}</span>` : ''}
+      </li>`;
+    });
+    html += `</ul>`;
+  }
+
+  /* ── Editor's Pick ── */
+  if (edition.editors_pick) {
+    const ep = edition.editors_pick;
+    const idx = currentArticles.length;
+    currentArticles.push({ ...ep, _section: "Editor's Pick" });
+    html += `<div class="pick-block" onclick="openModal(${idx})">
+      <div class="pick-label">★ EDITOR'S PICK</div>
+      <div class="pick-title">${ep.title}</div>
+      ${ep.summary ? `<div class="pick-desc">${ep.summary}</div>` : ''}
+      ${ep.source ? `<div class="pick-source">${ep.source}</div>` : ''}
+    </div>`;
+  }
+
+  /* ── 섹션별 뉴스 ── */
+  (edition.sections||[]).forEach((sec, si) => {
+    if (!sec.articles || !sec.articles.length) return;
+    html += `<div class="sec-header" style="margin-top:8px;">
+      <div class="sec-header-left">
+        <span class="sec-symbol">§ ${String(si+1).padStart(2,'0')}</span>
+        <span class="sec-title">${sec.title}</span>
       </div>
-      <div class="section-block-body" id="sec-${si}-list">`;
-    (sec.articles||[]).forEach((a, ai) => { html += articleCard(a,'sec',ai,false,si); });
+      <span class="sec-count">${sec.articles.length.toString().padStart(2,'0')} 건</span>
+    </div>
+    <div class="sec-desc"></div>
+    <ul class="news-list">`;
+    sec.articles.forEach(item => {
+      const idx = currentArticles.length;
+      currentArticles.push({ ...item, _section: sec.title });
+      const tags = (item.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+      html += `<li class="news-item" onclick="openModal(${idx})" id="art-${idx}">
+        <div class="news-body">
+          ${tags ? `<div class="news-tags">${tags}</div>` : ''}
+          <div class="news-headline">${item.title}</div>
+          ${item.summary ? `<div class="news-snippet">${item.summary}</div>` : ''}
+          ${(item.category || item.source) ? `
+          <div class="news-source-row">
+            ${item.category ? `<span class="news-source-cat">${item.category}</span>` : ''}
+            ${(item.category && item.source) ? `<span class="news-source-dot"></span>` : ''}
+            ${item.source ? `<span class="news-source-name">${item.source}</span>` : ''}
+          </div>` : ''}
+        </div>
+        <div class="news-meta">${item.date||''}</div>
+      </li>`;
+    });
+    html += `</ul>`;
+  });
+
+  document.getElementById('content').innerHTML = html;
+}
+
+/* ════ 아카이브 렌더 ════ */
+let _archiveRendered = false;
+
+function renderArchive() {
+  if (!_archiveRendered) {
+    _archiveRendered = true;
+    runArchiveSearch();
+  }
+}
+
+function runArchiveSearch() {
+  const query    = (document.getElementById('archive-search').value || '').trim().toLowerCase();
+  const edFilter  = document.getElementById('archive-filter-edition').value;
+  const catFilter = document.getElementById('archive-filter-cat').value;
+
+  let filtered = _allArticles.filter(a => {
+    if (edFilter  && a._edKey   !== edFilter)  return false;
+    if (catFilter && a.category !== catFilter)  return false;
+    if (query) {
+      const haystack = [a.title, a.category, a.summary, a._section, ...(a.tags||[])].join(' ').toLowerCase();
+      if (!haystack.includes(query)) return false;
+    }
+    return true;
+  });
+
+  document.getElementById('archive-result-info').textContent =
+    query || edFilter || catFilter ? `${filtered.length}건` : `전체 ${_allArticles.length}건`;
+
+  const groups = {};
+  const groupOrder = [];
+  filtered.forEach(a => {
+    if (!groups[a._edKey]) { groups[a._edKey] = []; groupOrder.push(a._edKey); }
+    groups[a._edKey].push(a);
+  });
+
+  const body = document.getElementById('archive-body');
+
+  if (!filtered.length) {
+    body.innerHTML = `<div class="archive-empty"><span class="archive-empty-icon">🔍</span>검색 결과가 없습니다.<br>다른 키워드로 검색해 보세요.</div>`;
+    return;
+  }
+
+  const hl = (text, q) => {
+    if (!q) return text;
+    return text.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi'), m => `<mark>${m}</mark>`);
+  };
+
+  let html = '';
+  const openAll = !!(query || catFilter);
+
+  groupOrder.forEach((k, gi) => {
+    const articles = groups[k];
+    const ed = window._editionsData[k];
+    const isOpen = openAll || gi === 0;
+    html += `<div class="archive-edition-group">
+      <div class="archive-edition-header" onclick="toggleEditionGroup('eg-${k}', this)">
+        <span class="archive-edition-title">${ed.title || k}</span>
+        <span class="archive-edition-date">${ed.date || ''}</span>
+        <span class="archive-edition-cnt">${articles.length}건</span>
+        <span class="archive-edition-arrow${isOpen?' open':''}">▼</span>
+      </div>
+      <div class="archive-edition-body${isOpen?' open':''}" id="eg-${k}">`;
+    articles.forEach(a => {
+      const globalIdx = _allArticles.indexOf(a);
+      html += `<div class="archive-article-row" onclick="openArchiveModal(${globalIdx})">
+        <span class="archive-article-cat">${a.category||a._section||''}</span>
+        <span class="archive-article-title">${hl(a.title, query)}</span>
+        <span class="archive-article-date">${a.date||''}</span>
+      </div>`;
+    });
     html += `</div></div>`;
   });
 
-  html += `<button class="add-edition-btn" style="width:100%;margin:0 0 40px;" onclick="addSection()">+ 새 섹션 추가</button>`;
-  main.innerHTML = html;
-  window._editingEdition = ed;
-  const rawTop5 = ed.top5 || [];
-  window._top5Selected = rawTop5.map(t5 => {
-    let matched = null;
-    (ed.sections||[]).forEach((sec,si) => {
-      (sec.articles||[]).forEach((art,ai) => {
-        if (!matched && art.title === t5.title) matched = {...art, _secIdx:si, _artIdx:ai, badge:t5.badge||null};
-      });
-    });
-    return matched || {...t5, _secIdx:-1, _artIdx:-1};
-  });
-  renderTop5Panel();
+  body.innerHTML = html;
 }
 
-function articleCard(a, type, idx, isTop5, secIdx) {
-  const badgeLabel = a.badge ? a.badge.label||'' : '';
-  const badgeType  = a.badge ? a.badge.type||'hot' : 'hot';
-  const points = (a.points||[]).map((p,pi) =>
-    `<div class="point-row"><input type="text" value="${p}" placeholder="핵심 포인트"><button class="btn-sm delete" onclick="removePoint(this)">✕</button></div>`).join('');
-  return `<div class="article-card" id="card-${type}-${secIdx??''}-${idx}">
-    <div class="article-card-header" onclick="toggleCard(this)">
-      <span class="article-card-num">${isTop5?'0'+(idx+1):(idx+1)}</span>
-      <span class="article-card-title-preview">${a.title||'(제목 없음)'}</span>
-      <div class="article-card-actions"><button class="btn-sm delete" onclick="deleteArticle(event,'${type}',${idx},${secIdx??'null'})">삭제</button></div>
+function toggleEditionGroup(id, headerEl) {
+  const body  = document.getElementById(id);
+  const arrow = headerEl.querySelector('.archive-edition-arrow');
+  const isOpen = body.classList.toggle('open');
+  arrow.classList.toggle('open', isOpen);
+}
+
+/* ════ 모달 ════ */
+function openModal(idx, articleList) {
+  const list = articleList || currentArticles;
+  if (currentIndex === idx && !articleList) { closeModal(); return; }
+  currentIndex = idx;
+  const item = list[idx];
+  document.querySelectorAll('.top5-item,.news-item,.pick-block,.archive-article-row').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById(`art-${idx}`);
+  if (el) el.classList.add('active');
+
+  const points = (item.points||[]).map(p=>`<li>${p}</li>`).join('');
+  const editionTag = item._edTitle ? `<span class="modal-tag" style="background:#f0f4ff;color:var(--navy-mid);border:1px solid var(--border);">${item._edTitle}</span>` : '';
+
+  document.getElementById('modal-inner').innerHTML = `
+    <div class="modal-top">
+      <div class="modal-tags">
+        ${(item.tags && item.tags.length)
+          ? item.tags.map(t=>`<span class="modal-tag modal-tag-sec">${t}</span>`).join('')
+          : `<span class="modal-tag modal-tag-cat">${item.category||item._section||''}</span>
+             ${item.category && item._section && item._section !== item.category ? `<span class="modal-tag modal-tag-sec">${item._section}</span>` : ''}`}
+        ${editionTag}
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="article-card-body">
-      <div class="form-row">
-        <div class="form-group"><label>제목</label><input type="text" class="art-title" value="${a.title||''}" placeholder="기사 제목"></div>
-        <div class="form-group" style="max-width:120px;"><label>날짜</label><input type="text" class="art-date" value="${a.date||''}" placeholder="04.08"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>카테고리</label><input type="text" class="art-cat" value="${a.category||''}" placeholder="AI·HR"></div>
-        <div class="form-group"><label>출처</label><input type="text" class="art-source" value="${a.source||''}" placeholder="HR Korea"></div>
-      </div>
-      ${isTop5?`<div class="form-row">
-        <div class="form-group"><label>뱃지 텍스트</label><input type="text" class="art-badge-label" value="${badgeLabel}" placeholder="HOT"></div>
-        <div class="form-group"><label>뱃지 타입</label><select class="art-badge-type">
-          <option value="hot" ${badgeType==='hot'?'selected':''}>hot (빨강)</option>
-          <option value="new" ${badgeType==='new'?'selected':''}>new (초록)</option>
-          <option value="trend" ${badgeType==='trend'?'selected':''}>trend (파랑)</option>
-        </select></div></div>`
-      :`<div class="form-group" style="margin-bottom:10px;"><label>태그 (엔터로 추가)</label>
-        <div class="tags-input-wrap" onclick="this.querySelector('.tags-input').focus()">
-          ${(a.tags||[]).map(t=>`<span class="tag-chip">${t}<button onclick="removeTag(this)">✕</button></span>`).join('')}
-          <input class="tags-input" placeholder="태그 입력 후 엔터" onkeydown="addTag(event,this)">
-        </div></div>`}
-      <div class="form-group" style="margin-bottom:10px;"><label>부제</label><input type="text" class="art-sub" value="${a.sub||''}" placeholder="이번 주 가장 많이 언급된 이슈"></div>
-      <div class="form-group" style="margin-bottom:10px;"><label>요약</label><textarea class="art-summary" placeholder="기사 요약 (2-3문장)">${a.summary||''}</textarea></div>
-      <div class="form-group" style="margin-bottom:10px;"><label>핵심 포인트</label>
-        <div class="points-list" id="points-${type}-${secIdx??''}-${idx}">${points}</div>
-        <button class="btn-add-row" onclick="addPoint(this,'${type}',${idx},${secIdx??'null'})">+ 포인트 추가</button>
-      </div>
-      <div class="form-group"><label>원문 URL</label><input type="url" class="art-url" value="${a.url||''}" placeholder="https://..."></div>
+    <div class="modal-title">${item.title}</div>
+    <div class="modal-sub">${item.sub||'이번 주 가장 많이 언급된 이슈 중 하나입니다.'}</div>
+    <hr class="modal-divider">
+    <div class="modal-meta">
+      <span>카테고리: <strong>${item.category||item._section||'-'}</strong></span>
+      <span>발표일: <strong>${item.date||'-'}</strong></span>
+      <span>출처: <strong>${item.source||'-'}</strong></span>
     </div>
-  </div>`;
-}
-
-function toggleCard(header) {
-  const body = header.nextElementSibling;
-  body.classList.toggle('open');
-  const input = body.querySelector('.art-title');
-  if (input) header.querySelector('.article-card-title-preview').textContent = input.value || '(제목 없음)';
-}
-
-function addArticle(type, secIdx) {
-  const blank = {title:'',date:'',category:'',source:'',summary:'',sub:'',points:[],tags:[],url:''};
-  if (type==='top5') {
-    if (!window._editingEdition.top5) window._editingEdition.top5=[];
-    const idx = window._editingEdition.top5.length;
-    window._editingEdition.top5.push(blank);
-    document.getElementById('top5-list').insertAdjacentHTML('beforeend', articleCard(blank,'top5',idx,true));
-  } else {
-    const sec = window._editingEdition.sections[secIdx];
-    if (!sec.articles) sec.articles=[];
-    const idx = sec.articles.length;
-    sec.articles.push(blank);
-    document.getElementById(`sec-${secIdx}-list`).insertAdjacentHTML('beforeend', articleCard(blank,'sec',idx,false,secIdx));
-    renderPoolArticles();
-  }
-}
-
-function deleteArticle(e, type, idx, secIdx) {
-  e.stopPropagation();
-  if (!confirm('이 기사를 삭제할까요?')) return;
-  const card = e.target.closest('.article-card');
-  if (type==='sec') {
-    window._top5Selected = (window._top5Selected||[]).filter(s=>!(s._secIdx==secIdx && s._artIdx==idx));
-    renderTop5Panel();
-  }
-  card.remove(); toast('기사가 삭제되었습니다.');
-}
-
-function addSection() {
-  if (!window._editingEdition.sections) window._editingEdition.sections=[];
-  const si = window._editingEdition.sections.length;
-  window._editingEdition.sections.push({title:'새 섹션',articles:[]});
-  const html = `<div class="section-block">
-    <div class="section-block-header">
-      <input type="text" value="새 섹션" id="sec-title-${si}" style="border:none;background:transparent;font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
-        <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
-      </div>
+    ${item.summary ? `<div class="modal-summary-label">SUMMARY</div><div class="modal-summary">${item.summary}</div>` : ''}
+    ${points ? `<ul class="modal-points">${points}</ul>` : ''}
+    <div class="modal-source">
+      <span></span>
+      ${item.url ? `<a class="modal-link" href="${item.url}" target="_blank">원문 보기 →</a>` : ''}
     </div>
-    <div class="section-block-body" id="sec-${si}-list"></div>
-  </div>`;
-  document.querySelector('.add-edition-btn').insertAdjacentHTML('beforebegin', html);
-  toast('새 섹션이 추가되었습니다.');
-}
-
-function deleteSection(si) {
-  if (!confirm('이 섹션을 삭제할까요?')) return;
-  event.target.closest('.section-block').remove(); toast('섹션이 삭제되었습니다.');
-}
-
-function addTag(e, input) {
-  if (e.key==='Enter' && input.value.trim()) {
-    e.preventDefault();
-    const chip = document.createElement('span');
-    chip.className='tag-chip';
-    chip.innerHTML=`${input.value.trim()}<button onclick="removeTag(this)">✕</button>`;
-    input.before(chip); input.value='';
-  }
-}
-function removeTag(btn) { btn.parentElement.remove(); }
-function addPoint(btn, type, idx, secIdx) {
-  const container=btn.previousElementSibling;
-  const row=document.createElement('div'); row.className='point-row';
-  row.innerHTML=`<input type="text" placeholder="핵심 포인트"><button class="btn-sm delete" onclick="removePoint(this)">✕</button>`;
-  container.appendChild(row);
-}
-function removePoint(btn) { btn.parentElement.remove(); }
-
-window._top5Selected=[]; window._dragSrcIdx=null;
-
-function renderTop5Panel() { renderPoolArticles(); renderTop5Selected(); }
-
-function renderPoolArticles() {
-  const poolEl=document.getElementById('pool-articles-list');
-  const countEl=document.getElementById('pool-count');
-  if (!poolEl) return;
-  const sections=window._editingEdition.sections||[];
-  const selectedKeys=window._top5Selected.map(s=>`${s._secIdx}-${s._artIdx}`);
-  let html='', total=0;
-  sections.forEach((sec,si) => {
-    const arts=sec.articles||[];
-    if (!arts.length) return;
-    html+=`<div class="pool-section-group"><div class="pool-section-name">§ ${sec.title}</div>`;
-    arts.forEach((a,ai) => {
-      total++;
-      const key=`${si}-${ai}`, inTop5=selectedKeys.includes(key);
-      html+=`<div class="pool-article-item ${inTop5?'in-top5':''}" data-si="${si}" data-ai="${ai}">
-        <div class="pool-article-text">${a.title||'(제목 없음)'}</div>
-        <div class="pool-article-meta">${a.date||''}</div>
-        ${inTop5?`<span style="font-size:10px;color:var(--accent-green);padding:3px 8px;">✓ 선정됨</span>`
-                :`<button class="pool-add-btn" onclick="addToTop5(${si},${ai})">+ Top5</button>`}
-      </div>`;
-    });
-    html+=`</div>`;
-  });
-  if (!total) { html=`<div style="text-align:center;padding:24px;color:var(--ink-light);font-size:12px;">섹션에 기사를 먼저 추가하세요</div>`; countEl.textContent='섹션 기사 없음'; }
-  else { countEl.textContent=`${total}개 기사`; }
-  poolEl.innerHTML=html;
-}
-
-function renderTop5Selected() {
-  const el=document.getElementById('top5-selected-list');
-  const countEl=document.getElementById('top5-count');
-  if (!el) return;
-  countEl.textContent=`${window._top5Selected.length} / 5`;
-  if (!window._top5Selected.length) { el.innerHTML=`<div class="top5-empty-msg">왼쪽에서 기사를 선택하세요</div>`; return; }
-  let html='';
-  window._top5Selected.forEach((item,i)=>{
-    const sec=(window._editingEdition.sections||[])[item._secIdx];
-    const secName=sec?sec.title:'섹션';
-    const badgeLabel=item.badge?item.badge.label||'':'';
-    const badgeType=item.badge?item.badge.type||'hot':'hot';
-    html+=`<div class="top5-selected-item" draggable="true"
-      ondragstart="dragStart(event,${i})" ondragover="dragOver(event,${i})"
-      ondrop="dragDrop(event,${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
-      <div class="top5-rank-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="top5-selected-body">
-        <div class="top5-selected-title">${item.title||'(제목 없음)'}</div>
-        <div class="top5-selected-sec">${secName} · ${item.date||''}</div>
-      </div>
-      <div class="top5-selected-badge">
-        <input class="top5-badge-input" type="text" placeholder="뱃지 (HOT 등)" value="${badgeLabel}" onchange="updateTop5Badge(${i},'label',this.value)">
-        <select class="top5-badge-select" onchange="updateTop5Badge(${i},'type',this.value)">
-          <option value="hot" ${badgeType==='hot'?'selected':''}>🔴 hot</option>
-          <option value="new" ${badgeType==='new'?'selected':''}>🟢 new</option>
-          <option value="trend" ${badgeType==='trend'?'selected':''}>🔵 trend</option>
-        </select>
-        <button class="top5-remove-btn" onclick="removeFromTop5(${i})">✕ 해제</button>
-      </div>
+    <div class="modal-nav">
+      <button class="modal-nav-btn" onclick="navModal(-1)" ${idx===0?'disabled':''}>← 이전 기사</button>
+      <button class="modal-nav-btn" onclick="navModal(1)" ${idx===list.length-1?'disabled':''}>다음 기사 →</button>
     </div>`;
-  });
-  el.innerHTML=html;
+
+  document.getElementById('overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
 }
 
-function addToTop5(si,ai) {
-  if (window._top5Selected.length>=5){toast('Top5는 최대 5개까지 선정할 수 있습니다.');return;}
-  const sec=(window._editingEdition.sections||[])[si]; if(!sec)return;
-  const art=(sec.articles||[])[ai]; if(!art)return;
-  window._top5Selected.push({...art,_secIdx:si,_artIdx:ai,badge:null});
-  renderTop5Panel(); toast(`"${art.title||'기사'}"가 Top5에 추가되었습니다.`);
-}
-function removeFromTop5(rank){window._top5Selected.splice(rank,1);renderTop5Panel();}
-function updateTop5Badge(rank,field,val){const item=window._top5Selected[rank];if(!item.badge)item.badge={label:'',type:'hot'};item.badge[field]=val;}
-
-function dragStart(e,idx){window._dragSrcIdx=idx;e.dataTransfer.effectAllowed='move';e.currentTarget.style.opacity='0.5';}
-function dragOver(e,idx){e.preventDefault();e.dataTransfer.dropEffect='move';e.currentTarget.classList.add('drag-over');}
-function dragLeave(e){e.currentTarget.classList.remove('drag-over');}
-function dragDrop(e,idx){e.preventDefault();e.currentTarget.classList.remove('drag-over');const src=window._dragSrcIdx;if(src===null||src===idx)return;const moved=window._top5Selected.splice(src,1)[0];window._top5Selected.splice(idx,0,moved);renderTop5Selected();}
-function dragEnd(e){e.currentTarget.style.opacity='';document.querySelectorAll('.top5-selected-item').forEach(el=>el.classList.remove('drag-over'));window._dragSrcIdx=null;}
-
-function saveAll() {
-  const edition={
-    title:document.getElementById('f-title').value,
-    date:document.getElementById('f-date').value,
-    intro_title:document.getElementById('f-intro-title').value,
-    intro:document.getElementById('f-intro').value,
-    top5:[],editors_pick:null,sections:[]
-  };
-  (window._top5Selected||[]).forEach(item=>{
-    const secIdx=item._secIdx,artIdx=item._artIdx;
-    const secBlock=document.querySelector(`[id="sec-${secIdx}-list"]`);
-    let artData={...item};
-    if(secBlock){const cards=secBlock.querySelectorAll('.article-card');const card=cards[artIdx];if(card)artData={...artData,...collectArticleFromCard(card,false)};}
-    const top5Entry={title:artData.title||'',date:artData.date||'',category:artData.category||'',source:artData.source||'',sub:artData.sub||'',summary:artData.summary||'',url:artData.url||'',points:artData.points||[]};
-    if(item.badge&&item.badge.label)top5Entry.badge=item.badge;
-    edition.top5.push(top5Entry);
-  });
-  const epTitle=document.getElementById('ep-title').value;
-  if(epTitle){edition.editors_pick={title:epTitle,source:document.getElementById('ep-source').value,summary:document.getElementById('ep-summary').value,url:document.getElementById('ep-url').value,date:document.getElementById('ep-date').value};}
-  document.querySelectorAll('.section-block').forEach((block,si)=>{
-    const titleInput=block.querySelector('[id^="sec-title-"]');
-    if(!titleInput)return;
-    const articles=[];
-    block.querySelectorAll('.article-card').forEach(card=>{articles.push(collectArticleFromCard(card,false));});
-    edition.sections.push({title:titleInput.value,articles});
-  });
-  const key=edition.date||_currentKey;
-  if(!key){toast('발행일을 입력해주세요.');return;}
-  _set(_ref(_db,`editions/${key}`),edition)
-    .then(()=>{toast('✓ 저장되어 발행되었습니다!');_currentKey=key;})
-    .catch(err=>toast('저장 실패: '+err.message));
+function openArchiveModal(globalIdx) {
+  currentArticles = _allArticles;
+  openModal(globalIdx, _allArticles);
 }
 
-function collectArticleFromCard(card,isTop5){
-  const a={title:card.querySelector('.art-title')?.value||'',date:card.querySelector('.art-date')?.value||'',category:card.querySelector('.art-cat')?.value||'',source:card.querySelector('.art-source')?.value||'',sub:card.querySelector('.art-sub')?.value||'',summary:card.querySelector('.art-summary')?.value||'',url:card.querySelector('.art-url')?.value||'',points:[]};
-  card.querySelectorAll('.points-list .point-row input').forEach(inp=>{if(inp.value.trim())a.points.push(inp.value.trim());});
-  if(isTop5){const label=card.querySelector('.art-badge-label')?.value;const type=card.querySelector('.art-badge-type')?.value;if(label)a.badge={label,type};}
-  else{a.tags=[];card.querySelectorAll('.tag-chip').forEach(chip=>{a.tags.push(chip.textContent.replace('✕','').trim());});}
-  return a;
+function closeModal() {
+  document.getElementById('overlay').classList.remove('show');
+  document.body.style.overflow = '';
+  document.querySelectorAll('.top5-item,.news-item,.pick-block,.archive-article-row').forEach(el => el.classList.remove('active'));
+  currentIndex = -1;
 }
 
-function showJsonUpload(){document.getElementById('json-modal').style.display='flex';document.getElementById('json-input').value='';document.getElementById('json-error').style.display='none';setTimeout(()=>document.getElementById('json-input').focus(),100);}
-function closeJsonUpload(){document.getElementById('json-modal').style.display='none';}
-
-function uploadJson(){
-  const raw=document.getElementById('json-input').value.trim();
-  const errEl=document.getElementById('json-error');
-  errEl.style.display='none';
-  if(!raw){errEl.textContent='JSON을 입력해주세요.';errEl.style.display='block';return;}
-  let parsed;
-  try{parsed=JSON.parse(raw);}catch(e){errEl.textContent='JSON 형식이 올바르지 않습니다: '+e.message;errEl.style.display='block';return;}
-  const editions=parsed.editions||parsed;
-  if(typeof editions!=='object'){errEl.textContent='editions 키를 찾을 수 없습니다.';errEl.style.display='block';return;}
-  const keys=Object.keys(editions);
-  if(!keys.length){errEl.textContent='추가할 에디션이 없습니다.';errEl.style.display='block';return;}
-  Promise.all(keys.map(k=>_set(_ref(_db,`editions/${k}`),editions[k])))
-    .then(()=>{closeJsonUpload();toast(`✓ ${keys.length}개 에디션이 추가되었습니다: ${keys.join(', ')}`);})
-    .catch(err=>{errEl.textContent='업로드 실패: '+err.message;errEl.style.display='block';});
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
 }
 
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function navModal(dir) {
+  const next = currentIndex + dir;
+  if (next >= 0 && next < currentArticles.length) openModal(next, currentArticles);
+}
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJsonViewer();closeJsonUpload();}});
+function openAdminLogin() {
+  document.getElementById('admin-modal').classList.add('show');
+  setTimeout(() => document.getElementById('admin-pw').focus(), 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById('admin-modal').classList.remove('show');
+  document.getElementById('admin-pw').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function tryLogin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === ADMIN_PASSWORD) {
+    closeAdminLogin();
+    window.location.href = 'admin.html';
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-pw').focus();
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeAdminLogin(); }
+});
 </script>
 </body>
 </html>
