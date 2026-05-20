@@ -144,6 +144,13 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .slot-badge-row { display:flex; gap:6px; margin-top:6px; align-items:center; }
 .slot-badge-input { padding:3px 6px; border:1px solid var(--cream-border); border-radius:3px; font-size:10px; font-family:'Noto Sans KR',sans-serif; background:white; width:80px; outline:none; }
 .slot-badge-select { padding:3px 5px; border:1px solid var(--cream-border); border-radius:3px; font-size:10px; font-family:'Noto Sans KR',sans-serif; background:white; outline:none; }
+.slot-drag-handle { color:var(--cream-border); font-size:14px; cursor:grab; user-select:none; padding:0 6px 0 0; flex-shrink:0; transition:color .12s; }
+.slot-drag-handle:hover { color:var(--ink-mid); }
+.slot.slot-dragging { opacity:.4; }
+.slot.slot-drag-over { border-color:var(--blue); background:#EEF4FF; }
+/* 편집 중인 카드는 드래그 커서 제거 */
+.art-card.editing { cursor:default; }
+.art-card.editing .art-card-header { cursor:default; }
 
 /* ── EP 슬롯 ── */
 .ep-slot { border:2px dashed #C4B5FD; background:#FAF8FF; }
@@ -536,7 +543,14 @@ function artFormHtml(a) {
 
 function toggleArtCard(id) {
   const body = document.getElementById('artbody-'+id);
-  if(body) body.classList.toggle('open');
+  const card = document.getElementById('artcard-'+id);
+  if(!body) return;
+  const isOpening = !body.classList.contains('open');
+  body.classList.toggle('open');
+  if(card) {
+    card.classList.toggle('editing', isOpening);
+    card.draggable = !isOpening; // 편집 중엔 드래그 비활성화
+  }
 }
 
 /* ════ 기사 CRUD ════ */
@@ -622,25 +636,38 @@ function renderSlots() {
   [0,1,2,3,4].forEach(i=>{
     const slot=document.getElementById(`slot-top5-${i}`); if(!slot) return;
     const t=_top5[i];
-    if(!t){ slot.className='slot'; slot.innerHTML=`<div class="slot-num">0${i+1}</div><div class="slot-empty-hint">기사를 여기에 드롭하거나 목록에서 → Top5</div>`; return; }
+    if(!t){
+      slot.className='slot';
+      slot.draggable=false;
+      slot.ondragstart=null;
+      slot.innerHTML=`<div class="slot-num">0${i+1}</div><div class="slot-empty-hint">기사를 드롭하거나 목록에서 → Top5</div>`;
+      return;
+    }
     const bl=t.badge?.label||''; const bt=t.badge?.type||'hot';
     slot.className='slot filled';
+    slot.draggable=true;
+    slot.ondragstart=(e)=>slotDragStart(e,i);
+    slot.ondragend=(e)=>slotDragEnd(e,i);
     slot.innerHTML=`
-      <div class="slot-num">0${i+1}</div>
       <div class="slot-content">
+        <span class="slot-drag-handle" title="드래그로 순서 변경">⠿</span>
         <div style="flex:1">
-          <div class="slot-title">${esc(t.title||'')}</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <span class="slot-num" style="margin:0">0${i+1}</span>
+            <div class="slot-title">${esc(t.title||'')}</div>
+          </div>
           <div class="slot-meta">${esc(t.category||'')} · ${esc(t.date||'')} · ${esc(t.source||'')}</div>
           <div class="slot-badge-row">
-            <input class="slot-badge-input" placeholder="뱃지 텍스트 (HOT 등)" value="${esc(bl)}" onchange="updateTop5Badge(${i},'label',this.value)">
-            <select class="slot-badge-select" onchange="updateTop5Badge(${i},'type',this.value)">
+            <input class="slot-badge-input" placeholder="뱃지 텍스트 (HOT 등)" value="${esc(bl)}"
+              onchange="updateTop5Badge(${i},'label',this.value)" onclick="event.stopPropagation()">
+            <select class="slot-badge-select" onchange="updateTop5Badge(${i},'type',this.value)" onclick="event.stopPropagation()">
               <option value="hot" ${bt==='hot'?'selected':''}>🔴 hot</option>
               <option value="new" ${bt==='new'?'selected':''}>🟢 new</option>
               <option value="trend" ${bt==='trend'?'selected':''}>🔵 trend</option>
             </select>
           </div>
         </div>
-        <button class="slot-remove" onclick="removeFromTop5(${i})">✕</button>
+        <button class="slot-remove" onclick="removeFromTop5(${i});event.stopPropagation()">✕</button>
       </div>`;
   });
   // EP 슬롯
@@ -658,10 +685,12 @@ function renderSlots() {
 }
 
 /* ════ 드래그 앤 드롭 ════ */
-window._draggingId = null;
+window._draggingId = null;    // 풀 기사 드래그용
+window._draggingSlotIdx = null; // 슬롯→슬롯 드래그용
 
 function artDragStart(e, id) {
   window._draggingId = id;
+  window._draggingSlotIdx = null;
   e.dataTransfer.effectAllowed='move';
   e.dataTransfer.setData('text/plain','');
   setTimeout(()=>{ const el=document.getElementById('artcard-'+id); if(el) el.classList.add('dragging'); },0);
@@ -674,29 +703,64 @@ function artDragEnd(e) {
     if(el) el.classList.remove('dragging');
   }
   window._draggingId=null;
-  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('drag-over'));
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('slot-drag-over'));
+}
+
+// 슬롯 → 슬롯 드래그
+function slotDragStart(e, fromIdx) {
+  window._draggingSlotIdx = fromIdx;
+  window._draggingId = null;
+  e.dataTransfer.effectAllowed='move';
+  e.dataTransfer.setData('text/plain','');
+  setTimeout(()=>{
+    const slot=document.getElementById(`slot-top5-${fromIdx}`);
+    if(slot) slot.classList.add('slot-dragging');
+  },0);
+}
+
+function slotDragEnd(e, fromIdx) {
+  stopAutoScroll();
+  window._draggingSlotIdx=null;
+  document.querySelectorAll('.slot').forEach(s=>{
+    s.classList.remove('slot-drag-over');
+    s.classList.remove('slot-dragging');
+  });
 }
 
 function slotDragOver(e, el) {
   e.preventDefault(); e.dataTransfer.dropEffect='move';
-  el.classList.add('drag-over');
+  el.classList.add('slot-drag-over');
   autoScroll(e.clientY);
 }
 
 function slotDragLeave(e, el) {
-  if(!el.contains(e.relatedTarget)) el.classList.remove('drag-over');
+  if(!el.contains(e.relatedTarget)) el.classList.remove('slot-drag-over');
 }
 
-function slotDrop(e, type, idx) {
+function slotDrop(e, type, toIdx) {
   e.preventDefault();
-  const id=window._draggingId; if(!id) return;
-  const art=_pool.find(a=>a._id===id); if(!art) return;
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('slot-drag-over','slot-dragging'));
+
+  // 슬롯 → 슬롯 (순서 변경)
+  if(window._draggingSlotIdx !== null && type === 'top5') {
+    const from = window._draggingSlotIdx;
+    if(from === toIdx) return;
+    const moved = _top5[from];
+    // swap
+    _top5[from] = _top5[toIdx];
+    _top5[toIdx] = moved;
+    window._draggingSlotIdx = null;
+    renderPool(); renderSlots(); saveAll(true);
+    return;
+  }
+
+  // 풀 → 슬롯
+  const id = window._draggingId; if(!id) return;
+  const art = _pool.find(a=>a._id===id); if(!art) return;
   if(type==='top5'){
-    if(_top5.some((t,i)=>t&&t._id===id&&i!==idx)){
-      // 이미 다른 슬롯에 있으면 그 슬롯 비우고 이동
-      _top5=_top5.map((t,i)=>t&&t._id===id&&i!==idx ? null : t);
-    }
-    _top5[idx]={...art, badge:_top5[idx]?.badge||null};
+    // 이미 다른 슬롯에 있으면 그 슬롯 비우기
+    _top5 = _top5.map((t,i)=>t&&t._id===id&&i!==toIdx ? null : t);
+    _top5[toIdx]={...art, badge:_top5[toIdx]?.badge||null};
   } else {
     _ep={...art};
   }
