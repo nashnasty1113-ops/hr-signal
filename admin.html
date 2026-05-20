@@ -790,17 +790,16 @@ function closeCard(btn) {
 }
 
 function applyCardEdit(e, btn) {
-  e.stopPropagation(); // 카드 토글 방지
+  e.stopPropagation();
   const card = btn.closest('.article-card');
   const header = card.querySelector('.article-card-header');
   const body = card.querySelector('.article-card-body');
-  // 헤더 미리보기 업데이트
   const titleInput = body.querySelector('.art-title');
   if (titleInput) header.querySelector('.article-card-title-preview').textContent = titleInput.value || '(제목 없음)';
-  // Top5 pool 갱신 — DOM에서 읽어 _editingEdition.sections 메모리 동기화
   syncSectionsFromDom();
   renderPoolArticles();
-  toast('적용되었습니다. 헤더의 저장 & 발행으로 최종 저장하세요.');
+  // Firebase에 즉시 저장
+  saveAll(true);
 }
 
 // DOM에 있는 섹션/기사 데이터를 _editingEdition.sections에 동기화
@@ -1132,7 +1131,13 @@ function formatPeriod(start, end) {
   return '';
 }
 
-function saveAll() {
+function saveAll(silent = false) {
+  // 저장 전 모든 카드 헤더 미리보기를 input 값과 동기화
+  document.querySelectorAll('.article-card').forEach(card => {
+    const titleInput = card.querySelector('.art-title');
+    const preview = card.querySelector('.article-card-title-preview');
+    if (titleInput && preview) preview.textContent = titleInput.value || '(제목 없음)';
+  });
   syncSectionsFromDom();
   const periodStart = document.getElementById('f-period-start').value;
   const periodEnd   = document.getElementById('f-period-end').value;
@@ -1146,11 +1151,16 @@ function saveAll() {
     intro:document.getElementById('f-intro').value,
     top5:[],editors_pick:null,sections:[]
   };
+  // Top5 저장 — artIdx 인덱스 대신 title 기반으로 DOM에서 매칭해서 최신 데이터 수집
   (window._top5Selected||[]).forEach(item=>{
-    const secIdx=item._secIdx,artIdx=item._artIdx;
-    const secBlock=document.querySelector(`[id="sec-${secIdx}-list"]`);
-    let artData={...item};
-    if(secBlock){const cards=secBlock.querySelectorAll('.article-card');const card=cards[artIdx];if(card)artData={...artData,...collectArticleFromCard(card,false)};}
+    // 모든 섹션 카드에서 title이 일치하는 카드 찾기
+    let artData = {...item};
+    document.querySelectorAll('.section-block-body .article-card').forEach(card => {
+      const cardTitle = card.querySelector('.art-title')?.value || '';
+      if (cardTitle && cardTitle === (item.title||'')) {
+        artData = {...artData, ...collectArticleFromCard(card, false)};
+      }
+    });
     const top5Entry={title:artData.title||'',date:artData.date||'',category:artData.category||'',source:artData.source||'',sub:artData.sub||'',summary:artData.summary||'',url:artData.url||'',points:artData.points||[]};
     if(item.badge&&item.badge.label)top5Entry.badge=item.badge;
     edition.top5.push(top5Entry);
@@ -1169,8 +1179,7 @@ function saveAll() {
   if(!key){toast('에디션을 먼저 선택해주세요.');return;}
   _set(_ref(_db,`editions/${key}`),edition)
     .then(()=>{
-      toast('✓ 저장되어 발행되었습니다!');
-      // 사이드바 날짜 표시 즉시 갱신
+      toast(silent ? '✓ 자동 저장되었습니다.' : '✓ 저장되어 발행되었습니다!');
       if(window._data[key]) window._data[key] = edition;
       renderSidebar();
     })
