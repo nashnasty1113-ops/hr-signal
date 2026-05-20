@@ -185,10 +185,11 @@ body {
 .top5-item:nth-child(3) .top5-num,
 .top5-item:nth-child(4) .top5-num,
 .top5-item:nth-child(5) .top5-num { color:var(--border); }
-.top5-cat-row { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
+.top5-cat-row { display:flex; align-items:center; gap:5px; margin-bottom:3px; flex-wrap:wrap; }
 .top5-cat    { font-size:10px; color:var(--ink-light); }
-.top5-dot    { width:3px; height:3px; border-radius:50%; background:var(--border); }
+.top5-dot    { width:3px; height:3px; border-radius:50%; background:var(--border); flex-shrink:0; }
 .top5-date-sm{ font-size:10px; color:var(--ink-light); }
+.top5-source { font-size:10px; color:var(--ink-light); }
 .top5-headline { font-size:15px; font-weight:600; line-height:1.5; word-break:keep-all; color:var(--ink); }
 
 .badge {
@@ -234,6 +235,13 @@ body {
   display:-webkit-box; -webkit-line-clamp:2;
   -webkit-box-orient:vertical; overflow:hidden;
 }
+.news-source-row {
+  margin-top:5px;
+  display:flex; align-items:center; gap:5px;
+}
+.news-source-cat  { font-size:10px; color:var(--ink-light); }
+.news-source-dot  { width:3px; height:3px; border-radius:50%; background:var(--border); flex-shrink:0; }
+.news-source-name { font-size:10px; color:var(--ink-light); }
 .news-meta { font-size:10px; color:var(--ink-light); white-space:nowrap; padding-top:2px; text-align:right; min-width:44px; }
 
 /* ─── EDITOR'S PICK ─── */
@@ -253,9 +261,10 @@ body {
   background:#93C5FD;
 }
 .pick-block:hover { opacity:.92; }
-.pick-label { font-size:9px; letter-spacing:2px; color:#93C5FD; margin-bottom:8px; font-weight:700; }
-.pick-title { font-family:'Noto Serif KR',serif; font-size:17px; font-weight:700; margin-bottom:8px; line-height:1.5; color:var(--white); }
-.pick-desc  { font-size:12px; color:rgba(255,255,255,0.65); line-height:1.8; }
+.pick-label  { font-size:9px; letter-spacing:2px; color:#93C5FD; margin-bottom:8px; font-weight:700; }
+.pick-title  { font-family:'Noto Serif KR',serif; font-size:17px; font-weight:700; margin-bottom:8px; line-height:1.5; color:var(--white); }
+.pick-desc   { font-size:12px; color:rgba(255,255,255,0.65); line-height:1.8; }
+.pick-source { font-size:10px; color:rgba(255,255,255,0.4); margin-top:8px; }
 
 /* ─── 아카이브 탭 ─── */
 .archive-wrap {
@@ -578,7 +587,7 @@ onValue(ref(db, 'editions'), (snapshot) => {
 const ADMIN_PASSWORD = 'maeil2024';
 let currentArticles = [];
 let currentIndex = -1;
-let _allArticles = []; // 전체 기사 플랫 목록 (아카이브용)
+let _allArticles = [];
 
 /* ════ 탭 전환 ════ */
 function switchTab(tab) {
@@ -594,7 +603,6 @@ function initPage(keys, data) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = 'block';
 
-  // 아카이브용 플랫 기사 목록 구성
   _allArticles = [];
   const cats = new Set();
   keys.forEach(k => {
@@ -609,7 +617,6 @@ function initPage(keys, data) {
     (ed.sections || []).forEach(sec => (sec.articles || []).forEach(i => collectItem(i, sec.title)));
   });
 
-  // 아카이브 필터 옵션 채우기
   const edSel = document.getElementById('archive-filter-edition');
   keys.forEach(k => {
     const opt = document.createElement('option');
@@ -624,7 +631,6 @@ function initPage(keys, data) {
     catSel.appendChild(opt);
   });
 
-  // 최신 에디션 렌더
   renderEdition(data[keys[0]]);
 }
 
@@ -645,6 +651,7 @@ function renderEdition(edition) {
     </div>`;
   }
 
+  /* ── Top 5 ── */
   if (edition.top5 && edition.top5.length) {
     html += `<div class="sec-header">
       <div class="sec-header-left">
@@ -664,16 +671,18 @@ function renderEdition(edition) {
         <div>
           <div class="top5-cat-row">
             <span class="top5-cat">${item.category||''}</span>
-            ${item.date?`<span class="top5-dot"></span><span class="top5-date-sm">${item.date}</span>`:''}
+            ${item.source ? `<span class="top5-dot"></span><span class="top5-source">${item.source}</span>` : ''}
+            ${item.date ? `<span class="top5-dot"></span><span class="top5-date-sm">${item.date}</span>` : ''}
           </div>
           <div class="top5-headline">${item.title}</div>
         </div>
-        ${badge?`<span class="badge badge-${badge.type||'hot'}">${badge.label||''}</span>`:''}
+        ${badge ? `<span class="badge badge-${badge.type||'hot'}">${badge.label||''}</span>` : ''}
       </li>`;
     });
     html += `</ul>`;
   }
 
+  /* ── Editor's Pick ── */
   if (edition.editors_pick) {
     const ep = edition.editors_pick;
     const idx = currentArticles.length;
@@ -681,10 +690,12 @@ function renderEdition(edition) {
     html += `<div class="pick-block" onclick="openModal(${idx})">
       <div class="pick-label">★ EDITOR'S PICK</div>
       <div class="pick-title">${ep.title}</div>
-      ${ep.summary?`<div class="pick-desc">${ep.summary}</div>`:''}
+      ${ep.summary ? `<div class="pick-desc">${ep.summary}</div>` : ''}
+      ${ep.source ? `<div class="pick-source">${ep.source}</div>` : ''}
     </div>`;
   }
 
+  /* ── 섹션별 뉴스 ── */
   (edition.sections||[]).forEach((sec, si) => {
     if (!sec.articles || !sec.articles.length) return;
     html += `<div class="sec-header" style="margin-top:8px;">
@@ -702,9 +713,15 @@ function renderEdition(edition) {
       const tags = (item.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
       html += `<li class="news-item" onclick="openModal(${idx})" id="art-${idx}">
         <div class="news-body">
-          ${tags?`<div class="news-tags">${tags}</div>`:''}
+          ${tags ? `<div class="news-tags">${tags}</div>` : ''}
           <div class="news-headline">${item.title}</div>
-          ${item.summary?`<div class="news-snippet">${item.summary}</div>`:''}
+          ${item.summary ? `<div class="news-snippet">${item.summary}</div>` : ''}
+          ${(item.category || item.source) ? `
+          <div class="news-source-row">
+            ${item.category ? `<span class="news-source-cat">${item.category}</span>` : ''}
+            ${(item.category && item.source) ? `<span class="news-source-dot"></span>` : ''}
+            ${item.source ? `<span class="news-source-name">${item.source}</span>` : ''}
+          </div>` : ''}
         </div>
         <div class="news-meta">${item.date||''}</div>
       </li>`;
@@ -726,14 +743,13 @@ function renderArchive() {
 }
 
 function runArchiveSearch() {
-  const query   = (document.getElementById('archive-search').value || '').trim().toLowerCase();
-  const edFilter = document.getElementById('archive-filter-edition').value;
+  const query    = (document.getElementById('archive-search').value || '').trim().toLowerCase();
+  const edFilter  = document.getElementById('archive-filter-edition').value;
   const catFilter = document.getElementById('archive-filter-cat').value;
 
-  // 필터 적용
   let filtered = _allArticles.filter(a => {
-    if (edFilter  && a._edKey     !== edFilter)  return false;
-    if (catFilter && a.category   !== catFilter)  return false;
+    if (edFilter  && a._edKey   !== edFilter)  return false;
+    if (catFilter && a.category !== catFilter)  return false;
     if (query) {
       const haystack = [a.title, a.category, a.summary, a._section, ...(a.tags||[])].join(' ').toLowerCase();
       if (!haystack.includes(query)) return false;
@@ -744,7 +760,6 @@ function runArchiveSearch() {
   document.getElementById('archive-result-info').textContent =
     query || edFilter || catFilter ? `${filtered.length}건` : `전체 ${_allArticles.length}건`;
 
-  // 에디션별 그루핑
   const groups = {};
   const groupOrder = [];
   filtered.forEach(a => {
@@ -765,7 +780,6 @@ function runArchiveSearch() {
   };
 
   let html = '';
-  // 검색어 있으면 에디션 기본 열기, 없으면 접기 (최신 1개만 열기)
   const openAll = !!(query || catFilter);
 
   groupOrder.forEach((k, gi) => {
@@ -781,7 +795,6 @@ function runArchiveSearch() {
       </div>
       <div class="archive-edition-body${isOpen?' open':''}" id="eg-${k}">`;
     articles.forEach(a => {
-      // 아카이브에서 클릭하면 해당 기사 모달 열기
       const globalIdx = _allArticles.indexOf(a);
       html += `<div class="archive-article-row" onclick="openArchiveModal(${globalIdx})">
         <span class="archive-article-cat">${a.category||a._section||''}</span>
@@ -813,7 +826,6 @@ function openModal(idx, articleList) {
   if (el) el.classList.add('active');
 
   const points = (item.points||[]).map(p=>`<li>${p}</li>`).join('');
-  // 에디션 정보가 있으면 태그에 표시
   const editionTag = item._edTitle ? `<span class="modal-tag" style="background:#f0f4ff;color:var(--navy-mid);border:1px solid var(--border);">${item._edTitle}</span>` : '';
 
   document.getElementById('modal-inner').innerHTML = `
@@ -822,7 +834,7 @@ function openModal(idx, articleList) {
         ${(item.tags && item.tags.length)
           ? item.tags.map(t=>`<span class="modal-tag modal-tag-sec">${t}</span>`).join('')
           : `<span class="modal-tag modal-tag-cat">${item.category||item._section||''}</span>
-             ${item.category && item._section && item._section !== item.category?`<span class="modal-tag modal-tag-sec">${item._section}</span>`:''}`}
+             ${item.category && item._section && item._section !== item.category ? `<span class="modal-tag modal-tag-sec">${item._section}</span>` : ''}`}
         ${editionTag}
       </div>
       <button class="modal-close" onclick="closeModal()">✕</button>
@@ -835,11 +847,11 @@ function openModal(idx, articleList) {
       <span>발표일: <strong>${item.date||'-'}</strong></span>
       <span>출처: <strong>${item.source||'-'}</strong></span>
     </div>
-    ${item.summary?`<div class="modal-summary-label">SUMMARY</div><div class="modal-summary">${item.summary}</div>`:''}
-    ${points?`<ul class="modal-points">${points}</ul>`:''}
+    ${item.summary ? `<div class="modal-summary-label">SUMMARY</div><div class="modal-summary">${item.summary}</div>` : ''}
+    ${points ? `<ul class="modal-points">${points}</ul>` : ''}
     <div class="modal-source">
       <span></span>
-      ${item.url?`<a class="modal-link" href="${item.url}" target="_blank">원문 보기 →</a>`:''}
+      ${item.url ? `<a class="modal-link" href="${item.url}" target="_blank">원문 보기 →</a>` : ''}
     </div>
     <div class="modal-nav">
       <button class="modal-nav-btn" onclick="navModal(-1)" ${idx===0?'disabled':''}>← 이전 기사</button>
@@ -851,7 +863,6 @@ function openModal(idx, articleList) {
 }
 
 function openArchiveModal(globalIdx) {
-  // 아카이브 탭에서 열 때는 _allArticles 기준
   currentArticles = _allArticles;
   openModal(globalIdx, _allArticles);
 }
