@@ -40,585 +40,200 @@
     z-index: 100;
   }
 
-  .admin-logo {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 17px;
-    font-weight: 700;
-  }
-
+  .admin-logo { font-family: 'Noto Serif KR', serif; font-size: 17px; font-weight: 700; }
   .admin-logo span { color: #E07A3A; }
-
   .header-actions { display: flex; gap: 8px; }
 
   .btn {
-    padding: 7px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    font-family: 'Noto Sans KR', sans-serif;
-    border: none;
-    transition: opacity 0.15s;
+    padding: 7px 16px; border-radius: 4px; cursor: pointer;
+    font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+    border: none; transition: opacity 0.15s;
   }
-
   .btn:hover { opacity: 0.85; }
+  .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: var(--cream); }
+  .btn-white   { background: var(--cream); color: var(--ink); }
+  .btn-danger  { background: var(--accent-red); color: white; }
+  .btn-success { background: var(--accent-green); color: white; }
+  .btn-blue    { background: var(--accent-blue); color: white; }
 
-  .btn-outline {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.3);
-    color: var(--cream);
-  }
-
-  .btn-white {
-    background: var(--cream);
-    color: var(--ink);
-  }
-
-  .btn-danger {
-    background: var(--accent-red);
-    color: white;
-  }
-
-  .btn-success {
-    background: var(--accent-green);
-    color: white;
-  }
-
-  /* ─── LAYOUT ─── */
-  .admin-layout {
-    display: flex;
-    min-height: calc(100vh - 56px);
-  }
+  .admin-layout { display: flex; min-height: calc(100vh - 56px); }
 
   /* ─── SIDEBAR ─── */
-  .sidebar {
-    width: 260px;
-    border-right: 1px solid var(--cream-border);
-    padding: 20px 0;
-    background: var(--cream);
-    flex-shrink: 0;
-  }
-
-  .sidebar-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--ink-light);
-    padding: 0 18px 8px;
-  }
-
-  .edition-item {
-    padding: 10px 18px;
-    cursor: pointer;
-    border-left: 3px solid transparent;
-    transition: all 0.15s;
-  }
-
+  .sidebar { width: 260px; border-right: 1px solid var(--cream-border); padding: 20px 0; background: var(--cream); flex-shrink: 0; }
+  .sidebar-label { font-size: 10px; letter-spacing: 2px; color: var(--ink-light); padding: 0 18px 8px; }
+  .edition-item { padding: 10px 18px; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; }
   .edition-item:hover { background: var(--cream-dark); }
-
-  .edition-item.active {
-    border-left-color: var(--accent-red);
-    background: var(--cream-dark);
-  }
-
-  .edition-item-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink);
-  }
-
-  .edition-item-date {
-    font-size: 11px;
-    color: var(--ink-light);
-    margin-top: 2px;
-  }
-
+  .edition-item.active { border-left-color: var(--accent-red); background: var(--cream-dark); }
+  .edition-item-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .edition-item-date  { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
   .add-edition-btn {
-    margin: 12px 18px 0;
-    width: calc(100% - 36px);
-    padding: 9px;
-    border: 1px dashed var(--cream-border);
-    border-radius: 4px;
-    background: none;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--ink-light);
-    font-family: 'Noto Sans KR', sans-serif;
-    text-align: center;
-    transition: all 0.15s;
+    margin: 12px 18px 0; width: calc(100% - 36px); padding: 9px;
+    border: 1px dashed var(--cream-border); border-radius: 4px;
+    background: none; cursor: pointer; font-size: 12px; color: var(--ink-light);
+    font-family: 'Noto Sans KR', sans-serif; text-align: center; transition: all 0.15s;
   }
-
-  .add-edition-btn:hover {
-    border-color: var(--ink-mid);
-    color: var(--ink);
-  }
+  .add-edition-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
 
   /* ─── MAIN PANEL ─── */
-  .admin-main {
-    flex: 1;
-    padding: 28px 36px;
-    overflow-y: auto;
-  }
-
-  .section-block {
-    margin-bottom: 32px;
-    background: white;
-    border: 1px solid var(--cream-border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .section-block-header {
-    padding: 14px 20px;
-    background: var(--cream-dark);
-    border-bottom: 1px solid var(--cream-border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .section-block-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink);
-  }
-
+  .admin-main { flex: 1; padding: 28px 36px; overflow-y: auto; }
+  .section-block { margin-bottom: 32px; background: white; border: 1px solid var(--cream-border); border-radius: 6px; overflow: hidden; }
+  .section-block-header { padding: 14px 20px; background: var(--cream-dark); border-bottom: 1px solid var(--cream-border); display: flex; align-items: center; justify-content: space-between; }
+  .section-block-title { font-size: 13px; font-weight: 500; color: var(--ink); }
   .section-block-body { padding: 16px 20px; }
 
-  /* ─── FORM FIELDS ─── */
-  .form-row {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
+  .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .form-group { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 11px; color: var(--ink-light); letter-spacing: 0.5px; }
 
-  .form-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  input[type="text"], input[type="date"], input[type="url"], select, textarea {
+    padding: 8px 10px; border: 1px solid var(--cream-border); border-radius: 4px;
+    font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+    background: white; color: var(--ink); outline: none; transition: border-color 0.15s; width: 100%;
   }
-
-  label {
-    font-size: 11px;
-    color: var(--ink-light);
-    letter-spacing: 0.5px;
-  }
-
-  input[type="text"],
-  input[type="date"],
-  input[type="url"],
-  select,
-  textarea {
-    padding: 8px 10px;
-    border: 1px solid var(--cream-border);
-    border-radius: 4px;
-    font-size: 13px;
-    font-family: 'Noto Sans KR', sans-serif;
-    background: white;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.15s;
-    width: 100%;
-  }
-
-  input:focus, textarea:focus, select:focus {
-    border-color: var(--ink-mid);
-  }
-
+  input:focus, textarea:focus, select:focus { border-color: var(--ink-mid); }
   textarea { resize: vertical; min-height: 70px; }
 
-  /* ─── ARTICLE CARD ─── */
-  .article-card {
-    border: 1px solid var(--cream-border);
-    border-radius: 5px;
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-
-  .article-card-header {
-    padding: 10px 14px;
-    background: var(--cream);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    user-select: none;
-  }
-
+  .article-card { border: 1px solid var(--cream-border); border-radius: 5px; margin-bottom: 10px; overflow: hidden; }
+  .article-card-header { padding: 10px 14px; background: var(--cream); display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
   .article-card-header:hover { background: var(--cream-dark); }
-
-  .article-card-num {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--ink-mid);
-    margin-right: 10px;
-  }
-
-  .article-card-title-preview {
-    flex: 1;
-    font-size: 12px;
-    color: var(--ink);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
+  .article-card-num { font-size: 11px; font-weight: 500; color: var(--ink-mid); margin-right: 10px; }
+  .article-card-title-preview { flex: 1; font-size: 12px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .article-card-actions { display: flex; gap: 6px; }
-
-  .btn-sm {
-    padding: 4px 10px;
-    font-size: 11px;
-    border-radius: 3px;
-    cursor: pointer;
-    border: 1px solid var(--cream-border);
-    background: white;
-    color: var(--ink-mid);
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: background 0.15s;
-  }
-
+  .btn-sm { padding: 4px 10px; font-size: 11px; border-radius: 3px; cursor: pointer; border: 1px solid var(--cream-border); background: white; color: var(--ink-mid); font-family: 'Noto Sans KR', sans-serif; transition: background 0.15s; }
   .btn-sm:hover { background: var(--cream-dark); }
   .btn-sm.delete { border-color: #FACCCC; color: var(--accent-red); }
   .btn-sm.delete:hover { background: #FEF0F0; }
-
-  .article-card-body {
-    padding: 14px 14px;
-    border-top: 1px solid var(--cream-border);
-    display: none;
-  }
-
+  .article-card-body { padding: 14px 14px; border-top: 1px solid var(--cream-border); display: none; }
   .article-card-body.open { display: block; }
 
-  /* ─── TAGS INPUT ─── */
-  .tags-input-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    padding: 6px 8px;
-    border: 1px solid var(--cream-border);
-    border-radius: 4px;
-    background: white;
-    cursor: text;
-    min-height: 36px;
-    align-items: center;
-  }
+  .tags-input-wrap { display: flex; flex-wrap: wrap; gap: 5px; padding: 6px 8px; border: 1px solid var(--cream-border); border-radius: 4px; background: white; cursor: text; min-height: 36px; align-items: center; }
+  .tag-chip { background: var(--cream-dark); border: 1px solid var(--cream-border); border-radius: 10px; padding: 2px 8px; font-size: 11px; color: var(--ink-mid); display: flex; align-items: center; gap: 4px; }
+  .tag-chip button { background: none; border: none; cursor: pointer; color: var(--ink-light); font-size: 11px; padding: 0; line-height: 1; }
+  .tags-input { border: none !important; outline: none; font-size: 12px; font-family: 'Noto Sans KR', sans-serif; min-width: 80px; flex: 1; padding: 0 !important; background: transparent; }
 
-  .tag-chip {
-    background: var(--cream-dark);
-    border: 1px solid var(--cream-border);
-    border-radius: 10px;
-    padding: 2px 8px;
-    font-size: 11px;
-    color: var(--ink-mid);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--ink); color: var(--cream); padding: 12px 20px; border-radius: 6px; font-size: 13px; transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; }
+  .toast.show { transform: translateY(0); opacity: 1; }
 
-  .tag-chip button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--ink-light);
-    font-size: 11px;
-    padding: 0;
-    line-height: 1;
-  }
-
-  .tags-input {
-    border: none !important;
-    outline: none;
-    font-size: 12px;
-    font-family: 'Noto Sans KR', sans-serif;
-    min-width: 80px;
-    flex: 1;
-    padding: 0 !important;
-    background: transparent;
-  }
-
-  /* ─── TOAST ─── */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--ink);
-    color: var(--cream);
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 13px;
-    transform: translateY(80px);
-    opacity: 0;
-    transition: all 0.3s;
-    z-index: 999;
-  }
-
-  .toast.show {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  /* ─── POINTS ─── */
-  .point-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 6px;
-    align-items: center;
-  }
-
+  .point-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: center; }
   .point-row input { flex: 1; }
-
-  .btn-add-row {
-    padding: 6px 12px;
-    border: 1px dashed var(--cream-border);
-    border-radius: 4px;
-    background: none;
-    cursor: pointer;
-    font-size: 11px;
-    color: var(--ink-light);
-    font-family: 'Noto Sans KR', sans-serif;
-    margin-top: 4px;
-  }
-
+  .btn-add-row { padding: 6px 12px; border: 1px dashed var(--cream-border); border-radius: 4px; background: none; cursor: pointer; font-size: 11px; color: var(--ink-light); font-family: 'Noto Sans KR', sans-serif; margin-top: 4px; }
   .btn-add-row:hover { border-color: var(--ink-mid); color: var(--ink); }
 
-  /* ─── EMPTY ─── */
-  .empty-state {
-    text-align: center;
-    padding: 48px 0;
-    color: var(--ink-light);
-  }
+  .empty-state { text-align: center; padding: 48px 0; color: var(--ink-light); }
+  .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--ink-mid); }
 
-  .empty-state h3 {
-    font-size: 16px;
-    margin-bottom: 8px;
-    color: var(--ink-mid);
-  }
-
-  /* ─── TOP5 PANEL ─── */
-  .top5-panel {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    min-height: 320px;
-  }
-
-  .top5-pool {
-    border-right: 1px solid var(--cream-border);
-    padding: 16px;
-    max-height: 520px;
-    overflow-y: auto;
-  }
-
-  .top5-selected {
-    padding: 16px;
-    max-height: 520px;
-    overflow-y: auto;
-  }
-
-  .top5-panel-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--ink-light);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .top5-panel-label strong {
-    font-size: 12px;
-    color: var(--ink-mid);
-    letter-spacing: 0;
-    font-weight: 500;
-  }
-
-  .pool-section-group {
-    margin-bottom: 14px;
-  }
-
-  .pool-section-name {
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: var(--ink-light);
-    padding: 4px 0;
-    border-bottom: 1px solid var(--cream-border);
-    margin-bottom: 6px;
-  }
-
-  .pool-article-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 10px;
-    border-radius: 4px;
-    border: 1px solid transparent;
-    margin-bottom: 4px;
-    cursor: pointer;
-    transition: all 0.13s;
-    background: white;
-  }
-
-  .pool-article-item:hover {
-    border-color: var(--cream-border);
-    background: var(--cream-dark);
-  }
-
-  .pool-article-item.in-top5 {
-    opacity: 0.45;
-    cursor: default;
-  }
-
-  .pool-article-item.in-top5:hover {
-    background: white;
-    border-color: transparent;
-  }
-
-  .pool-article-text {
-    flex: 1;
-    font-size: 12px;
-    line-height: 1.4;
-    color: var(--ink);
-    word-break: keep-all;
-  }
-
-  .pool-article-meta {
-    font-size: 10px;
-    color: var(--ink-light);
-    white-space: nowrap;
-  }
-
-  .pool-add-btn {
-    background: var(--accent-green);
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 3px 8px;
-    font-size: 11px;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: 'Noto Sans KR', sans-serif;
-    flex-shrink: 0;
-  }
-
+  /* ─── TOP5 ─── */
+  .top5-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 320px; }
+  .top5-pool { border-right: 1px solid var(--cream-border); padding: 16px; max-height: 520px; overflow-y: auto; }
+  .top5-selected { padding: 16px; max-height: 520px; overflow-y: auto; }
+  .top5-panel-label { font-size: 10px; letter-spacing: 2px; color: var(--ink-light); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+  .top5-panel-label strong { font-size: 12px; color: var(--ink-mid); letter-spacing: 0; font-weight: 500; }
+  .pool-section-group { margin-bottom: 14px; }
+  .pool-section-name { font-size: 10px; letter-spacing: 1px; color: var(--ink-light); padding: 4px 0; border-bottom: 1px solid var(--cream-border); margin-bottom: 6px; }
+  .pool-article-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 4px; border: 1px solid transparent; margin-bottom: 4px; cursor: pointer; transition: all 0.13s; background: white; }
+  .pool-article-item:hover { border-color: var(--cream-border); background: var(--cream-dark); }
+  .pool-article-item.in-top5 { opacity: 0.45; cursor: default; }
+  .pool-article-item.in-top5:hover { background: white; border-color: transparent; }
+  .pool-article-text { flex: 1; font-size: 12px; line-height: 1.4; color: var(--ink); word-break: keep-all; }
+  .pool-article-meta { font-size: 10px; color: var(--ink-light); white-space: nowrap; }
+  .pool-add-btn { background: var(--accent-green); color: white; border: none; border-radius: 3px; padding: 3px 8px; font-size: 11px; cursor: pointer; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; flex-shrink: 0; }
   .pool-add-btn:hover { opacity: 0.85; }
-
-  .top5-selected-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 12px;
-    border: 1px solid var(--cream-border);
-    border-radius: 5px;
-    margin-bottom: 8px;
-    background: white;
-    cursor: grab;
-  }
-
+  .top5-selected-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--cream-border); border-radius: 5px; margin-bottom: 8px; background: white; cursor: grab; }
   .top5-selected-item:active { cursor: grabbing; }
   .top5-selected-item.drag-over { border-color: var(--accent-red); background: #FEF0F0; }
-
-  .top5-rank-num {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--accent-red);
-    line-height: 1;
-    min-width: 28px;
-    padding-top: 2px;
-  }
-
+  .top5-rank-num { font-size: 22px; font-weight: 700; color: var(--accent-red); line-height: 1; min-width: 28px; padding-top: 2px; }
   .top5-selected-item:nth-child(2) .top5-rank-num { color: var(--ink-mid); }
   .top5-selected-item:nth-child(n+3) .top5-rank-num { color: var(--cream-border); }
-
   .top5-selected-body { flex: 1; }
-
-  .top5-selected-title {
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.4;
-    color: var(--ink);
-    word-break: keep-all;
-    margin-bottom: 4px;
-  }
-
-  .top5-selected-sec {
-    font-size: 10px;
-    color: var(--ink-light);
-  }
-
-  .top5-selected-badge {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-end;
-    flex-shrink: 0;
-  }
-
-  .top5-badge-input {
-    font-size: 11px;
-    padding: 3px 7px;
-    border: 1px solid var(--cream-border);
-    border-radius: 3px;
-    background: white;
-    width: 80px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-
-  .top5-badge-select {
-    font-size: 11px;
-    padding: 3px 6px;
-    border: 1px solid var(--cream-border);
-    border-radius: 3px;
-    background: white;
-    width: 80px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-
-  .top5-remove-btn {
-    background: none;
-    border: 1px solid #FACCCC;
-    color: var(--accent-red);
-    border-radius: 3px;
-    padding: 3px 7px;
-    font-size: 11px;
-    cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-
+  .top5-selected-title { font-size: 12px; font-weight: 500; line-height: 1.4; color: var(--ink); word-break: keep-all; margin-bottom: 4px; }
+  .top5-selected-sec { font-size: 10px; color: var(--ink-light); }
+  .top5-selected-badge { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; flex-shrink: 0; }
+  .top5-badge-input { font-size: 11px; padding: 3px 7px; border: 1px solid var(--cream-border); border-radius: 3px; background: white; width: 80px; font-family: 'Noto Sans KR', sans-serif; }
+  .top5-badge-select { font-size: 11px; padding: 3px 6px; border: 1px solid var(--cream-border); border-radius: 3px; background: white; width: 80px; font-family: 'Noto Sans KR', sans-serif; }
+  .top5-remove-btn { background: none; border: 1px solid #FACCCC; color: var(--accent-red); border-radius: 3px; padding: 3px 7px; font-size: 11px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
   .top5-remove-btn:hover { background: #FEF0F0; }
+  .top5-empty-msg { text-align: center; padding: 32px 16px; color: var(--ink-light); font-size: 12px; border: 1px dashed var(--cream-border); border-radius: 5px; }
+  .top5-drag-hint { font-size: 10px; color: var(--ink-light); text-align: center; margin-top: 8px; letter-spacing: 0.5px; }
 
-  .top5-empty-msg {
-    text-align: center;
-    padding: 32px 16px;
-    color: var(--ink-light);
-    font-size: 12px;
-    border: 1px dashed var(--cream-border);
-    border-radius: 5px;
-  }
+  .edition-form-block { background: white; border: 1px solid var(--cream-border); border-radius: 6px; padding: 20px; margin-bottom: 24px; }
+  .edition-form-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--cream-border); }
 
-  .top5-drag-hint {
-    font-size: 10px;
-    color: var(--ink-light);
-    text-align: center;
-    margin-top: 8px;
-    letter-spacing: 0.5px;
+  /* ─── JSON 뷰어 모달 ─── */
+  .json-viewer-modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(42,34,24,0.6); z-index: 400;
+    align-items: center; justify-content: center; padding: 20px;
   }
+  .json-viewer-modal.show { display: flex; }
+  .json-viewer-box {
+    background: #1E1E2E; border-radius: 8px;
+    width: 100%; max-width: 760px; max-height: 90vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+  .json-viewer-header {
+    background: #2A2A3E; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #3A3A50; flex-shrink: 0;
+  }
+  .json-viewer-title { font-size: 13px; font-weight: 500; color: #C9C9E0; letter-spacing: 0.5px; }
+  .json-viewer-actions { display: flex; gap: 8px; align-items: center; }
+  .json-viewer-btn {
+    padding: 6px 14px; border-radius: 4px; cursor: pointer;
+    font-size: 12px; font-family: 'Noto Sans KR', sans-serif; border: none;
+    transition: opacity .15s;
+  }
+  .json-viewer-btn:hover { opacity: 0.85; }
+  .jvb-scope { background: #3A3A50; color: #C9C9E0; font-size: 11px; }
+  .jvb-scope.active { background: #5A5A7A; color: white; }
+  .jvb-copy     { background: #3A7A5A; color: white; }
+  .jvb-download { background: #2A5A8A; color: white; }
+  .jvb-close    { background: none; border: 1px solid #4A4A60 !important; color: #8A8AAA; font-size: 14px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; padding: 0; }
 
-  /* ─── EDITION FORM ─── */
-  .edition-form-block {
-    background: white;
-    border: 1px solid var(--cream-border);
-    border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 24px;
+  .json-viewer-tabs {
+    display: flex; gap: 0; background: #252535; border-bottom: 1px solid #3A3A50; flex-shrink: 0;
   }
+  .json-tab-btn {
+    padding: 8px 16px; font-size: 11px; color: #7A7A9A;
+    background: none; border: none; cursor: pointer;
+    border-bottom: 2px solid transparent; font-family: 'Noto Sans KR', sans-serif;
+    transition: all .15s;
+  }
+  .json-tab-btn:hover { color: #C9C9E0; }
+  .json-tab-btn.active { color: #E07A3A; border-bottom-color: #E07A3A; }
 
-  .edition-form-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink);
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--cream-border);
+  .json-viewer-body { flex: 1; overflow: auto; position: relative; }
+  .json-code {
+    padding: 20px; font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 12.5px; line-height: 1.7; color: #CDD6F4;
+    white-space: pre; tab-size: 2; min-height: 100%;
+    background: #1E1E2E;
   }
+  /* JSON 문법 색상 */
+  .json-key    { color: #89DCEB; }
+  .json-str    { color: #A6E3A1; }
+  .json-num    { color: #FAB387; }
+  .json-bool   { color: #CBA6F7; }
+  .json-null   { color: #7F849C; }
+  .json-punct  { color: #7F849C; }
+
+  /* 편집 모드 */
+  .json-editor {
+    width: 100%; height: 100%; min-height: 400px;
+    padding: 20px; font-family: 'Consolas','Monaco',monospace;
+    font-size: 12.5px; line-height: 1.7; color: #CDD6F4;
+    background: #1E1E2E; border: none; outline: none; resize: none;
+    tab-size: 2;
+  }
+  .json-editor-toolbar {
+    background: #252535; padding: 10px 18px;
+    display: flex; align-items: center; gap: 10px;
+    border-top: 1px solid #3A3A50; flex-shrink: 0;
+  }
+  .json-editor-status { font-size: 11px; color: #7A7A9A; flex: 1; }
+  .json-editor-status.error { color: #F38BA8; }
+  .json-editor-status.ok    { color: #A6E3A1; }
 </style>
 </head>
 <body>
@@ -627,12 +242,12 @@
   <div class="admin-logo">HR<span>시그널</span> 관리자</div>
   <div class="header-actions">
     <a href="index.html" class="btn btn-outline">← 뉴스레터 보기</a>
+    <button class="btn btn-blue" onclick="openJsonViewer()">{ } JSON 보기/편집</button>
     <button class="btn btn-white" onclick="saveAll()">저장 & 발행</button>
   </div>
 </header>
 
 <div class="admin-layout">
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-label">에디션 목록</div>
     <div id="edition-list"></div>
@@ -640,7 +255,6 @@
     <button class="add-edition-btn" onclick="showJsonUpload()" style="margin-top:6px;border-color:#C94A2A;color:#C94A2A;">↑ JSON으로 업로드</button>
   </aside>
 
-  <!-- MAIN -->
   <main class="admin-main" id="admin-main">
     <div class="empty-state">
       <h3>에디션을 선택하거나 새로 만드세요</h3>
@@ -661,13 +275,7 @@
       </div>
       <button onclick="closeJsonUpload()" style="background:none;border:1px solid #D8D0C0;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:14px;color:#5A5040;">✕</button>
     </div>
-    <textarea id="json-input" placeholder='제가 드린 JSON을 여기에 붙여넣으세요.
-
-{
-  "editions": {
-    "2026-04-21": { ... }
-  }
-}'
+    <textarea id="json-input" placeholder='제가 드린 JSON을 여기에 붙여넣으세요.'
       style="width:100%;height:220px;padding:12px;border:1px solid #D8D0C0;border-radius:4px;font-size:12px;font-family:monospace;background:white;color:#2A2218;resize:vertical;outline:none;"></textarea>
     <div id="json-error" style="font-size:12px;color:#C94A2A;margin-top:6px;display:none;"></div>
     <div style="display:flex;gap:8px;margin-top:12px;">
@@ -677,11 +285,46 @@
   </div>
 </div>
 
+<!-- ★ JSON 뷰어/편집 모달 -->
+<div class="json-viewer-modal" id="json-viewer-modal">
+  <div class="json-viewer-box">
+    <div class="json-viewer-header">
+      <span class="json-viewer-title" id="jv-title">JSON 데이터</span>
+      <div class="json-viewer-actions">
+        <!-- 범위 토글 -->
+        <button class="json-viewer-btn jvb-scope active" id="jv-scope-current" onclick="setJsonScope('current')">현재 에디션</button>
+        <button class="json-viewer-btn jvb-scope" id="jv-scope-all" onclick="setJsonScope('all')">전체</button>
+        <!-- 탭 -->
+        <button class="json-viewer-btn jvb-copy" onclick="copyJson()">복사</button>
+        <button class="json-viewer-btn jvb-download" onclick="downloadJson()">다운로드</button>
+        <button class="json-viewer-btn jvb-close" onclick="closeJsonViewer()">✕</button>
+      </div>
+    </div>
+    <!-- 보기 / 편집 탭 -->
+    <div class="json-viewer-tabs">
+      <button class="json-tab-btn active" id="jv-tab-view" onclick="switchJsonTab('view')">👁 보기</button>
+      <button class="json-tab-btn" id="jv-tab-edit" onclick="switchJsonTab('edit')">✏️ 편집 후 저장</button>
+    </div>
+    <!-- 보기 패널 -->
+    <div class="json-viewer-body" id="jv-panel-view">
+      <div class="json-code" id="jv-code"></div>
+    </div>
+    <!-- 편집 패널 -->
+    <div class="json-viewer-body" id="jv-panel-edit" style="display:none;flex-direction:column;">
+      <textarea class="json-editor" id="jv-editor" oninput="validateJsonEditor()" spellcheck="false"></textarea>
+      <div class="json-editor-toolbar">
+        <span class="json-editor-status" id="jv-editor-status">JSON을 직접 수정하세요.</span>
+        <button class="json-viewer-btn" style="background:#3A7A5A;color:white;" onclick="applyJsonEdit()">Firebase에 저장</button>
+        <button class="json-viewer-btn" style="background:#3A3A50;color:#C9C9E0;" onclick="formatJsonEditor()">포맷 정렬</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getDatabase, ref, onValue, set, remove } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
-// ★ 동일한 Firebase 설정
 const firebaseConfig = {
   apiKey: "AIzaSyBIH03tDDCNSZHdq0_ru-4LnvaehECycSY",
   authDomain: "hrsignal.firebaseapp.com",
@@ -694,13 +337,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+window._db = db; window._ref = ref; window._set = set; window._remove = remove;
 
-window._db = db;
-window._ref = ref;
-window._set = set;
-window._remove = remove;
-
-// 데이터 로드
 const editionsRef = ref(db, 'editions');
 onValue(editionsRef, (snapshot) => {
   window._data = snapshot.val() || {};
@@ -713,8 +351,153 @@ onValue(editionsRef, (snapshot) => {
 window._data = {};
 window._keys = [];
 window._currentKey = null;
+window._jsonScope = 'current'; // 'current' | 'all'
+window._jsonTab = 'view';
 
-// ─── SIDEBAR ───
+/* ════ JSON 뷰어 ════ */
+
+function openJsonViewer() {
+  if (_jsonScope === 'current' && !_currentKey) {
+    toast('에디션을 먼저 선택해 주세요.'); return;
+  }
+  document.getElementById('json-viewer-modal').classList.add('show');
+  refreshJsonViewer();
+}
+
+function closeJsonViewer() {
+  document.getElementById('json-viewer-modal').classList.remove('show');
+}
+
+function setJsonScope(scope) {
+  _jsonScope = scope;
+  document.getElementById('jv-scope-current').classList.toggle('active', scope === 'current');
+  document.getElementById('jv-scope-all').classList.toggle('active', scope === 'all');
+  refreshJsonViewer();
+}
+
+function switchJsonTab(tab) {
+  _jsonTab = tab;
+  document.getElementById('jv-tab-view').classList.toggle('active', tab === 'view');
+  document.getElementById('jv-tab-edit').classList.toggle('active', tab === 'edit');
+  document.getElementById('jv-panel-view').style.display = tab === 'view' ? '' : 'none';
+  document.getElementById('jv-panel-edit').style.display = tab === 'edit' ? 'flex' : 'none';
+  if (tab === 'edit') {
+    // 에디터에 현재 JSON 채우기
+    const data = getJsonData();
+    document.getElementById('jv-editor').value = JSON.stringify(data, null, 2);
+    validateJsonEditor();
+  }
+}
+
+function getJsonData() {
+  if (_jsonScope === 'all') {
+    return { editions: _data };
+  } else {
+    return { editions: { [_currentKey]: _data[_currentKey] } };
+  }
+}
+
+function refreshJsonViewer() {
+  const data = getJsonData();
+  const label = _jsonScope === 'all'
+    ? `전체 에디션 (${_keys.length}개)`
+    : `${_data[_currentKey]?.title || _currentKey}`;
+  document.getElementById('jv-title').textContent = `{ } ${label}`;
+
+  // 보기 탭 렌더
+  document.getElementById('jv-code').innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
+
+  // 편집 탭도 열려있으면 갱신
+  if (_jsonTab === 'edit') {
+    document.getElementById('jv-editor').value = JSON.stringify(data, null, 2);
+    validateJsonEditor();
+  }
+}
+
+// JSON 문법 하이라이팅
+function syntaxHighlight(json) {
+  json = json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+    let cls = 'json-num';
+    if (/^"/.test(match)) {
+      cls = /:$/.test(match) ? 'json-key' : 'json-str';
+    } else if (/true|false/.test(match)) {
+      cls = 'json-bool';
+    } else if (/null/.test(match)) {
+      cls = 'json-null';
+    }
+    return `<span class="${cls}">${match}</span>`;
+  });
+}
+
+function copyJson() {
+  const data = getJsonData();
+  navigator.clipboard.writeText(JSON.stringify(data, null, 2))
+    .then(() => toast('✓ JSON이 클립보드에 복사되었습니다.'))
+    .catch(() => toast('복사 실패 — 수동으로 선택해 주세요.'));
+}
+
+function downloadJson() {
+  const data = getJsonData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const label = _jsonScope === 'all' ? 'hrsignal_all' : (_currentKey || 'edition');
+  a.download = `${label}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('JSON 파일 다운로드 시작');
+}
+
+/* ── 편집 모드 ── */
+function validateJsonEditor() {
+  const statusEl = document.getElementById('jv-editor-status');
+  const val = document.getElementById('jv-editor').value.trim();
+  if (!val) { statusEl.textContent = 'JSON을 입력해 주세요.'; statusEl.className = 'json-editor-status'; return false; }
+  try {
+    JSON.parse(val);
+    statusEl.textContent = '✓ 유효한 JSON입니다.';
+    statusEl.className = 'json-editor-status ok';
+    return true;
+  } catch(e) {
+    statusEl.textContent = '✗ ' + e.message;
+    statusEl.className = 'json-editor-status error';
+    return false;
+  }
+}
+
+function formatJsonEditor() {
+  const el = document.getElementById('jv-editor');
+  try {
+    el.value = JSON.stringify(JSON.parse(el.value), null, 2);
+    validateJsonEditor();
+  } catch(e) { toast('포맷 실패: JSON이 올바르지 않습니다.'); }
+}
+
+function applyJsonEdit() {
+  if (!validateJsonEditor()) { toast('JSON 오류를 먼저 수정해 주세요.'); return; }
+  const parsed = JSON.parse(document.getElementById('jv-editor').value);
+  const editions = parsed.editions || parsed;
+
+  if (typeof editions !== 'object' || !Object.keys(editions).length) {
+    toast('editions 데이터를 찾을 수 없습니다.'); return;
+  }
+
+  if (!confirm(`Firebase에 저장할까요?\n범위: ${_jsonScope === 'all' ? '전체 에디션 (덮어씀)' : '현재 에디션만'}`)) return;
+
+  const saveScope = _jsonScope === 'all'
+    ? _set(_ref(_db, 'editions'), editions)
+    : _set(_ref(_db, `editions/${_currentKey}`), editions[_currentKey] || editions);
+
+  saveScope
+    .then(() => {
+      toast('✓ Firebase에 저장되었습니다!');
+      closeJsonViewer();
+    })
+    .catch(err => toast('저장 실패: ' + err.message));
+}
+
+/* ════ 사이드바 ════ */
 function renderSidebar() {
   const list = document.getElementById('edition-list');
   list.innerHTML = '';
@@ -745,6 +528,8 @@ function selectEditionByKey(key) {
     if (el.querySelector(`[onclick="selectEditionByKey('${key}')"]`)) el.classList.add('active');
   });
   renderEditor(_data[key]);
+  // 뷰어가 열려있으면 갱신
+  if (document.getElementById('json-viewer-modal').classList.contains('show')) refreshJsonViewer();
 }
 
 function deleteEdition(key) {
@@ -754,76 +539,46 @@ function deleteEdition(key) {
     toast(`"${title}" 에디션이 삭제되었습니다.`);
     if (_currentKey === key) {
       _currentKey = null;
-      document.getElementById('admin-main').innerHTML = `
-        <div class="empty-state">
-          <h3>에디션을 선택하거나 새로 만드세요</h3>
-          <p>왼쪽 사이드바에서 에디션을 선택하면 편집할 수 있습니다.</p>
-        </div>`;
+      document.getElementById('admin-main').innerHTML = `<div class="empty-state"><h3>에디션을 선택하거나 새로 만드세요</h3><p>왼쪽 사이드바에서 에디션을 선택하면 편집할 수 있습니다.</p></div>`;
     }
   }).catch(err => toast('삭제 실패: ' + err.message));
 }
 
-// ─── SELECT EDITION ───
-function selectEdition(key) {
-  selectEditionByKey(key);
-}
-
-// ─── CREATE NEW EDITION ───
 function createNewEdition() {
   const now = new Date();
   const key = now.toISOString().split('T')[0];
   const newEd = {
     title: `HR시그널 #${(_keys.length + 1)}`,
-    date: key,
-    intro_title: '이번 주 HR 핵심 이슈',
-    intro: '',
-    top5: [],
-    editors_pick: null,
+    date: key, intro_title: '이번 주 HR 핵심 이슈', intro: '',
+    top5: [], editors_pick: null,
     sections: [
       { title: 'AI와 HR', articles: [] },
       { title: '채용 트렌드', articles: [] },
       { title: '노동법 & 정책', articles: [] }
     ]
   };
-  _data[key] = newEd;
-  _keys.unshift(key);
-  _currentKey = key;
-  renderSidebar();
-  renderEditor(newEd);
+  _data[key] = newEd; _keys.unshift(key); _currentKey = key;
+  renderSidebar(); renderEditor(newEd);
   toast('새 에디션이 생성되었습니다.');
 }
 
-// ─── RENDER EDITOR ───
+/* ════ 에디터 렌더 (기존과 동일) ════ */
 function renderEditor(edition) {
   const main = document.getElementById('admin-main');
-  const ed = JSON.parse(JSON.stringify(edition)); // deep copy
+  const ed = JSON.parse(JSON.stringify(edition));
 
-  let html = `
-    <div class="edition-form-block">
-      <div class="edition-form-title">에디션 기본 정보</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>에디션 제목</label>
-          <input type="text" id="f-title" value="${ed.title || ''}" placeholder="예: HR시그널 #12">
-        </div>
-        <div class="form-group">
-          <label>발행일</label>
-          <input type="date" id="f-date" value="${ed.date || ''}">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>헤드라인 타이틀</label>
-          <input type="text" id="f-intro-title" value="${ed.intro_title || ''}" placeholder="이번 주 HR 핵심 이슈">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>에디션 소개글</label>
-        <textarea id="f-intro" placeholder="이번 주 주요 내용을 간략히...">${ed.intro || ''}</textarea>
-      </div>
-    </div>`;
+  let html = `<div class="edition-form-block">
+    <div class="edition-form-title">에디션 기본 정보</div>
+    <div class="form-row">
+      <div class="form-group"><label>에디션 제목</label><input type="text" id="f-title" value="${ed.title||''}" placeholder="예: HR시그널 #12"></div>
+      <div class="form-group"><label>발행일</label><input type="date" id="f-date" value="${ed.date||''}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>헤드라인 타이틀</label><input type="text" id="f-intro-title" value="${ed.intro_title||''}" placeholder="이번 주 HR 핵심 이슈"></div>
+    </div>
+    <div class="form-group"><label>에디션 소개글</label><textarea id="f-intro" placeholder="이번 주 주요 내용을 간략히...">${ed.intro||''}</textarea></div>
+  </div>`;
 
-  // TOP 5 — 선정 패널 (기사는 섹션에서 골라서 추가)
   html += `<div class="section-block">
     <div class="section-block-header">
       <span class="section-block-title">이번 주 Top 5</span>
@@ -842,226 +597,137 @@ function renderEditor(edition) {
     </div>
   </div>`;
 
-  // Editor's Pick
   const ep = ed.editors_pick || {};
   html += `<div class="section-block">
-    <div class="section-block-header">
-      <span class="section-block-title">★ Editor's Pick</span>
-    </div>
+    <div class="section-block-header"><span class="section-block-title">★ Editor's Pick</span></div>
     <div class="section-block-body">
       <div class="form-row">
-        <div class="form-group">
-          <label>제목</label>
-          <input type="text" id="ep-title" value="${ep.title || ''}" placeholder="에디터 추천 기사 제목">
-        </div>
-        <div class="form-group">
-          <label>출처</label>
-          <input type="text" id="ep-source" value="${ep.source || ''}">
-        </div>
+        <div class="form-group"><label>제목</label><input type="text" id="ep-title" value="${ep.title||''}" placeholder="에디터 추천 기사 제목"></div>
+        <div class="form-group"><label>출처</label><input type="text" id="ep-source" value="${ep.source||''}"></div>
       </div>
-      <div class="form-group" style="margin-bottom:10px;">
-        <label>요약</label>
-        <textarea id="ep-summary">${ep.summary || ''}</textarea>
-      </div>
+      <div class="form-group" style="margin-bottom:10px;"><label>요약</label><textarea id="ep-summary">${ep.summary||''}</textarea></div>
       <div class="form-row">
-        <div class="form-group">
-          <label>URL</label>
-          <input type="url" id="ep-url" value="${ep.url || ''}">
-        </div>
-        <div class="form-group">
-          <label>날짜</label>
-          <input type="text" id="ep-date" value="${ep.date || ''}">
-        </div>
+        <div class="form-group"><label>URL</label><input type="url" id="ep-url" value="${ep.url||''}"></div>
+        <div class="form-group"><label>날짜</label><input type="text" id="ep-date" value="${ep.date||''}"></div>
       </div>
     </div>
   </div>`;
 
-  // Sections
-  (ed.sections || []).forEach((sec, si) => {
+  (ed.sections||[]).forEach((sec, si) => {
     html += `<div class="section-block">
       <div class="section-block-header">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <input type="text" value="${sec.title}" id="sec-title-${si}"
-            style="border:none;background:transparent;font-size:13px;font-weight:500;
-            font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
-        </div>
+        <input type="text" value="${sec.title}" id="sec-title-${si}" style="border:none;background:transparent;font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
         <div style="display:flex;gap:6px;">
           <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
           <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
         </div>
       </div>
       <div class="section-block-body" id="sec-${si}-list">`;
-    (sec.articles || []).forEach((a, ai) => {
-      html += articleCard(a, 'sec', ai, false, si);
-    });
+    (sec.articles||[]).forEach((a, ai) => { html += articleCard(a,'sec',ai,false,si); });
     html += `</div></div>`;
   });
 
-  // Add Section button
   html += `<button class="add-edition-btn" style="width:100%;margin:0 0 40px;" onclick="addSection()">+ 새 섹션 추가</button>`;
-
   main.innerHTML = html;
   window._editingEdition = ed;
-  // Top5 패널 렌더: 기존 top5 항목을 섹션 기사와 제목 매칭
   const rawTop5 = ed.top5 || [];
   window._top5Selected = rawTop5.map(t5 => {
     let matched = null;
-    (ed.sections || []).forEach((sec, si) => {
-      (sec.articles || []).forEach((art, ai) => {
-        if (!matched && art.title === t5.title) {
-          matched = { ...art, _secIdx: si, _artIdx: ai, badge: t5.badge || null };
-        }
+    (ed.sections||[]).forEach((sec,si) => {
+      (sec.articles||[]).forEach((art,ai) => {
+        if (!matched && art.title === t5.title) matched = {...art, _secIdx:si, _artIdx:ai, badge:t5.badge||null};
       });
     });
-    // 매칭 안 되면 orphan으로 보관 (섹션 삭제된 경우)
-    return matched || { ...t5, _secIdx: -1, _artIdx: -1 };
+    return matched || {...t5, _secIdx:-1, _artIdx:-1};
   });
   renderTop5Panel();
 }
 
-// ─── ARTICLE CARD HTML ───
 function articleCard(a, type, idx, isTop5, secIdx) {
-  const tags = (a.tags || []).join(',');
-  const points = (a.points || []).map((p, pi) =>
-    `<div class="point-row" id="point-${type}-${secIdx ?? ''}-${idx}-${pi}">
-      <input type="text" value="${p}" placeholder="핵심 포인트">
-      <button class="btn-sm delete" onclick="removePoint(this)">✕</button>
-    </div>`).join('');
-
-  const badgeLabel = a.badge ? a.badge.label || '' : '';
-  const badgeType = a.badge ? a.badge.type || 'hot' : 'hot';
-
-  return `<div class="article-card" id="card-${type}-${secIdx ?? ''}-${idx}">
+  const badgeLabel = a.badge ? a.badge.label||'' : '';
+  const badgeType  = a.badge ? a.badge.type||'hot' : 'hot';
+  const points = (a.points||[]).map((p,pi) =>
+    `<div class="point-row"><input type="text" value="${p}" placeholder="핵심 포인트"><button class="btn-sm delete" onclick="removePoint(this)">✕</button></div>`).join('');
+  return `<div class="article-card" id="card-${type}-${secIdx??''}-${idx}">
     <div class="article-card-header" onclick="toggleCard(this)">
-      <span class="article-card-num">${isTop5 ? '0'+(idx+1) : (idx+1)}</span>
-      <span class="article-card-title-preview">${a.title || '(제목 없음)'}</span>
-      <div class="article-card-actions">
-        <button class="btn-sm delete" onclick="deleteArticle(event,'${type}',${idx},${secIdx ?? 'null'})">삭제</button>
-      </div>
+      <span class="article-card-num">${isTop5?'0'+(idx+1):(idx+1)}</span>
+      <span class="article-card-title-preview">${a.title||'(제목 없음)'}</span>
+      <div class="article-card-actions"><button class="btn-sm delete" onclick="deleteArticle(event,'${type}',${idx},${secIdx??'null'})">삭제</button></div>
     </div>
     <div class="article-card-body">
       <div class="form-row">
-        <div class="form-group">
-          <label>제목</label>
-          <input type="text" class="art-title" value="${a.title || ''}" placeholder="기사 제목">
-        </div>
-        <div class="form-group" style="max-width:120px;">
-          <label>날짜</label>
-          <input type="text" class="art-date" value="${a.date || ''}" placeholder="04.08">
-        </div>
+        <div class="form-group"><label>제목</label><input type="text" class="art-title" value="${a.title||''}" placeholder="기사 제목"></div>
+        <div class="form-group" style="max-width:120px;"><label>날짜</label><input type="text" class="art-date" value="${a.date||''}" placeholder="04.08"></div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>카테고리</label>
-          <input type="text" class="art-cat" value="${a.category || ''}" placeholder="AI·HR">
-        </div>
-        <div class="form-group">
-          <label>출처</label>
-          <input type="text" class="art-source" value="${a.source || ''}" placeholder="HR Korea">
-        </div>
+        <div class="form-group"><label>카테고리</label><input type="text" class="art-cat" value="${a.category||''}" placeholder="AI·HR"></div>
+        <div class="form-group"><label>출처</label><input type="text" class="art-source" value="${a.source||''}" placeholder="HR Korea"></div>
       </div>
-      ${isTop5 ? `<div class="form-row">
-        <div class="form-group">
-          <label>뱃지 텍스트</label>
-          <input type="text" class="art-badge-label" value="${badgeLabel}" placeholder="HOT">
-        </div>
-        <div class="form-group">
-          <label>뱃지 타입</label>
-          <select class="art-badge-type">
-            <option value="hot" ${badgeType==='hot'?'selected':''}>hot (빨강)</option>
-            <option value="new" ${badgeType==='new'?'selected':''}>new (초록)</option>
-            <option value="trend" ${badgeType==='trend'?'selected':''}>trend (파랑)</option>
-          </select>
-        </div>
-      </div>` : `<div class="form-group" style="margin-bottom:10px;">
-        <label>태그 (엔터로 추가)</label>
+      ${isTop5?`<div class="form-row">
+        <div class="form-group"><label>뱃지 텍스트</label><input type="text" class="art-badge-label" value="${badgeLabel}" placeholder="HOT"></div>
+        <div class="form-group"><label>뱃지 타입</label><select class="art-badge-type">
+          <option value="hot" ${badgeType==='hot'?'selected':''}>hot (빨강)</option>
+          <option value="new" ${badgeType==='new'?'selected':''}>new (초록)</option>
+          <option value="trend" ${badgeType==='trend'?'selected':''}>trend (파랑)</option>
+        </select></div></div>`
+      :`<div class="form-group" style="margin-bottom:10px;"><label>태그 (엔터로 추가)</label>
         <div class="tags-input-wrap" onclick="this.querySelector('.tags-input').focus()">
           ${(a.tags||[]).map(t=>`<span class="tag-chip">${t}<button onclick="removeTag(this)">✕</button></span>`).join('')}
           <input class="tags-input" placeholder="태그 입력 후 엔터" onkeydown="addTag(event,this)">
-        </div>
-      </div>`}
-      <div class="form-group" style="margin-bottom:10px;">
-        <label>부제 (패널 서브텍스트)</label>
-        <input type="text" class="art-sub" value="${a.sub || ''}" placeholder="이번 주 가장 많이 언급된 이슈">
-      </div>
-      <div class="form-group" style="margin-bottom:10px;">
-        <label>요약</label>
-        <textarea class="art-summary" placeholder="기사 요약 (2-3문장)">${a.summary || ''}</textarea>
-      </div>
-      <div class="form-group" style="margin-bottom:10px;">
-        <label>핵심 포인트</label>
-        <div class="points-list" id="points-${type}-${secIdx??''}-${idx}">
-          ${points}
-        </div>
+        </div></div>`}
+      <div class="form-group" style="margin-bottom:10px;"><label>부제</label><input type="text" class="art-sub" value="${a.sub||''}" placeholder="이번 주 가장 많이 언급된 이슈"></div>
+      <div class="form-group" style="margin-bottom:10px;"><label>요약</label><textarea class="art-summary" placeholder="기사 요약 (2-3문장)">${a.summary||''}</textarea></div>
+      <div class="form-group" style="margin-bottom:10px;"><label>핵심 포인트</label>
+        <div class="points-list" id="points-${type}-${secIdx??''}-${idx}">${points}</div>
         <button class="btn-add-row" onclick="addPoint(this,'${type}',${idx},${secIdx??'null'})">+ 포인트 추가</button>
       </div>
-      <div class="form-group">
-        <label>원문 URL</label>
-        <input type="url" class="art-url" value="${a.url || ''}" placeholder="https://...">
-      </div>
+      <div class="form-group"><label>원문 URL</label><input type="url" class="art-url" value="${a.url||''}" placeholder="https://..."></div>
     </div>
   </div>`;
 }
 
-// ─── CARD TOGGLE ───
 function toggleCard(header) {
   const body = header.nextElementSibling;
   body.classList.toggle('open');
-  // 제목 미리보기 업데이트
   const input = body.querySelector('.art-title');
-  if (input) {
-    header.querySelector('.article-card-title-preview').textContent = input.value || '(제목 없음)';
-  }
+  if (input) header.querySelector('.article-card-title-preview').textContent = input.value || '(제목 없음)';
 }
 
-// ─── ADD ARTICLE ───
 function addArticle(type, secIdx) {
-  const blank = { title: '', date: '', category: '', source: '', summary: '', sub: '', points: [], tags: [], url: '' };
-  if (type === 'top5') {
-    if (!window._editingEdition.top5) window._editingEdition.top5 = [];
+  const blank = {title:'',date:'',category:'',source:'',summary:'',sub:'',points:[],tags:[],url:''};
+  if (type==='top5') {
+    if (!window._editingEdition.top5) window._editingEdition.top5=[];
     const idx = window._editingEdition.top5.length;
     window._editingEdition.top5.push(blank);
-    const html = articleCard(blank, 'top5', idx, true);
-    document.getElementById('top5-list').insertAdjacentHTML('beforeend', html);
+    document.getElementById('top5-list').insertAdjacentHTML('beforeend', articleCard(blank,'top5',idx,true));
   } else {
     const sec = window._editingEdition.sections[secIdx];
-    if (!sec.articles) sec.articles = [];
+    if (!sec.articles) sec.articles=[];
     const idx = sec.articles.length;
     sec.articles.push(blank);
-    const html = articleCard(blank, 'sec', idx, false, secIdx);
-    document.getElementById(`sec-${secIdx}-list`).insertAdjacentHTML('beforeend', html);
+    document.getElementById(`sec-${secIdx}-list`).insertAdjacentHTML('beforeend', articleCard(blank,'sec',idx,false,secIdx));
     renderPoolArticles();
   }
 }
 
-// ─── DELETE ARTICLE ───
 function deleteArticle(e, type, idx, secIdx) {
   e.stopPropagation();
   if (!confirm('이 기사를 삭제할까요?')) return;
   const card = e.target.closest('.article-card');
-  // Top5에서도 해당 기사 제거
-  if (type === 'sec') {
-    window._top5Selected = (window._top5Selected || []).filter(
-      s => !(s._secIdx == secIdx && s._artIdx == idx)
-    );
+  if (type==='sec') {
+    window._top5Selected = (window._top5Selected||[]).filter(s=>!(s._secIdx==secIdx && s._artIdx==idx));
     renderTop5Panel();
   }
-  card.remove();
-  toast('기사가 삭제되었습니다.');
+  card.remove(); toast('기사가 삭제되었습니다.');
 }
 
-// ─── ADD SECTION ───
 function addSection() {
-  if (!window._editingEdition.sections) window._editingEdition.sections = [];
+  if (!window._editingEdition.sections) window._editingEdition.sections=[];
   const si = window._editingEdition.sections.length;
-  const sec = { title: '새 섹션', articles: [] };
-  window._editingEdition.sections.push(sec);
-
+  window._editingEdition.sections.push({title:'새 섹션',articles:[]});
   const html = `<div class="section-block">
     <div class="section-block-header">
-      <input type="text" value="새 섹션" id="sec-title-${si}"
-        style="border:none;background:transparent;font-size:13px;font-weight:500;
-        font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
+      <input type="text" value="새 섹션" id="sec-title-${si}" style="border:none;background:transparent;font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
       <div style="display:flex;gap:6px;">
         <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
         <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
@@ -1069,135 +735,87 @@ function addSection() {
     </div>
     <div class="section-block-body" id="sec-${si}-list"></div>
   </div>`;
-
   document.querySelector('.add-edition-btn').insertAdjacentHTML('beforebegin', html);
   toast('새 섹션이 추가되었습니다.');
 }
 
-// ─── DELETE SECTION ───
 function deleteSection(si) {
   if (!confirm('이 섹션을 삭제할까요?')) return;
-  event.target.closest('.section-block').remove();
-  toast('섹션이 삭제되었습니다.');
+  event.target.closest('.section-block').remove(); toast('섹션이 삭제되었습니다.');
 }
 
-// ─── TAGS ───
 function addTag(e, input) {
-  if (e.key === 'Enter' && input.value.trim()) {
+  if (e.key==='Enter' && input.value.trim()) {
     e.preventDefault();
     const chip = document.createElement('span');
-    chip.className = 'tag-chip';
-    chip.innerHTML = `${input.value.trim()}<button onclick="removeTag(this)">✕</button>`;
-    input.before(chip);
-    input.value = '';
+    chip.className='tag-chip';
+    chip.innerHTML=`${input.value.trim()}<button onclick="removeTag(this)">✕</button>`;
+    input.before(chip); input.value='';
   }
 }
-
-function removeTag(btn) {
-  btn.parentElement.remove();
-}
-
-// ─── POINTS ───
+function removeTag(btn) { btn.parentElement.remove(); }
 function addPoint(btn, type, idx, secIdx) {
-  const container = btn.previousElementSibling;
-  const pi = container.children.length;
-  const row = document.createElement('div');
-  row.className = 'point-row';
-  row.innerHTML = `<input type="text" placeholder="핵심 포인트">
-    <button class="btn-sm delete" onclick="removePoint(this)">✕</button>`;
+  const container=btn.previousElementSibling;
+  const row=document.createElement('div'); row.className='point-row';
+  row.innerHTML=`<input type="text" placeholder="핵심 포인트"><button class="btn-sm delete" onclick="removePoint(this)">✕</button>`;
   container.appendChild(row);
 }
+function removePoint(btn) { btn.parentElement.remove(); }
 
-function removePoint(btn) {
-  btn.parentElement.remove();
-}
+window._top5Selected=[]; window._dragSrcIdx=null;
 
-// ─── TOP5 PANEL ───
-window._top5Selected = []; // { title, date, category, source, sub, summary, url, points, tags, badge, _secIdx, _artIdx }
-window._dragSrcIdx = null;
-
-function renderTop5Panel() {
-  renderPoolArticles();
-  renderTop5Selected();
-}
+function renderTop5Panel() { renderPoolArticles(); renderTop5Selected(); }
 
 function renderPoolArticles() {
-  const poolEl = document.getElementById('pool-articles-list');
-  const countEl = document.getElementById('pool-count');
+  const poolEl=document.getElementById('pool-articles-list');
+  const countEl=document.getElementById('pool-count');
   if (!poolEl) return;
-
-  const sections = window._editingEdition.sections || [];
-  // 현재 top5에 선정된 기사 식별자 목록
-  const selectedKeys = window._top5Selected.map(s => `${s._secIdx}-${s._artIdx}`);
-
-  let html = '';
-  let total = 0;
-
-  sections.forEach((sec, si) => {
-    const arts = sec.articles || [];
+  const sections=window._editingEdition.sections||[];
+  const selectedKeys=window._top5Selected.map(s=>`${s._secIdx}-${s._artIdx}`);
+  let html='', total=0;
+  sections.forEach((sec,si) => {
+    const arts=sec.articles||[];
     if (!arts.length) return;
-    html += `<div class="pool-section-group">
-      <div class="pool-section-name">§ ${sec.title}</div>`;
-    arts.forEach((a, ai) => {
+    html+=`<div class="pool-section-group"><div class="pool-section-name">§ ${sec.title}</div>`;
+    arts.forEach((a,ai) => {
       total++;
-      const key = `${si}-${ai}`;
-      const inTop5 = selectedKeys.includes(key);
-      html += `<div class="pool-article-item ${inTop5 ? 'in-top5' : ''}" data-si="${si}" data-ai="${ai}">
-        <div class="pool-article-text">${a.title || '(제목 없음)'}</div>
-        <div class="pool-article-meta">${a.date || ''}</div>
-        ${inTop5
-          ? `<span style="font-size:10px;color:var(--accent-green);padding:3px 8px;">✓ 선정됨</span>`
-          : `<button class="pool-add-btn" onclick="addToTop5(${si},${ai})">+ Top5</button>`}
+      const key=`${si}-${ai}`, inTop5=selectedKeys.includes(key);
+      html+=`<div class="pool-article-item ${inTop5?'in-top5':''}" data-si="${si}" data-ai="${ai}">
+        <div class="pool-article-text">${a.title||'(제목 없음)'}</div>
+        <div class="pool-article-meta">${a.date||''}</div>
+        ${inTop5?`<span style="font-size:10px;color:var(--accent-green);padding:3px 8px;">✓ 선정됨</span>`
+                :`<button class="pool-add-btn" onclick="addToTop5(${si},${ai})">+ Top5</button>`}
       </div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-
-  if (!total) {
-    html = `<div style="text-align:center;padding:24px;color:var(--ink-light);font-size:12px;">
-      섹션에 기사를 먼저 추가하세요
-    </div>`;
-    countEl.textContent = '섹션 기사 없음';
-  } else {
-    countEl.textContent = `${total}개 기사`;
-  }
-
-  poolEl.innerHTML = html;
+  if (!total) { html=`<div style="text-align:center;padding:24px;color:var(--ink-light);font-size:12px;">섹션에 기사를 먼저 추가하세요</div>`; countEl.textContent='섹션 기사 없음'; }
+  else { countEl.textContent=`${total}개 기사`; }
+  poolEl.innerHTML=html;
 }
 
 function renderTop5Selected() {
-  const el = document.getElementById('top5-selected-list');
-  const countEl = document.getElementById('top5-count');
+  const el=document.getElementById('top5-selected-list');
+  const countEl=document.getElementById('top5-count');
   if (!el) return;
-
-  countEl.textContent = `${window._top5Selected.length} / 5`;
-
-  if (!window._top5Selected.length) {
-    el.innerHTML = `<div class="top5-empty-msg">왼쪽에서 기사를 선택하세요</div>`;
-    return;
-  }
-
-  let html = '';
-  window._top5Selected.forEach((item, i) => {
-    const sec = (window._editingEdition.sections || [])[item._secIdx];
-    const secName = sec ? sec.title : '섹션';
-    const badgeLabel = item.badge ? item.badge.label || '' : '';
-    const badgeType = item.badge ? item.badge.type || 'hot' : 'hot';
-    html += `<div class="top5-selected-item" draggable="true"
-        ondragstart="dragStart(event,${i})"
-        ondragover="dragOver(event,${i})"
-        ondrop="dragDrop(event,${i})"
-        ondragleave="dragLeave(event)"
-        ondragend="dragEnd(event)">
+  countEl.textContent=`${window._top5Selected.length} / 5`;
+  if (!window._top5Selected.length) { el.innerHTML=`<div class="top5-empty-msg">왼쪽에서 기사를 선택하세요</div>`; return; }
+  let html='';
+  window._top5Selected.forEach((item,i)=>{
+    const sec=(window._editingEdition.sections||[])[item._secIdx];
+    const secName=sec?sec.title:'섹션';
+    const badgeLabel=item.badge?item.badge.label||'':'';
+    const badgeType=item.badge?item.badge.type||'hot':'hot';
+    html+=`<div class="top5-selected-item" draggable="true"
+      ondragstart="dragStart(event,${i})" ondragover="dragOver(event,${i})"
+      ondrop="dragDrop(event,${i})" ondragleave="dragLeave(event)" ondragend="dragEnd(event)">
       <div class="top5-rank-num">${String(i+1).padStart(2,'0')}</div>
       <div class="top5-selected-body">
-        <div class="top5-selected-title">${item.title || '(제목 없음)'}</div>
-        <div class="top5-selected-sec">${secName} · ${item.date || ''}</div>
+        <div class="top5-selected-title">${item.title||'(제목 없음)'}</div>
+        <div class="top5-selected-sec">${secName} · ${item.date||''}</div>
       </div>
       <div class="top5-selected-badge">
-        <input class="top5-badge-input" type="text" placeholder="뱃지 (HOT 등)"
-          value="${badgeLabel}"
-          onchange="updateTop5Badge(${i},'label',this.value)">
+        <input class="top5-badge-input" type="text" placeholder="뱃지 (HOT 등)" value="${badgeLabel}" onchange="updateTop5Badge(${i},'label',this.value)">
         <select class="top5-badge-select" onchange="updateTop5Badge(${i},'type',this.value)">
           <option value="hot" ${badgeType==='hot'?'selected':''}>🔴 hot</option>
           <option value="new" ${badgeType==='new'?'selected':''}>🟢 new</option>
@@ -1207,251 +825,88 @@ function renderTop5Selected() {
       </div>
     </div>`;
   });
-
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
 
-function addToTop5(si, ai) {
-  if (window._top5Selected.length >= 5) {
-    toast('Top5는 최대 5개까지 선정할 수 있습니다.'); return;
-  }
-  const sec = (window._editingEdition.sections || [])[si];
-  if (!sec) return;
-  const art = (sec.articles || [])[ai];
-  if (!art) return;
-
-  window._top5Selected.push({ ...art, _secIdx: si, _artIdx: ai, badge: null });
-  renderTop5Panel();
-  toast(`"${art.title || '기사'}"가 Top5에 추가되었습니다.`);
+function addToTop5(si,ai) {
+  if (window._top5Selected.length>=5){toast('Top5는 최대 5개까지 선정할 수 있습니다.');return;}
+  const sec=(window._editingEdition.sections||[])[si]; if(!sec)return;
+  const art=(sec.articles||[])[ai]; if(!art)return;
+  window._top5Selected.push({...art,_secIdx:si,_artIdx:ai,badge:null});
+  renderTop5Panel(); toast(`"${art.title||'기사'}"가 Top5에 추가되었습니다.`);
 }
+function removeFromTop5(rank){window._top5Selected.splice(rank,1);renderTop5Panel();}
+function updateTop5Badge(rank,field,val){const item=window._top5Selected[rank];if(!item.badge)item.badge={label:'',type:'hot'};item.badge[field]=val;}
 
-function removeFromTop5(rank) {
-  window._top5Selected.splice(rank, 1);
-  renderTop5Panel();
-}
+function dragStart(e,idx){window._dragSrcIdx=idx;e.dataTransfer.effectAllowed='move';e.currentTarget.style.opacity='0.5';}
+function dragOver(e,idx){e.preventDefault();e.dataTransfer.dropEffect='move';e.currentTarget.classList.add('drag-over');}
+function dragLeave(e){e.currentTarget.classList.remove('drag-over');}
+function dragDrop(e,idx){e.preventDefault();e.currentTarget.classList.remove('drag-over');const src=window._dragSrcIdx;if(src===null||src===idx)return;const moved=window._top5Selected.splice(src,1)[0];window._top5Selected.splice(idx,0,moved);renderTop5Selected();}
+function dragEnd(e){e.currentTarget.style.opacity='';document.querySelectorAll('.top5-selected-item').forEach(el=>el.classList.remove('drag-over'));window._dragSrcIdx=null;}
 
-function updateTop5Badge(rank, field, val) {
-  const item = window._top5Selected[rank];
-  if (!item.badge) item.badge = { label: '', type: 'hot' };
-  item.badge[field] = val;
-}
-
-// ─── DRAG & DROP (Top5 순서 변경) ───
-function dragStart(e, idx) {
-  window._dragSrcIdx = idx;
-  e.dataTransfer.effectAllowed = 'move';
-  e.currentTarget.style.opacity = '0.5';
-}
-
-function dragOver(e, idx) {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-  e.currentTarget.classList.add('drag-over');
-}
-
-function dragLeave(e) {
-  e.currentTarget.classList.remove('drag-over');
-}
-
-function dragDrop(e, idx) {
-  e.preventDefault();
-  e.currentTarget.classList.remove('drag-over');
-  const src = window._dragSrcIdx;
-  if (src === null || src === idx) return;
-  const moved = window._top5Selected.splice(src, 1)[0];
-  window._top5Selected.splice(idx, 0, moved);
-  renderTop5Selected();
-}
-
-function dragEnd(e) {
-  e.currentTarget.style.opacity = '';
-  document.querySelectorAll('.top5-selected-item').forEach(el => el.classList.remove('drag-over'));
-  window._dragSrcIdx = null;
-}
-
-// ─── SAVE ALL ───
 function saveAll() {
-  // 기본 정보 수집
-  const edition = {
-    title: document.getElementById('f-title').value,
-    date: document.getElementById('f-date').value,
-    intro_title: document.getElementById('f-intro-title').value,
-    intro: document.getElementById('f-intro').value,
-    top5: [],
-    editors_pick: null,
-    sections: []
+  const edition={
+    title:document.getElementById('f-title').value,
+    date:document.getElementById('f-date').value,
+    intro_title:document.getElementById('f-intro-title').value,
+    intro:document.getElementById('f-intro').value,
+    top5:[],editors_pick:null,sections:[]
   };
-
-  // TOP 5 — _top5Selected에서 수집 (섹션 기사 데이터 + 뱃지)
-  (window._top5Selected || []).forEach(item => {
-    const sec = (edition.sections.length ? null : null); // placeholder
-    // 섹션 기사 최신값을 DOM에서 읽기
-    const secIdx = item._secIdx;
-    const artIdx = item._artIdx;
-    const secBlock = document.querySelector(`[id="sec-${secIdx}-list"]`);
-    let artData = { ...item };
-    if (secBlock) {
-      const cards = secBlock.querySelectorAll('.article-card');
-      const card = cards[artIdx];
-      if (card) artData = { ...artData, ...collectArticleFromCard(card, false) };
-    }
-    const top5Entry = {
-      title: artData.title || '',
-      date: artData.date || '',
-      category: artData.category || '',
-      source: artData.source || '',
-      sub: artData.sub || '',
-      summary: artData.summary || '',
-      url: artData.url || '',
-      points: artData.points || [],
-    };
-    if (item.badge && item.badge.label) top5Entry.badge = item.badge;
+  (window._top5Selected||[]).forEach(item=>{
+    const secIdx=item._secIdx,artIdx=item._artIdx;
+    const secBlock=document.querySelector(`[id="sec-${secIdx}-list"]`);
+    let artData={...item};
+    if(secBlock){const cards=secBlock.querySelectorAll('.article-card');const card=cards[artIdx];if(card)artData={...artData,...collectArticleFromCard(card,false)};}
+    const top5Entry={title:artData.title||'',date:artData.date||'',category:artData.category||'',source:artData.source||'',sub:artData.sub||'',summary:artData.summary||'',url:artData.url||'',points:artData.points||[]};
+    if(item.badge&&item.badge.label)top5Entry.badge=item.badge;
     edition.top5.push(top5Entry);
   });
-
-  // Editor's Pick
-  const epTitle = document.getElementById('ep-title').value;
-  if (epTitle) {
-    edition.editors_pick = {
-      title: epTitle,
-      source: document.getElementById('ep-source').value,
-      summary: document.getElementById('ep-summary').value,
-      url: document.getElementById('ep-url').value,
-      date: document.getElementById('ep-date').value,
-    };
-  }
-
-  // Sections
-  document.querySelectorAll('.section-block').forEach((block, si) => {
-    const titleInput = block.querySelector('[id^="sec-title-"]');
-    if (!titleInput) return;
-    const secIdx = titleInput.id.replace('sec-title-', '');
-    const articles = [];
-    block.querySelectorAll('.article-card').forEach(card => {
-      articles.push(collectArticleFromCard(card, false));
-    });
-    edition.sections.push({
-      title: titleInput.value,
-      articles
-    });
+  const epTitle=document.getElementById('ep-title').value;
+  if(epTitle){edition.editors_pick={title:epTitle,source:document.getElementById('ep-source').value,summary:document.getElementById('ep-summary').value,url:document.getElementById('ep-url').value,date:document.getElementById('ep-date').value};}
+  document.querySelectorAll('.section-block').forEach((block,si)=>{
+    const titleInput=block.querySelector('[id^="sec-title-"]');
+    if(!titleInput)return;
+    const articles=[];
+    block.querySelectorAll('.article-card').forEach(card=>{articles.push(collectArticleFromCard(card,false));});
+    edition.sections.push({title:titleInput.value,articles});
   });
-
-  // Firebase 저장
-  const key = edition.date || _currentKey;
-  if (!key) { toast('발행일을 입력해주세요.'); return; }
-
-  _set(_ref(_db, `editions/${key}`), edition)
-    .then(() => {
-      toast('✓ 저장되어 발행되었습니다!');
-      _currentKey = key;
-    })
-    .catch(err => toast('저장 실패: ' + err.message));
+  const key=edition.date||_currentKey;
+  if(!key){toast('발행일을 입력해주세요.');return;}
+  _set(_ref(_db,`editions/${key}`),edition)
+    .then(()=>{toast('✓ 저장되어 발행되었습니다!');_currentKey=key;})
+    .catch(err=>toast('저장 실패: '+err.message));
 }
 
-function collectArticleFromCard(card, isTop5) {
-  const a = {
-    title: card.querySelector('.art-title')?.value || '',
-    date: card.querySelector('.art-date')?.value || '',
-    category: card.querySelector('.art-cat')?.value || '',
-    source: card.querySelector('.art-source')?.value || '',
-    sub: card.querySelector('.art-sub')?.value || '',
-    summary: card.querySelector('.art-summary')?.value || '',
-    url: card.querySelector('.art-url')?.value || '',
-    points: [],
-  };
-
-  // Points
-  card.querySelectorAll('.points-list .point-row input').forEach(inp => {
-    if (inp.value.trim()) a.points.push(inp.value.trim());
-  });
-
-  if (isTop5) {
-    const label = card.querySelector('.art-badge-label')?.value;
-    const type = card.querySelector('.art-badge-type')?.value;
-    if (label) a.badge = { label, type };
-  } else {
-    a.tags = [];
-    card.querySelectorAll('.tag-chip').forEach(chip => {
-      a.tags.push(chip.textContent.replace('✕','').trim());
-    });
-  }
-
+function collectArticleFromCard(card,isTop5){
+  const a={title:card.querySelector('.art-title')?.value||'',date:card.querySelector('.art-date')?.value||'',category:card.querySelector('.art-cat')?.value||'',source:card.querySelector('.art-source')?.value||'',sub:card.querySelector('.art-sub')?.value||'',summary:card.querySelector('.art-summary')?.value||'',url:card.querySelector('.art-url')?.value||'',points:[]};
+  card.querySelectorAll('.points-list .point-row input').forEach(inp=>{if(inp.value.trim())a.points.push(inp.value.trim());});
+  if(isTop5){const label=card.querySelector('.art-badge-label')?.value;const type=card.querySelector('.art-badge-type')?.value;if(label)a.badge={label,type};}
+  else{a.tags=[];card.querySelectorAll('.tag-chip').forEach(chip=>{a.tags.push(chip.textContent.replace('✕','').trim());});}
   return a;
 }
 
-// ─── JSON 업로드 ───
-function showJsonUpload() {
-  document.getElementById('json-modal').style.display = 'flex';
-  document.getElementById('json-input').value = '';
-  document.getElementById('json-error').style.display = 'none';
-  setTimeout(() => document.getElementById('json-input').focus(), 100);
-}
+function showJsonUpload(){document.getElementById('json-modal').style.display='flex';document.getElementById('json-input').value='';document.getElementById('json-error').style.display='none';setTimeout(()=>document.getElementById('json-input').focus(),100);}
+function closeJsonUpload(){document.getElementById('json-modal').style.display='none';}
 
-function closeJsonUpload() {
-  document.getElementById('json-modal').style.display = 'none';
-}
-
-function uploadJson() {
-  const raw = document.getElementById('json-input').value.trim();
-  const errEl = document.getElementById('json-error');
-  errEl.style.display = 'none';
-
-  if (!raw) { errEl.textContent = 'JSON을 입력해주세요.'; errEl.style.display = 'block'; return; }
-
+function uploadJson(){
+  const raw=document.getElementById('json-input').value.trim();
+  const errEl=document.getElementById('json-error');
+  errEl.style.display='none';
+  if(!raw){errEl.textContent='JSON을 입력해주세요.';errEl.style.display='block';return;}
   let parsed;
-  try {
-    parsed = JSON.parse(raw);
-  } catch(e) {
-    errEl.textContent = 'JSON 형식이 올바르지 않습니다: ' + e.message;
-    errEl.style.display = 'block';
-    return;
-  }
-
-  const editions = parsed.editions || parsed;
-  if (typeof editions !== 'object') {
-    errEl.textContent = 'editions 키를 찾을 수 없습니다.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  const keys = Object.keys(editions);
-  if (keys.length === 0) {
-    errEl.textContent = '추가할 에디션이 없습니다.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // 각 에디션을 개별적으로 Firebase에 저장 (기존 데이터 유지)
-  const promises = keys.map(k => _set(_ref(_db, `editions/${k}`), editions[k]));
-
-  Promise.all(promises)
-    .then(() => {
-      closeJsonUpload();
-      toast(`✓ ${keys.length}개 에디션이 추가되었습니다: ${keys.join(', ')}`);
-    })
-    .catch(err => {
-      errEl.textContent = '업로드 실패: ' + err.message;
-      errEl.style.display = 'block';
-    });
+  try{parsed=JSON.parse(raw);}catch(e){errEl.textContent='JSON 형식이 올바르지 않습니다: '+e.message;errEl.style.display='block';return;}
+  const editions=parsed.editions||parsed;
+  if(typeof editions!=='object'){errEl.textContent='editions 키를 찾을 수 없습니다.';errEl.style.display='block';return;}
+  const keys=Object.keys(editions);
+  if(!keys.length){errEl.textContent='추가할 에디션이 없습니다.';errEl.style.display='block';return;}
+  Promise.all(keys.map(k=>_set(_ref(_db,`editions/${k}`),editions[k])))
+    .then(()=>{closeJsonUpload();toast(`✓ ${keys.length}개 에디션이 추가되었습니다: ${keys.join(', ')}`);})
+    .catch(err=>{errEl.textContent='업로드 실패: '+err.message;errEl.style.display='block';});
 }
 
-// ─── TOAST ───
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
-// ─── DELETE EDITION ───
-function deleteCurrentEdition() {
-  if (!_currentKey || !confirm(`'${_data[_currentKey]?.title}' 에디션을 삭제할까요?`)) return;
-  _remove(_ref(_db, `editions/${_currentKey}`)).then(() => {
-    toast('에디션이 삭제되었습니다.');
-    _currentKey = null;
-    document.getElementById('admin-main').innerHTML = '<div class="empty-state"><h3>에디션을 선택하세요</h3></div>';
-  });
-}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJsonViewer();closeJsonUpload();}});
 </script>
 </body>
 </html>
