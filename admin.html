@@ -616,7 +616,10 @@ function renderEditor(edition) {
   (ed.sections||[]).forEach((sec, si) => {
     html += `<div class="section-block">
       <div class="section-block-header">
-        <input type="text" value="${sec.title}" id="sec-title-${si}" style="border:none;background:transparent;font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
+        <select id="sec-title-${si}" class="sec-title-select" style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
+          <option value="">-- 섹션 선택 --</option>
+          ${['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'].map(c=>`<option value="${c}" ${sec.title===c?'selected':''}>${c}</option>`).join('')}
+        </select>
         <div style="display:flex;gap:6px;">
           <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
           <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
@@ -732,7 +735,10 @@ function addSection() {
   window._editingEdition.sections.push({title:'새 섹션',articles:[]});
   const html = `<div class="section-block">
     <div class="section-block-header">
-      <input type="text" value="새 섹션" id="sec-title-${si}" style="border:none;background:transparent;font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;width:160px;">
+      <select id="sec-title-${si}" class="sec-title-select" style="border:1px solid var(--cream-border);background:var(--cream);font-size:13px;font-weight:500;font-family:'Noto Sans KR',sans-serif;color:var(--ink);border-radius:4px;padding:4px 8px;outline:none;cursor:pointer;">
+        <option value="">-- 섹션 선택 --</option>
+        ${['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'].map(c=>`<option value="${c}">${c}</option>`).join('')}
+      </select>
       <div style="display:flex;gap:6px;">
         <button class="btn btn-success" onclick="addArticle('sec',${si})" style="padding:5px 12px;font-size:11px;">+ 기사 추가</button>
         <button class="btn btn-danger" onclick="deleteSection(${si})" style="padding:5px 10px;font-size:11px;">삭제</button>
