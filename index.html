@@ -498,7 +498,8 @@ body {
 <!-- 이번 주 탭 -->
 <div id="pane-latest">
   <div class="meta-bar">
-    <span class="meta-date" id="mag-date">—</span>
+    <span class="meta-edition" id="mag-edition" style="font-size:13px;font-weight:600;color:var(--ink);"></span>
+    <span class="meta-date" id="mag-date" style="font-size:12px;color:var(--ink-light);"></span>
   </div>
   <div class="wrap" style="padding-top:8px;">
     <div id="loading" class="loading">불러오는 중...</div>
@@ -650,8 +651,9 @@ function renderEdition(edition) {
   currentArticles = [];
   const num = (edition.title || '').replace(/[^0-9]/g, '');
   document.getElementById('issue-label').textContent = num ? `ISSUE NO. ${num.padStart(3,'0')}` : 'HR시그널';
-  document.getElementById('mag-date').textContent = edition.date || '';
-  document.getElementById('footer-date').textContent = edition.date || '';
+  document.getElementById('mag-edition').textContent = edition.title || '';
+  document.getElementById('mag-date').textContent = edition.period || edition.date || '';
+  document.getElementById('footer-date').textContent = edition.period || edition.date || '';
 
   let html = '';
 
