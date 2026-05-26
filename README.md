@@ -1,75 +1,158 @@
-# HR 시그널 — 설정 가이드
+[README.md](https://github.com/user-attachments/files/28243663/README.md)
+# HR시그널 (HR Signal)
 
-## 파일 구조
+> 매일유업 피플팀 주간 HR 이슈 뉴스레터 시스템
+
+Firebase Realtime Database 기반의 콘텐츠 관리 시스템(CMS)으로,  
+별도 서버 없이 정적 HTML 파일만으로 운영되는 사내 HR 뉴스레터 플랫폼입니다.
+
+---
+
+## 📌 개요
+
+| 항목 | 내용 |
+|------|------|
+| 운영 주체 | 매일유업 피플팀 |
+| 서비스 형태 | 정적 웹사이트 (Firebase Hosting) |
+| 데이터베이스 | Firebase Realtime Database |
+| 주요 기능 | 주간 HR 뉴스레터 발행 / 기사 관리 / 아카이브 검색 / 조회수 분석 |
+
+---
+
+## 🗂 파일 구조
+
 ```
-hr-signal/
-├── index.html        ← 메인 뉴스레터 페이지
-├── admin.html        ← 관리자 편집 페이지
-├── sample-data.json  ← Firebase 초기 데이터
-└── README.md
-```
-
-## 1단계 — Firebase 설정
-
-1. https://console.firebase.google.com 접속
-2. 새 프로젝트 생성 (예: `hr-signal`)
-3. Realtime Database → 데이터베이스 만들기 → 테스트 모드
-4. 프로젝트 설정 → 웹 앱 추가 → Firebase 설정값 복사
-
-## 2단계 — Firebase 설정값 입력
-
-`index.html` 과 `admin.html` 두 파일에서 아래 부분을 찾아 교체:
-
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",           // ← 실제 값으로 교체
-  authDomain: "YOUR_PROJECT...",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb...",
-  ...
-};
-```
-
-## 3단계 — 비밀번호 변경
-
-`index.html` 에서:
-```javascript
-const ADMIN_PASSWORD = 'maeil2024';  // ← 원하는 비밀번호로 변경
+/
+├── index.html        # 독자용 뉴스레터 페이지
+├── admin.html        # 관리자용 CMS 페이지
+└── firebase.json     # Firebase Hosting 배포 설정
 ```
 
-## 4단계 — 초기 데이터 입력
+### index.html — 독자 페이지
+- 이번 주 호: Top5, Editor's Pick, 카테고리별 기사 목록
+- 지난 호 아카이브: 전체 기사 검색 (제목 / 카테고리 / 키워드)
+- 기사 상세 모달: 요약 · 핵심포인트 · 원문링크
+- 반응형 디자인 (모바일 지원)
 
-Firebase 콘솔 → Realtime Database → 데이터 탭 → 오른쪽 점 메뉴 → JSON 가져오기
-→ `sample-data.json` 파일 업로드
+### admin.html — 관리자 페이지
+- 에디션 생성 · 삭제 (사이드바)
+- 기사 CRUD (카테고리 · 태그 · 핵심포인트 · URL 관리)
+- Top5 & Editor's Pick 슬롯 드래그&드롭 지정
+- 실시간 저장 & 발행 (Firebase 직접 저장 → 독자 페이지 즉시 반영)
+- JSON 뷰어 / 편집기 (데이터 직접 확인 및 수정)
+- 조회수 분석 대시보드
 
-## 5단계 — Vercel 배포
+---
+
+## 🛠 기술 스택
+
+| 구분 | 기술 |
+|------|------|
+| Frontend | HTML / CSS / JavaScript (Vanilla, 외부 프레임워크 없음) |
+| Database | Firebase Realtime Database |
+| Hosting | Firebase Hosting |
+| 폰트 | Google Fonts (Noto Serif KR, Noto Sans KR, Playfair Display) |
+
+---
+
+## 🗄 Firebase DB 구조
+
+```
+editions/
+  {editionKey}/               ← 에디션 키 (YYYY-MM-DD_난수)
+    title: string             ← 에디션 제목 (예: "HR시그널 #12")
+    date: string              ← 발행일 (YYYY-MM-DD)
+    period_start: string      ← 기간 시작일
+    period_end: string        ← 기간 종료일
+    period: string            ← 표시용 기간 문자열 (자동 생성)
+    intro: string             ← Editor's Note 소개글
+    top5: array               ← 편집자 선정 Top5 기사 (최대 5개)
+      [].title: string
+      []._id: string          ← 기사 고유 ID
+      [].category: string
+      [].date: string
+      [].source: string
+      [].summary: string
+      [].points: array        ← 핵심 포인트 목록
+      [].tags: array
+      [].url: string
+      [].badge: object|null   ← { label: "HOT", type: "hot" }
+    editors_pick: object|null ← Editor's Pick 기사 1건
+    sections: array           ← 카테고리별 섹션
+      [].title: string        ← 카테고리명
+      [].articles: array      ← 기사 목록
+
+views/
+  {editionKey}/
+    total: number             ← 에디션 총 페이지뷰
+    articles: object          ← 기사별 클릭수 { _id: count }
+    lastUpdated: number       ← timestamp
+```
+
+---
+
+## 🚀 배포 방법
+
+### 콘텐츠 업데이트 (코드 배포 없이)
+
+```
+1. 브라우저에서 [배포 도메인]/admin.html 접속
+2. 관리자 비밀번호 입력
+3. [+ 새 에디션 추가] → 기사 입력 → [💾 저장 & 발행]
+   → index.html에 즉시 반영 (별도 배포 불필요)
+```
+
+### 코드 수정 후 재배포
 
 ```bash
-# Vercel CLI 설치 (최초 1회)
-npm i -g vercel
+# Firebase CLI 설치 (최초 1회)
+npm install -g firebase-tools
+firebase login
 
-# hr-signal 폴더에서
-vercel
-
-# 이후 수정 시
-vercel --prod
+# 배포
+firebase deploy --only hosting
 ```
 
-## 기사 업데이트 방법
+---
 
-### Claude에게 요청하는 경우
-1. 키워드 엑셀 파일 공유
-2. "HR 시그널 #13 기사 찾아줘" 요청
-3. Claude가 JSON 형태로 반환
-4. 관리자 페이지에서 붙여넣기
+## 📋 주간 운영 프로세스
 
-### 직접 입력하는 경우
-1. `your-url.vercel.app/admin.html` 접속
-2. 비밀번호 입력
-3. `+ 새 에디션 추가` 클릭
-4. 기사 추가 → 저장 & 발행
+| 단계 | 작업 | 소요 시간 |
+|------|------|-----------|
+| STEP 1 | 주간 HR 기사 수집 | 2~3시간 |
+| STEP 2 | admin.html 접속 | 1분 |
+| STEP 3 | 새 에디션 생성 (제목·날짜·소개글 입력) | 5분 |
+| STEP 4 | 기사 입력 (카테고리·요약·포인트·URL) | 30~60분 |
+| STEP 5 | Top5 슬롯 지정 및 뱃지 설정 | 5분 |
+| STEP 6 | Editor's Pick 지정 | 2분 |
+| STEP 7 | 저장 & 발행 | 1분 |
+| STEP 8 | index.html에서 최종 검토 | 10분 |
 
-## 관리자 URL
-```
-https://your-project.vercel.app/admin.html
-```
-(index.html 우상단 "관리자 ↗" 클릭 → 비밀번호 입력해도 이동)
+---
+
+## 📂 카테고리 목록
+
+`노사관계` `노동법/정책` `채용/퇴직` `조직/문화` `보상/복리후생` `교육/개발` `AI/디지털HR` `글로벌HR` `기타`
+
+---
+
+## ⚠️ 보안 주의사항
+
+- 관리자 비밀번호가 `index.html` 소스에 평문 저장되어 있음 → **운영 환경에서는 변경 필요**
+- Firebase API Key가 소스코드에 노출되어 있음 → **Firebase Console에서 도메인 제한 설정 권장**
+- Firebase 무료 플랜(Spark) 한도: 10GB/월 전송량 초과 시 유료 전환 필요
+
+---
+
+## 📝 업데이트 이력
+
+| 날짜 | 내용 | 담당 |
+|------|------|------|
+| 2026-05 | 초기 버전 개발 완료 | 김창중 |
+| | Firebase Realtime DB 기반 CMS 구현 | |
+| | Top5 드래그&드롭, Editor's Pick, JSON 편집기 | |
+| | 아카이브 탭, 조회수 분석 대시보드 | |
+
+---
+
+© 2026 매일유업 피플팀
