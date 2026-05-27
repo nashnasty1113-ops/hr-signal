@@ -15,7 +15,6 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',sans-serif; font-size:13px; min-height:100vh; }
 
-/* ── 헤더 ── */
 .admin-header { background:var(--ink); color:var(--cream); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
 .admin-logo { font-family:'Noto Serif KR',serif; font-size:17px; font-weight:700; }
 .admin-logo span { color:#E07A3A; }
@@ -26,28 +25,31 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .btn-blue    { background:var(--blue); color:white; }
 .btn-save    { background:var(--red); color:white; font-weight:600; box-shadow:0 2px 8px rgba(201,74,42,0.35); }
 
-/* ── 레이아웃 ── */
 .admin-layout { display:flex; min-height:calc(100vh - 52px); }
 
-/* ── 사이드바 ── */
-.sidebar { width:220px; border-right:1px solid var(--cream-border); padding:16px 0; background:var(--cream); flex-shrink:0; overflow-y:auto; }
+/* 사이드바 */
+.sidebar { width:230px; border-right:1px solid var(--cream-border); padding:16px 0; background:var(--cream); flex-shrink:0; overflow-y:auto; }
 .sidebar-label { font-size:10px; letter-spacing:2px; color:var(--ink-light); padding:0 14px 8px; }
-.edition-item { padding:9px 14px; cursor:pointer; border-left:3px solid transparent; transition:all .15s; display:flex; align-items:center; justify-content:space-between; }
+.edition-item { padding:9px 10px 9px 14px; cursor:pointer; border-left:3px solid transparent; transition:all .15s; display:flex; align-items:center; justify-content:space-between; gap:6px; }
 .edition-item:hover { background:var(--cream-dark); }
 .edition-item.active { border-left-color:var(--red); background:var(--cream-dark); }
-.edition-item-info { flex:1; }
-.edition-item-title { font-size:12px; font-weight:500; color:var(--ink); }
+.edition-item-info { flex:1; min-width:0; }
+.edition-item-title { font-size:12px; font-weight:500; color:var(--ink); display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
 .edition-item-date  { font-size:10px; color:var(--ink-light); margin-top:2px; }
-.edition-del-btn { background:none; border:none; cursor:pointer; color:var(--ink-light); font-size:13px; padding:2px 4px; border-radius:3px; transition:all .12s; flex-shrink:0; }
+.current-badge { font-size:9px; background:var(--green); color:white; padding:1px 6px; border-radius:8px; white-space:nowrap; flex-shrink:0; }
+.edition-actions { display:flex; gap:2px; align-items:center; flex-shrink:0; }
+.edition-del-btn { background:none; border:none; cursor:pointer; color:var(--ink-light); font-size:13px; padding:3px 5px; border-radius:3px; transition:all .12s; }
 .edition-del-btn:hover { color:var(--red); background:#FDEEE9; }
+.edition-star-btn { background:none; border:none; cursor:pointer; color:var(--ink-light); font-size:13px; padding:3px 5px; border-radius:3px; transition:all .12s; }
+.edition-star-btn:hover { color:#E07A3A; background:#FDF3E9; }
 .add-edition-btn { margin:10px 14px 0; width:calc(100% - 28px); padding:8px; border:1px dashed var(--cream-border); border-radius:4px; background:none; cursor:pointer; font-size:11px; color:var(--ink-light); font-family:'Noto Sans KR',sans-serif; text-align:center; transition:all .15s; }
 .add-edition-btn:hover { border-color:var(--ink-mid); color:var(--ink); }
 .add-edition-btn.upload { border-color:var(--red); color:var(--red); margin-top:6px; }
 
-/* ── 메인 영역 ── */
+/* 메인 */
 .admin-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
 
-/* ── 에디션 기본정보 바 ── */
+/* 기본정보 바 */
 .info-bar { background:white; border-bottom:1px solid var(--cream-border); padding:14px 24px; display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; flex-shrink:0; }
 .info-bar .fg { display:flex; flex-direction:column; gap:3px; }
 .info-bar label { font-size:10px; color:var(--ink-light); letter-spacing:.5px; }
@@ -59,10 +61,10 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .info-bar textarea  { padding:6px 9px; border:1px solid var(--cream-border); border-radius:4px; font-size:12px; font-family:'Noto Sans KR',sans-serif; background:white; color:var(--ink); outline:none; resize:none; height:52px; }
 .info-bar .fg-intro { flex:3; min-width:200px; }
 
-/* ── 3단 메인 패널 ── */
+/* 에디터 본문 */
 .editor-body { flex:1; display:grid; grid-template-columns:1fr 320px; gap:0; overflow:hidden; }
 
-/* ── 기사 풀 (왼쪽) ── */
+/* 기사 풀 */
 .pool-panel { display:flex; flex-direction:column; overflow:hidden; border-right:1px solid var(--cream-border); }
 .pool-toolbar { padding:10px 16px; background:var(--cream); border-bottom:1px solid var(--cream-border); display:flex; align-items:center; gap:8px; flex-shrink:0; }
 .pool-toolbar-title { font-size:12px; font-weight:600; color:var(--ink); flex:1; }
@@ -71,12 +73,8 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .btn-add-art:hover { opacity:.85; }
 .pool-scroll { flex:1; overflow-y:auto; padding:12px; }
 
-/* ── 기사 카드 (풀) ── */
-.art-card {
-  background:white; border:1px solid var(--cream-border); border-radius:5px;
-  margin-bottom:8px; cursor:grab; transition:all .12s;
-  user-select:none;
-}
+/* 기사 카드 */
+.art-card { background:white; border:1px solid var(--cream-border); border-radius:5px; margin-bottom:8px; cursor:grab; transition:all .12s; user-select:none; }
 .art-card:hover { border-color:#B0A890; box-shadow:0 2px 6px rgba(0,0,0,0.06); }
 .art-card.dragging { opacity:.4; cursor:grabbing; }
 .art-card.assigned-top5 { border-left:3px solid var(--red); }
@@ -95,11 +93,7 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .art-form-row { display:flex; gap:8px; margin-bottom:8px; }
 .art-fg { flex:1; display:flex; flex-direction:column; gap:3px; }
 .art-fg label { font-size:10px; color:var(--ink-light); }
-.art-fg input, .art-fg select, .art-fg textarea {
-  padding:5px 8px; border:1px solid var(--cream-border); border-radius:3px;
-  font-size:12px; font-family:'Noto Sans KR',sans-serif; background:white;
-  color:var(--ink); outline:none; width:100%;
-}
+.art-fg input, .art-fg select, .art-fg textarea { padding:5px 8px; border:1px solid var(--cream-border); border-radius:3px; font-size:12px; font-family:'Noto Sans KR',sans-serif; background:white; color:var(--ink); outline:none; width:100%; }
 .art-fg input:focus, .art-fg select:focus, .art-fg textarea:focus { border-color:var(--ink-mid); }
 .art-fg textarea { resize:vertical; min-height:56px; }
 .tags-wrap { display:flex; flex-wrap:wrap; gap:4px; padding:5px 7px; border:1px solid var(--cream-border); border-radius:3px; background:white; cursor:text; min-height:32px; align-items:center; }
@@ -114,24 +108,19 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .btn-art-save { padding:5px 12px; background:var(--green); color:white; border:none; border-radius:3px; font-size:11px; font-family:'Noto Sans KR',sans-serif; cursor:pointer; }
 .btn-art-save:hover { opacity:.85; }
 
-/* ── 섹션 그룹 헤더 ── */
+/* 섹션 그룹 헤더 */
 .cat-group { margin-bottom:4px; }
 .cat-group-header { font-size:10px; letter-spacing:1.5px; color:var(--ink-light); padding:6px 4px 4px; border-bottom:1px solid var(--cream-border); margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; }
 .cat-group-count { font-size:10px; color:var(--ink-light); background:var(--cream-dark); padding:1px 6px; border-radius:8px; }
 
-/* ── 오른쪽 패널 (Top5 + EP) ── */
+/* 오른쪽 패널 */
 .assign-panel { display:flex; flex-direction:column; overflow-y:auto; background:var(--cream); }
 .assign-section { padding:14px 16px; border-bottom:1px solid var(--cream-border); }
 .assign-section-title { font-size:11px; font-weight:700; letter-spacing:1px; color:var(--ink-mid); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
 .assign-section-title span { font-size:10px; font-weight:400; color:var(--ink-light); letter-spacing:0; }
 
-/* ── 슬롯 ── */
-.slot {
-  border:2px dashed var(--cream-border); border-radius:5px;
-  padding:8px 10px; margin-bottom:6px; min-height:44px;
-  background:var(--slot-empty); transition:all .15s;
-  position:relative;
-}
+/* 슬롯 */
+.slot { border:2px dashed var(--cream-border); border-radius:5px; padding:8px 10px; margin-bottom:6px; min-height:44px; background:var(--slot-empty); transition:all .15s; position:relative; }
 .slot.drag-over { border-color:var(--blue); background:#EEF4FF; }
 .slot.filled { border-style:solid; border-color:#C8D8C0; background:var(--slot-filled); }
 .slot-num { font-size:10px; color:var(--ink-light); margin-bottom:4px; font-weight:600; }
@@ -148,24 +137,23 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .slot-drag-handle:hover { color:var(--ink-mid); }
 .slot.slot-dragging { opacity:.4; }
 .slot.slot-drag-over { border-color:var(--blue); background:#EEF4FF; }
-/* 편집 중인 카드는 드래그 커서 제거 */
 .art-card.editing { cursor:default; }
 .art-card.editing .art-card-header { cursor:default; }
 
-/* ── EP 슬롯 ── */
+/* EP 슬롯 */
 .ep-slot { border:2px dashed #C4B5FD; background:#FAF8FF; }
 .ep-slot.drag-over { border-color:#8B5CF6; background:#F3EEFF; }
 .ep-slot.filled { border-style:solid; border-color:#A78BFA; background:#F3EEFF; }
 
-/* ── 빈 상태 ── */
+/* 빈 상태 */
 .empty-state { text-align:center; padding:60px 0; color:var(--ink-light); }
 .empty-state h3 { font-size:15px; margin-bottom:8px; color:var(--ink-mid); }
 
-/* ── 토스트 ── */
+/* 토스트 */
 .toast { position:fixed; bottom:24px; right:24px; background:var(--ink); color:var(--cream); padding:11px 18px; border-radius:6px; font-size:12px; transform:translateY(80px); opacity:0; transition:all .3s; z-index:999; }
 .toast.show { transform:translateY(0); opacity:1; }
 
-/* ── JSON 뷰어 ── */
+/* JSON 뷰어 */
 .json-viewer-modal { display:none; position:fixed; inset:0; background:rgba(42,34,24,0.6); z-index:400; align-items:center; justify-content:center; padding:20px; }
 .json-viewer-modal.show { display:flex; }
 .json-viewer-box { background:#1E1E2E; border-radius:8px; width:100%; max-width:760px; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.4); overflow:hidden; }
@@ -192,7 +180,7 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .json-editor-status.error { color:#F38BA8; }
 .json-editor-status.ok { color:#A6E3A1; }
 
-/* ── 조회수 분석 모달 ── */
+/* 조회수 분석 */
 .views-modal { display:none; position:fixed; inset:0; background:rgba(42,34,24,0.6); z-index:400; align-items:center; justify-content:center; padding:20px; }
 .views-modal.show { display:flex; }
 .views-box { background:var(--cream); border-radius:10px; width:100%; max-width:860px; max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden; border:1px solid var(--cream-border); }
@@ -257,7 +245,6 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 </header>
 
 <div class="admin-layout">
-  <!-- 사이드바 -->
   <aside class="sidebar">
     <div class="sidebar-label">에디션 목록</div>
     <div id="edition-list"></div>
@@ -265,7 +252,6 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
     <button class="add-edition-btn upload" onclick="showJsonUpload()">↑ JSON으로 업로드</button>
   </aside>
 
-  <!-- 메인 -->
   <main class="admin-main" id="admin-main">
     <div class="empty-state" style="margin:auto;">
       <h3>에디션을 선택하거나 새로 만드세요</h3>
@@ -339,7 +325,7 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, set, remove } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getDatabase, ref, onValue, set, remove, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 const firebaseConfig = {
   apiKey:"AIzaSyBIH03tDDCNSZHdq0_ru-4LnvaehECycSY",
   authDomain:"hrsignal.firebaseapp.com",
@@ -350,28 +336,53 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 window._db=db; window._ref=ref; window._set=set; window._remove=remove;
-onValue(ref(db,'editions'), snap => {
-  window._data = snap.val()||{};
-  window._keys = Object.keys(window._data).sort().reverse();
+
+// editions + current_edition 동시 로드
+Promise.all([
+  new Promise(resolve => onValue(ref(db,'editions'), snap => resolve(snap.val()||{}), {onlyOnce:true})),
+  get(ref(db,'config/current_edition'))
+]).then(([edData, curSnap]) => {
+  window._data = edData;
+  window._currentEditionKey = curSnap.val() || null;
+  window._keys = sortEditionKeys(edData);
   renderSidebar();
+  // 이후 실시간 업데이트
+  onValue(ref(db,'editions'), snap => {
+    window._data = snap.val()||{};
+    window._keys = sortEditionKeys(window._data);
+    renderSidebar();
+  });
 });
 </script>
 
 <script>
-window._data={}; window._keys=[]; window._currentKey=null;
+window._data={}; window._keys=[]; window._currentKey=null; window._currentEditionKey=null;
 window._jsonScope='current'; window._jsonTab='view';
 const SEC_CATS=['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'];
 
-// 기사 풀: [{_id, title, date, category, source, sub, summary, url, points, tags}, ...]
-// Top5 슬롯: [null|{...article, badge}, null, null, null, null]
-// EP 슬롯: null|{...article}
 window._pool = [];
 window._top5 = [null,null,null,null,null];
 window._ep   = null;
-window._dragSrc = null; // {type:'pool'|'top5'|'ep', id, slotIdx}
+window._draggingId = null;
+window._draggingSlotIdx = null;
 window._autoScrollTimer = null;
 
 function generateId() { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+/* ════ 정렬: period_start 기준 내림차순, 없으면 키 문자열 기준 ════ */
+function sortEditionKeys(data) {
+  return Object.keys(data).sort((a, b) => {
+    const psA = data[a]?.period_start || '';
+    const psB = data[b]?.period_start || '';
+    // period_start가 둘 다 있으면 날짜 비교
+    if (psA && psB) return psB.localeCompare(psA);
+    // 하나만 있으면 있는 쪽 우선
+    if (psA && !psB) return -1;
+    if (!psA && psB) return 1;
+    // 둘 다 없으면 키 문자열 비교
+    return b.localeCompare(a);
+  });
+}
 
 /* ════ 사이드바 ════ */
 function renderSidebar() {
@@ -379,14 +390,21 @@ function renderSidebar() {
   list.innerHTML='';
   (_keys||[]).forEach(k=>{
     const ed=_data[k];
+    const isCurrent = k === window._currentEditionKey;
     const item=document.createElement('div');
     item.className='edition-item'+(k===_currentKey?' active':'');
     item.innerHTML=`
       <div class="edition-item-info" onclick="selectEdition('${k}')" style="cursor:pointer;">
-        <div class="edition-item-title">${ed.title||k}</div>
-        <div class="edition-item-date">${ed.period||ed.date||''}</div>
+        <div class="edition-item-title">
+          ${esc(ed.title||k)}
+          ${isCurrent ? '<span class="current-badge">이번주호</span>' : ''}
+        </div>
+        <div class="edition-item-date">${esc(ed.period||ed.period_start||ed.date||'')}</div>
       </div>
-      <button class="edition-del-btn" onclick="deleteEdition('${k}')">✕</button>`;
+      <div class="edition-actions">
+        ${!isCurrent ? `<button class="edition-star-btn" title="이번 주 호로 설정" onclick="setCurrentEdition('${k}')">★</button>` : ''}
+        <button class="edition-del-btn" title="삭제" onclick="deleteEdition('${k}')">✕</button>
+      </div>`;
     list.appendChild(item);
   });
 }
@@ -401,19 +419,38 @@ function selectEdition(key) {
   if(document.getElementById('json-viewer-modal').classList.contains('show')) refreshJsonViewer();
 }
 
+/* ════ 이번 주 호 설정 ════ */
+function setCurrentEdition(key) {
+  const title = _data[key]?.title || key;
+  _set(_ref(_db,'config/current_edition'), key)
+    .then(() => {
+      window._currentEditionKey = key;
+      renderSidebar();
+      toast(`✓ "${title}"이(가) 이번 주 호로 설정되었습니다.`);
+    })
+    .catch(err => toast('설정 실패: '+err.message));
+}
+
 function deleteEdition(key) {
   const title=_data[key]?.title||key;
   if(!confirm(`"${title}" 에디션을 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.`)) return;
   _remove(_ref(_db,`editions/${key}`)).then(()=>{
     toast(`"${title}" 에디션이 삭제되었습니다.`);
     if(_currentKey===key){ _currentKey=null; renderEmptyMain(); }
+    // 삭제된 게 current_edition이면 해제
+    if(window._currentEditionKey===key){
+      window._currentEditionKey=null;
+      _set(_ref(_db,'config/current_edition'), null);
+    }
   }).catch(err=>toast('삭제 실패: '+err.message));
 }
 
 function createNewEdition() {
   const key=new Date().toISOString().split('T')[0]+'_'+Date.now().toString(36);
   const newEd={title:`HR시그널 #${(_keys.length+1)}`,date:'',period:'',period_start:'',period_end:'',intro_title:'이번 주 HR 핵심 이슈',intro:'',top5:[],editors_pick:null,sections:[]};
-  _data[key]=newEd; _keys.unshift(key); _currentKey=key;
+  _data[key]=newEd;
+  _keys = sortEditionKeys(_data);
+  _currentKey=key;
   renderSidebar(); loadEdition(newEd);
   toast('새 에디션이 생성되었습니다.');
 }
@@ -424,21 +461,18 @@ function renderEmptyMain() {
 
 /* ════ 에디션 로드 ════ */
 function loadEdition(ed) {
-  // 기사 풀 구성: sections 배열을 flat하게 + _id 보장
   _pool = [];
   (ed.sections||[]).forEach(sec=>{
     (sec.articles||[]).forEach(a=>{
       _pool.push({...a, _id: a._id||generateId(), category: a.category||sec.title||''});
     });
   });
-  // Top5 슬롯 구성: _id로 매칭, 없으면 title로 fallback
   _top5 = [null,null,null,null,null];
   (ed.top5||[]).forEach((t,i)=>{
     if(i>=5) return;
     const found = _pool.find(a=>a._id&&t._id ? a._id===t._id : a.title===t.title);
     _top5[i] = found ? {...found, badge:t.badge||null} : {...t, _id:t._id||generateId(), badge:t.badge||null};
   });
-  // EP 슬롯
   _ep = null;
   if(ed.editors_pick) {
     const found = _pool.find(a=>a._id&&ed.editors_pick._id ? a._id===ed.editors_pick._id : a.title===ed.editors_pick.title);
@@ -451,17 +485,14 @@ function loadEdition(ed) {
 function renderMain(ed) {
   const main = document.getElementById('admin-main');
   main.innerHTML=`
-    <!-- 기본정보 바 -->
     <div class="info-bar">
-      <div class="fg fg-title"><label>에디션 제목</label><input id="f-title" value="${esc(ed.title||'')}" placeholder="4월 4주차"></div>
+      <div class="fg fg-title"><label>에디션 제목</label><input id="f-title" value="${esc(ed.title||'')}" placeholder="5월 4주차"></div>
       <div class="fg fg-date"><label>발행일</label><input type="date" id="f-date" value="${esc(ed.date||'')}"></div>
       <div class="fg fg-period"><label>기간 시작</label><input type="date" id="f-period-start" value="${esc(ed.period_start||'')}"></div>
       <div class="fg fg-period"><label>기간 종료</label><input type="date" id="f-period-end" value="${esc(ed.period_end||'')}"></div>
       <div class="fg fg-intro"><label>에디션 소개글</label><textarea id="f-intro" placeholder="이번 주 주요 내용...">${esc(ed.intro||'')}</textarea></div>
     </div>
-    <!-- 에디터 본문 -->
     <div class="editor-body">
-      <!-- 왼쪽: 기사 풀 -->
       <div class="pool-panel">
         <div class="pool-toolbar">
           <span class="pool-toolbar-title">기사 목록</span>
@@ -475,7 +506,6 @@ function renderMain(ed) {
           ondragover="poolDragOver(event)" ondragleave="poolDragLeave(event)" ondrop="poolDrop(event)">
         </div>
       </div>
-      <!-- 오른쪽: Top5 + EP 슬롯 -->
       <div class="assign-panel" id="assign-panel">
         <div class="assign-section">
           <div class="assign-section-title">🏆 이번 주 Top 5 <span>기사를 드래그하거나 버튼으로 지정</span></div>
@@ -492,7 +522,7 @@ function renderMain(ed) {
           <div class="slot ep-slot" id="slot-ep"
             ondragover="slotDragOver(event,this)" ondragleave="slotDragLeave(event,this)"
             ondrop="slotDrop(event,'ep',0)">
-            <div class="slot-empty-hint">기사를 여기에 드롭</div>
+            <div class="slot-empty-hint">기사를 여기에 드롭하거나 목록에서 → EP</div>
           </div>
         </div>
       </div>
@@ -512,17 +542,13 @@ function renderPool() {
     ..._top5.filter(Boolean).map(a=>a._id),
     ...(_ep?[_ep._id]:[])
   ]);
-
-  // 카테고리별 그룹
   const groups = {};
   _pool.filter(a=>!catFilter||a.category===catFilter).forEach(a=>{
     const c = a.category||'기타';
     if(!groups[c]) groups[c]=[];
     groups[c].push(a);
   });
-
   if(!_pool.length){ scroll.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--ink-light);font-size:12px;">+ 기사 추가 버튼으로 기사를 등록하세요</div>`; return; }
-
   let html='';
   const cats = catFilter ? [catFilter] : SEC_CATS.filter(c=>groups[c]?.length).concat(Object.keys(groups).filter(c=>!SEC_CATS.includes(c)&&groups[c]?.length));
   cats.forEach(cat=>{
@@ -612,10 +638,7 @@ function toggleArtCard(id) {
   if(!body) return;
   const isOpening = !body.classList.contains('open');
   body.classList.toggle('open');
-  if(card) {
-    card.classList.toggle('editing', isOpening);
-    card.draggable = !isOpening; // 편집 중엔 드래그 비활성화
-  }
+  if(card) { card.classList.toggle('editing', isOpening); card.draggable = !isOpening; }
 }
 
 /* ════ 기사 CRUD ════ */
@@ -624,7 +647,6 @@ function addArticle() {
   const a = {_id:generateId(), title:'', date:'', category:catFilter||'', source:'', sub:'', summary:'', url:'', points:[], tags:[]};
   _pool.push(a);
   renderPool();
-  // 추가된 카드 펼치기
   setTimeout(()=>{
     const body=document.getElementById('artbody-'+a._id);
     if(body){ body.classList.add('open'); body.scrollIntoView({behavior:'smooth',block:'nearest'}); }
@@ -647,7 +669,6 @@ function saveArticle(id, btn) {
   body.querySelectorAll('.points-list .point-row input').forEach(inp=>{ if(inp.value.trim()) art.points.push(inp.value.trim()); });
   art.tags=[];
   body.querySelectorAll('.tag-chip').forEach(chip=>{ art.tags.push(chip.textContent.replace('✕','').trim()); });
-  // Top5/EP에 있으면 데이터 동기화
   _top5 = _top5.map(t=>t&&t._id===id ? {...t,...art} : t);
   if(_ep&&_ep._id===id) _ep={..._ep,...art};
   saveAll(true);
@@ -680,15 +701,8 @@ function assignEP(id) {
   renderPool(); renderSlots(); saveAll(true);
 }
 
-function removeFromTop5(idx) {
-  _top5[idx]=null;
-  renderPool(); renderSlots(); saveAll(true);
-}
-
-function removeEP() {
-  _ep=null;
-  renderPool(); renderSlots(); saveAll(true);
-}
+function removeFromTop5(idx) { _top5[idx]=null; renderPool(); renderSlots(); saveAll(true); }
+function removeEP() { _ep=null; renderPool(); renderSlots(); saveAll(true); }
 
 function updateTop5Badge(idx, field, val) {
   if(!_top5[idx]) return;
@@ -702,15 +716,12 @@ function renderSlots() {
     const slot=document.getElementById(`slot-top5-${i}`); if(!slot) return;
     const t=_top5[i];
     if(!t){
-      slot.className='slot';
-      slot.draggable=false;
-      slot.ondragstart=null;
+      slot.className='slot'; slot.draggable=false; slot.ondragstart=null;
       slot.innerHTML=`<div class="slot-num">0${i+1}</div><div class="slot-empty-hint">기사를 드롭하거나 목록에서 → Top5</div>`;
       return;
     }
     const bl=t.badge?.label||''; const bt=t.badge?.type||'hot';
-    slot.className='slot filled';
-    slot.draggable=true;
+    slot.className='slot filled'; slot.draggable=true;
     slot.ondragstart=(e)=>slotDragStart(e,i);
     slot.ondragend=(e)=>slotDragEnd(e,i);
     slot.innerHTML=`
@@ -735,7 +746,6 @@ function renderSlots() {
         <button class="slot-remove" onclick="removeFromTop5(${i});event.stopPropagation()">✕</button>
       </div>`;
   });
-  // EP 슬롯
   const epSlot=document.getElementById('slot-ep'); if(!epSlot) return;
   if(!_ep){ epSlot.className='slot ep-slot'; epSlot.innerHTML=`<div class="slot-empty-hint">기사를 여기에 드롭하거나 목록에서 → EP</div>`; return; }
   epSlot.className='slot ep-slot filled';
@@ -750,99 +760,49 @@ function renderSlots() {
 }
 
 /* ════ 드래그 앤 드롭 ════ */
-window._draggingId = null;    // 풀 기사 드래그용
-window._draggingSlotIdx = null; // 슬롯→슬롯 드래그용
-
 function artDragStart(e, id) {
-  window._draggingId = id;
-  window._draggingSlotIdx = null;
-  e.dataTransfer.effectAllowed='move';
-  e.dataTransfer.setData('text/plain','');
+  window._draggingId = id; window._draggingSlotIdx = null;
+  e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain','');
   setTimeout(()=>{ const el=document.getElementById('artcard-'+id); if(el) el.classList.add('dragging'); },0);
 }
-
 function artDragEnd(e) {
   stopAutoScroll();
-  if(window._draggingId) {
-    const el=document.getElementById('artcard-'+window._draggingId);
-    if(el) el.classList.remove('dragging');
-  }
+  if(window._draggingId){ const el=document.getElementById('artcard-'+window._draggingId); if(el) el.classList.remove('dragging'); }
   window._draggingId=null;
   document.querySelectorAll('.slot').forEach(s=>s.classList.remove('slot-drag-over'));
 }
-
-// 슬롯 → 슬롯 드래그
 function slotDragStart(e, fromIdx) {
-  window._draggingSlotIdx = fromIdx;
-  window._draggingId = null;
-  e.dataTransfer.effectAllowed='move';
-  e.dataTransfer.setData('text/plain','');
-  setTimeout(()=>{
-    const slot=document.getElementById(`slot-top5-${fromIdx}`);
-    if(slot) slot.classList.add('slot-dragging');
-  },0);
+  window._draggingSlotIdx = fromIdx; window._draggingId = null;
+  e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain','');
+  setTimeout(()=>{ const slot=document.getElementById(`slot-top5-${fromIdx}`); if(slot) slot.classList.add('slot-dragging'); },0);
 }
-
 function slotDragEnd(e, fromIdx) {
-  stopAutoScroll();
-  window._draggingSlotIdx=null;
-  document.querySelectorAll('.slot').forEach(s=>{
-    s.classList.remove('slot-drag-over');
-    s.classList.remove('slot-dragging');
-  });
+  stopAutoScroll(); window._draggingSlotIdx=null;
+  document.querySelectorAll('.slot').forEach(s=>{ s.classList.remove('slot-drag-over'); s.classList.remove('slot-dragging'); });
 }
-
-function slotDragOver(e, el) {
-  e.preventDefault(); e.dataTransfer.dropEffect='move';
-  el.classList.add('slot-drag-over');
-  autoScroll(e.clientY);
-}
-
-function slotDragLeave(e, el) {
-  if(!el.contains(e.relatedTarget)) el.classList.remove('slot-drag-over');
-}
-
+function slotDragOver(e, el) { e.preventDefault(); e.dataTransfer.dropEffect='move'; el.classList.add('slot-drag-over'); autoScroll(e.clientY); }
+function slotDragLeave(e, el) { if(!el.contains(e.relatedTarget)) el.classList.remove('slot-drag-over'); }
 function slotDrop(e, type, toIdx) {
   e.preventDefault();
   document.querySelectorAll('.slot').forEach(s=>s.classList.remove('slot-drag-over','slot-dragging'));
-
-  // 슬롯 → 슬롯 (순서 변경)
   if(window._draggingSlotIdx !== null && type === 'top5') {
     const from = window._draggingSlotIdx;
     if(from === toIdx) return;
-    const moved = _top5[from];
-    // swap
-    _top5[from] = _top5[toIdx];
-    _top5[toIdx] = moved;
+    const moved = _top5[from]; _top5[from] = _top5[toIdx]; _top5[toIdx] = moved;
     window._draggingSlotIdx = null;
-    renderPool(); renderSlots(); saveAll(true);
-    return;
+    renderPool(); renderSlots(); saveAll(true); return;
   }
-
-  // 풀 → 슬롯
   const id = window._draggingId; if(!id) return;
   const art = _pool.find(a=>a._id===id); if(!art) return;
   if(type==='top5'){
-    // 이미 다른 슬롯에 있으면 그 슬롯 비우기
     _top5 = _top5.map((t,i)=>t&&t._id===id&&i!==toIdx ? null : t);
     _top5[toIdx]={...art, badge:_top5[toIdx]?.badge||null};
-  } else {
-    _ep={...art};
-  }
+  } else { _ep={...art}; }
   renderPool(); renderSlots(); saveAll(true);
 }
-
-function poolDragOver(e) {
-  e.preventDefault(); e.dataTransfer.dropEffect='move';
-  autoScroll(e.clientY);
-}
+function poolDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect='move'; autoScroll(e.clientY); }
 function poolDragLeave(e) {}
-function poolDrop(e) {
-  e.preventDefault();
-  // 슬롯에서 풀로 드롭하면 해제
-  // (기사 자체는 이미 풀에 있으므로 별도 처리 불필요)
-}
-
+function poolDrop(e) { e.preventDefault(); }
 function autoScroll(clientY) {
   const main=document.getElementById('pool-scroll'); if(!main) return;
   const rect=main.getBoundingClientRect();
@@ -880,13 +840,8 @@ function saveAll(silent=false) {
   if(!_currentKey){ if(!silent) toast('에디션을 먼저 선택해주세요.'); return; }
   const ps=document.getElementById('f-period-start')?.value||'';
   const pe=document.getElementById('f-period-end')?.value||'';
-  // sections: 카테고리별로 grouping
   const secMap={};
-  _pool.forEach(a=>{
-    const c=a.category||'기타';
-    if(!secMap[c]) secMap[c]=[];
-    secMap[c].push(a);
-  });
+  _pool.forEach(a=>{ const c=a.category||'기타'; if(!secMap[c]) secMap[c]=[]; secMap[c].push(a); });
   const sections=Object.entries(secMap).map(([title,articles])=>({title,articles}));
   const edition={
     title: document.getElementById('f-title')?.value||'',
@@ -911,7 +866,7 @@ function saveAll(silent=false) {
   _set(_ref(_db,`editions/${_currentKey}`),edition)
     .then(()=>{
       toast(silent?'✓ 자동 저장':'✓ 저장되어 발행되었습니다!');
-      if(_data[_currentKey]) _data[_currentKey]=edition;
+      if(_data[_currentKey]) { _data[_currentKey]=edition; _keys=sortEditionKeys(_data); }
       renderSidebar();
     })
     .catch(err=>toast('저장 실패: '+err.message));
@@ -1005,22 +960,19 @@ function uploadJson(){
 
 /* ════ 조회수 분석 ════ */
 window._viewsData = null;
-window._viewsTab = 'editions';  // 'editions' | 'articles'
-window._viewsScope = 'all';     // 'all' | currentKey
+window._viewsTab = 'editions';
+window._viewsScope = 'all';
 
 function openViewsAnalytics() {
   document.getElementById('views-modal').classList.add('show');
   loadViewsData();
 }
-function closeViewsAnalytics() {
-  document.getElementById('views-modal').classList.remove('show');
-}
+function closeViewsAnalytics() { document.getElementById('views-modal').classList.remove('show'); }
 
 function loadViewsData() {
   document.getElementById('views-body').innerHTML = '<div class="views-loading">📊 Firebase에서 조회수 데이터를 불러오는 중...</div>';
   const db = window._db; const ref = window._ref;
   if(!db) { renderViewsError('Firebase 연결 없음'); return; }
-  // views/{editionKey} = { total: N, articles: { articleId: N }, lastUpdated: ts }
   import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js')
     .then(({onValue, ref: dbRef}) => {
       onValue(dbRef(db, 'views'), snap => {
@@ -1028,11 +980,7 @@ function loadViewsData() {
         renderViewsModal();
       }, { onlyOnce: true });
     })
-    .catch(()=> {
-      // fallback: use already-imported ref
-      const {onValue: ov} = window._fbDB || {};
-      renderViewsError('데이터 로드 실패. Firebase 연결을 확인해주세요.');
-    });
+    .catch(()=> { renderViewsError('데이터 로드 실패. Firebase 연결을 확인해주세요.'); });
 }
 
 function renderViewsModal() {
@@ -1040,31 +988,19 @@ function renderViewsModal() {
   const editionKeys = Object.keys(vd);
   const tab = window._viewsTab;
   const scope = window._viewsScope;
-
-  // 에디션 목록 버튼 생성용
   const edNames = {};
   (_keys||[]).forEach(k => { edNames[k] = _data[k]?.title || k; });
-
-  // scope 필터된 키들
   const scopedKeys = scope === 'all' ? editionKeys : (editionKeys.includes(scope) ? [scope] : []);
-
-  // KPI 계산
   const totalViews = scopedKeys.reduce((s,k) => s + (vd[k]?.total || 0), 0);
   const maxEdKey = scopedKeys.reduce((best,k) => (!best || (vd[k]?.total||0) > (vd[best]?.total||0)) ? k : best, null);
   const avgViews = scopedKeys.length ? Math.round(totalViews / scopedKeys.length) : 0;
-  const totalArticleViews = scopedKeys.reduce((s,k) => {
-    return s + Object.values(vd[k]?.articles||{}).reduce((a,b)=>a+b, 0);
-  }, 0);
-
-  // 에디션별 랭킹
+  const totalArticleViews = scopedKeys.reduce((s,k) => s + Object.values(vd[k]?.articles||{}).reduce((a,b)=>a+b, 0), 0);
   const edRank = scopedKeys.map(k => ({
     key: k, title: edNames[k] || k,
     views: vd[k]?.total || 0,
     articleViews: Object.values(vd[k]?.articles||{}).reduce((a,b)=>a+b,0),
     lastUpdated: vd[k]?.lastUpdated || null
   })).sort((a,b) => b.views - a.views);
-
-  // 기사별 랭킹 (전체)
   const artRankMap = {};
   scopedKeys.forEach(k => {
     const arts = vd[k]?.articles || {};
@@ -1074,7 +1010,6 @@ function renderViewsModal() {
       artRankMap[aid].editions.push({ edKey: k, edTitle: edNames[k]||k, cnt });
     });
   });
-  // 기사 제목 매칭
   const artRank = Object.values(artRankMap).map(a => {
     let title = a.id;
     (_keys||[]).forEach(ek => {
@@ -1085,153 +1020,58 @@ function renderViewsModal() {
     });
     return {...a, title};
   }).sort((a,b) => b.views - a.views);
-
   const maxEdViews = edRank[0]?.views || 1;
   const maxArtViews = artRank[0]?.views || 1;
-
   const scopeButtons = `
     <span class="views-scope-label">범위:</span>
     <button class="views-scope-btn ${scope==='all'?'active':''}" onclick="setViewsScope('all')">전체 에디션</button>
     ${(_keys||[]).map(k=>`<button class="views-scope-btn ${scope===k?'active':''}" onclick="setViewsScope('${k}')">${edNames[k]||k}</button>`).join('')}
   `;
-
   let tabContent = '';
   if(tab === 'editions') {
-    if(!edRank.length) {
-      tabContent = `<div class="views-empty"><div class="views-empty-icon">📭</div>조회수 데이터가 없습니다.<br><small style="margin-top:8px;display:block;">뉴스레터 페이지 방문 시 자동으로 기록됩니다.</small></div>`;
-    } else {
+    if(!edRank.length) { tabContent = `<div class="views-empty"><div class="views-empty-icon">📭</div>조회수 데이터가 없습니다.</div>`; }
+    else {
       tabContent = `
         <div class="views-chart-wrap">
           <div class="views-section-title">에디션별 조회수 순위</div>
-          ${edRank.map((e,i) => `
-            <div class="bar-row">
-              <span class="bar-label" title="${esc(e.title)}">${esc(e.title)}</span>
-              <div class="bar-track">
-                <div class="bar-fill ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="width:${Math.round(e.views/maxEdViews*100)}%"></div>
-              </div>
-              <span class="bar-val">${e.views.toLocaleString()}</span>
-            </div>`).join('')}
+          ${edRank.map((e,i) => `<div class="bar-row"><span class="bar-label" title="${esc(e.title)}">${esc(e.title)}</span><div class="bar-track"><div class="bar-fill ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="width:${Math.round(e.views/maxEdViews*100)}%"></div></div><span class="bar-val">${e.views.toLocaleString()}</span></div>`).join('')}
         </div>
         <div class="views-chart-wrap">
           <div class="views-section-title">에디션 상세 테이블</div>
-          <table class="views-table">
-            <thead><tr>
-              <th style="width:32px">순위</th>
-              <th>에디션</th>
-              <th style="width:90px;text-align:right">페이지뷰</th>
-              <th style="width:90px;text-align:right">기사 클릭</th>
-              <th style="width:120px">비율</th>
-            </tr></thead>
-            <tbody>
-              ${edRank.map((e,i) => `
-              <tr>
-                <td><span class="views-rank-badge ${i===0?'r1':i===1?'r2':i===2?'r3':''}">${i+1}</span></td>
-                <td>
-                  <div style="font-weight:500;color:var(--ink)">${esc(e.title)}</div>
-                  ${e.lastUpdated ? `<div style="font-size:10px;color:var(--ink-light)">${new Date(e.lastUpdated).toLocaleString('ko-KR')}</div>` : ''}
-                </td>
-                <td style="text-align:right;font-weight:600;color:var(--ink)">${e.views.toLocaleString()}</td>
-                <td style="text-align:right;color:var(--ink-mid)">${e.articleViews.toLocaleString()}</td>
-                <td>
-                  <div class="views-progress-mini">
-                    <div class="views-progress-fill" style="width:${Math.round(e.views/maxEdViews*100)}%"></div>
-                  </div>
-                </td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
+          <table class="views-table"><thead><tr><th style="width:32px">순위</th><th>에디션</th><th style="width:90px;text-align:right">페이지뷰</th><th style="width:90px;text-align:right">기사 클릭</th><th style="width:120px">비율</th></tr></thead><tbody>
+          ${edRank.map((e,i) => `<tr><td><span class="views-rank-badge ${i===0?'r1':i===1?'r2':i===2?'r3':''}">${i+1}</span></td><td><div style="font-weight:500;color:var(--ink)">${esc(e.title)}</div>${e.lastUpdated?`<div style="font-size:10px;color:var(--ink-light)">${new Date(e.lastUpdated).toLocaleString('ko-KR')}</div>`:''}</td><td style="text-align:right;font-weight:600">${e.views.toLocaleString()}</td><td style="text-align:right;color:var(--ink-mid)">${e.articleViews.toLocaleString()}</td><td><div class="views-progress-mini"><div class="views-progress-fill" style="width:${Math.round(e.views/maxEdViews*100)}%"></div></div></td></tr>`).join('')}
+          </tbody></table>
         </div>`;
     }
   } else {
-    if(!artRank.length) {
-      tabContent = `<div class="views-empty"><div class="views-empty-icon">📰</div>기사별 클릭 데이터가 없습니다.</div>`;
-    } else {
+    if(!artRank.length) { tabContent = `<div class="views-empty"><div class="views-empty-icon">📰</div>기사별 클릭 데이터가 없습니다.</div>`; }
+    else {
       tabContent = `
         <div class="views-chart-wrap">
           <div class="views-section-title">기사별 클릭 순위 TOP ${Math.min(artRank.length,15)}</div>
-          ${artRank.slice(0,15).map((a,i) => `
-            <div class="bar-row">
-              <span class="bar-label" title="${esc(a.title)}">${i+1}. ${esc(a.title)}</span>
-              <div class="bar-track">
-                <div class="bar-fill ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="width:${Math.round(a.views/maxArtViews*100)}%"></div>
-              </div>
-              <span class="bar-val">${a.views.toLocaleString()}</span>
-            </div>`).join('')}
-        </div>
-        <div class="views-chart-wrap">
-          <div class="views-section-title">기사 클릭 상세</div>
-          <table class="views-table">
-            <thead><tr>
-              <th style="width:32px">순위</th>
-              <th>기사 제목</th>
-              <th style="width:80px;text-align:right">클릭수</th>
-              <th style="width:120px">비율</th>
-            </tr></thead>
-            <tbody>
-              ${artRank.slice(0,30).map((a,i) => `
-              <tr>
-                <td><span class="views-rank-badge ${i===0?'r1':i===1?'r2':i===2?'r3':''}">${i+1}</span></td>
-                <td>
-                  <div style="font-weight:500;color:var(--ink)">${esc(a.title)}</div>
-                  <div style="font-size:10px;color:var(--ink-light)">${a.editions.map(e=>esc(e.edTitle)).join(', ')}</div>
-                </td>
-                <td style="text-align:right;font-weight:600;color:var(--ink)">${a.views.toLocaleString()}</td>
-                <td>
-                  <div class="views-progress-mini">
-                    <div class="views-progress-fill" style="width:${Math.round(a.views/maxArtViews*100)}%"></div>
-                  </div>
-                </td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
+          ${artRank.slice(0,15).map((a,i) => `<div class="bar-row"><span class="bar-label" title="${esc(a.title)}">${i+1}. ${esc(a.title)}</span><div class="bar-track"><div class="bar-fill ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="width:${Math.round(a.views/maxArtViews*100)}%"></div></div><span class="bar-val">${a.views.toLocaleString()}</span></div>`).join('')}
         </div>`;
     }
   }
-
   document.getElementById('views-body').innerHTML = `
     <div class="views-scope-bar">${scopeButtons}</div>
     <div class="views-kpi-row">
-      <div class="views-kpi highlight">
-        <div class="views-kpi-label">총 페이지뷰</div>
-        <div class="views-kpi-val">${totalViews.toLocaleString()}</div>
-        <div class="views-kpi-sub">${scopedKeys.length}개 에디션 합산</div>
-      </div>
-      <div class="views-kpi">
-        <div class="views-kpi-label">에디션 평균 조회수</div>
-        <div class="views-kpi-val">${avgViews.toLocaleString()}</div>
-        <div class="views-kpi-sub">에디션당 평균</div>
-      </div>
-      <div class="views-kpi">
-        <div class="views-kpi-label">기사 총 클릭수</div>
-        <div class="views-kpi-val">${totalArticleViews.toLocaleString()}</div>
-        <div class="views-kpi-sub">원문 링크 클릭 합계</div>
-      </div>
-      <div class="views-kpi">
-        <div class="views-kpi-label">최다 조회 에디션</div>
-        <div class="views-kpi-val" style="font-size:14px;padding-top:4px;">${maxEdKey ? esc((edNames[maxEdKey]||maxEdKey).slice(0,12)) : '-'}</div>
-        <div class="views-kpi-sub">${maxEdKey ? (vd[maxEdKey]?.total||0).toLocaleString()+'회' : '-'}</div>
-      </div>
+      <div class="views-kpi highlight"><div class="views-kpi-label">총 페이지뷰</div><div class="views-kpi-val">${totalViews.toLocaleString()}</div><div class="views-kpi-sub">${scopedKeys.length}개 에디션 합산</div></div>
+      <div class="views-kpi"><div class="views-kpi-label">에디션 평균 조회수</div><div class="views-kpi-val">${avgViews.toLocaleString()}</div><div class="views-kpi-sub">에디션당 평균</div></div>
+      <div class="views-kpi"><div class="views-kpi-label">기사 총 클릭수</div><div class="views-kpi-val">${totalArticleViews.toLocaleString()}</div><div class="views-kpi-sub">원문 링크 클릭 합계</div></div>
+      <div class="views-kpi"><div class="views-kpi-label">최다 조회 에디션</div><div class="views-kpi-val" style="font-size:14px;padding-top:4px;">${maxEdKey ? esc((edNames[maxEdKey]||maxEdKey).slice(0,12)) : '-'}</div><div class="views-kpi-sub">${maxEdKey ? (vd[maxEdKey]?.total||0).toLocaleString()+'회' : '-'}</div></div>
     </div>
     <div class="views-tab-row">
       <button class="views-tab ${tab==='editions'?'active':''}" onclick="setViewsTab('editions')">📅 에디션별</button>
       <button class="views-tab ${tab==='articles'?'active':''}" onclick="setViewsTab('articles')">📰 기사별 클릭</button>
       <button class="views-refresh-btn" onclick="loadViewsData()">↻ 새로고침</button>
     </div>
-    ${tabContent}
-  `;
+    ${tabContent}`;
 }
 
-function setViewsTab(t) {
-  window._viewsTab = t;
-  renderViewsModal();
-}
-function setViewsScope(s) {
-  window._viewsScope = s;
-  renderViewsModal();
-}
-function renderViewsError(msg) {
-  document.getElementById('views-body').innerHTML = `<div class="views-empty"><div class="views-empty-icon">⚠️</div>${msg}</div>`;
-}
+function setViewsTab(t) { window._viewsTab = t; renderViewsModal(); }
+function setViewsScope(s) { window._viewsScope = s; renderViewsModal(); }
+function renderViewsError(msg) { document.getElementById('views-body').innerHTML = `<div class="views-empty"><div class="views-empty-icon">⚠️</div>${msg}</div>`; }
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJsonViewer();closeJsonUpload();closeViewsAnalytics();}});
