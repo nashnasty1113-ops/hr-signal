@@ -33,6 +33,14 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .edition-item { padding:12px 10px 12px 16px; cursor:pointer; border-left:3px solid transparent; transition:all .15s; display:flex; align-items:flex-start; justify-content:space-between; gap:6px; border-bottom:1px solid var(--cream-border); }
 .edition-item:hover { background:var(--cream-dark); }
 .edition-item.active { border-left-color:var(--red); background:var(--cream-dark); }
+
+/* ★ 에디션 드롭 타깃 스타일 */
+.edition-item.drop-target { background:#EEF4FF; border-left-color:var(--blue); outline:2px dashed var(--blue); outline-offset:-2px; }
+.edition-item.drop-target .edition-item-title { color:var(--blue); font-weight:700; }
+/* 드래그 중 사이드바 힌트 배너 */
+.sidebar-drag-hint { display:none; font-size:10px; color:var(--blue); background:#EEF4FF; border:1px dashed var(--blue); border-radius:4px; margin:8px 12px; padding:6px 10px; text-align:center; }
+.sidebar-drag-hint.show { display:block; }
+
 .edition-item-info { flex:1; min-width:0; }
 .edition-item-title { font-size:12px; font-weight:500; color:var(--ink); display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:4px; }
 .edition-item-date  { font-size:10px; color:var(--ink-light); line-height:1.6; }
@@ -245,8 +253,10 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 </header>
 
 <div class="admin-layout">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-label">에디션 목록</div>
+    <!-- ★ 드래그 중 힌트 배너 -->
+    <div class="sidebar-drag-hint" id="sidebar-drag-hint">📂 에디션으로 드래그해서 기사 이동</div>
     <div id="edition-list"></div>
     <button class="add-edition-btn" onclick="createNewEdition()">+ 새 에디션 추가</button>
     <button class="add-edition-btn upload" onclick="showJsonUpload()">↑ JSON으로 업로드</button>
@@ -337,7 +347,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 window._db=db; window._ref=ref; window._set=set; window._remove=remove;
 
-// editions + current_edition 동시 로드
 Promise.all([
   new Promise(resolve => onValue(ref(db,'editions'), snap => resolve(snap.val()||{}), {onlyOnce:true})),
   get(ref(db,'config/current_edition'))
@@ -346,7 +355,6 @@ Promise.all([
   window._currentEditionKey = curSnap.val() || null;
   window._keys = sortEditionKeys(edData);
   renderSidebar();
-  // 이후 실시간 업데이트
   onValue(ref(db,'editions'), snap => {
     window._data = snap.val()||{};
     window._keys = sortEditionKeys(window._data);
@@ -366,20 +374,17 @@ window._ep   = null;
 window._draggingId = null;
 window._draggingSlotIdx = null;
 window._autoScrollTimer = null;
+window._sidebarScrollTimer = null; // ★ 사이드바 전용 스크롤 타이머
 
 function generateId() { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 
-/* ════ 정렬: period_start 기준 내림차순, 없으면 키 문자열 기준 ════ */
 function sortEditionKeys(data) {
   return Object.keys(data).sort((a, b) => {
     const psA = data[a]?.period_start || '';
     const psB = data[b]?.period_start || '';
-    // period_start가 둘 다 있으면 날짜 비교
     if (psA && psB) return psB.localeCompare(psA);
-    // 하나만 있으면 있는 쪽 우선
     if (psA && !psB) return -1;
     if (!psA && psB) return 1;
-    // 둘 다 없으면 키 문자열 비교
     return b.localeCompare(a);
   });
 }
@@ -393,6 +398,13 @@ function renderSidebar() {
     const isCurrent = k === window._currentEditionKey;
     const item=document.createElement('div');
     item.className='edition-item'+(k===_currentKey?' active':'');
+    item.dataset.editionKey = k; // ★ 드롭 식별용
+
+    // ★ 에디션 아이템에 드롭 이벤트 추가
+    item.addEventListener('dragover', e => editionDragOver(e, item, k));
+    item.addEventListener('dragleave', e => editionDragLeave(e, item));
+    item.addEventListener('drop', e => editionDrop(e, k));
+
     item.innerHTML=`
       <div class="edition-item-info" onclick="selectEdition('${k}')" style="cursor:pointer;">
         <div class="edition-item-title">
@@ -409,17 +421,83 @@ function renderSidebar() {
   });
 }
 
+/* ★ 에디션 드롭존 이벤트 핸들러 */
+function editionDragOver(e, item, key) {
+  // 기사 드래그 중일 때만, 현재 에디션이 아닌 다른 에디션으로만 허용
+  if(!window._draggingId) return;
+  if(key === _currentKey) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  item.classList.add('drop-target');
+  // 사이드바 자동 스크롤
+  autoScrollSidebar(e.clientY);
+}
+
+function editionDragLeave(e, item) {
+  if(!item.contains(e.relatedTarget)) {
+    item.classList.remove('drop-target');
+  }
+}
+
+function editionDrop(e, targetKey) {
+  e.preventDefault();
+  stopSidebarAutoScroll();
+  // 모든 drop-target 클래스 제거
+  document.querySelectorAll('.edition-item.drop-target').forEach(el => el.classList.remove('drop-target'));
+
+  const id = window._draggingId;
+  if(!id || targetKey === _currentKey) return;
+
+  const art = _pool.find(a => a._id === id);
+  if(!art) return;
+
+  const targetEd = _data[targetKey];
+  if(!targetEd) return;
+
+  const sourceTitle = _data[_currentKey]?.title || _currentKey;
+  const targetTitle = targetEd.title || targetKey;
+
+  if(!confirm(`"${art.title || '(제목 없음)'}"\n\n[${sourceTitle}] → [${targetTitle}]으로 이동할까요?`)) return;
+
+  // 1. 현재 에디션에서 제거
+  _pool = _pool.filter(a => a._id !== id);
+  _top5 = _top5.map(t => t && t._id === id ? null : t);
+  if(_ep && _ep._id === id) _ep = null;
+
+  // 2. 대상 에디션의 sections에 기사 추가
+  const tEd = JSON.parse(JSON.stringify(targetEd)); // 깊은 복사
+  const cat = art.category || '기타';
+  let secFound = (tEd.sections||[]).find(s => s.title === cat);
+  if(!secFound) {
+    if(!tEd.sections) tEd.sections = [];
+    secFound = { title: cat, articles: [] };
+    tEd.sections.push(secFound);
+  }
+  secFound.articles.push({...art});
+
+  // 3. 현재 에디션 저장 (기사 제거 반영)
+  saveAll(true);
+
+  // 4. 대상 에디션 Firebase 저장
+  _set(_ref(_db, `editions/${targetKey}`), tEd)
+    .then(() => {
+      toast(`✓ "${targetTitle}"으로 이동 완료`);
+      renderPool();
+      renderSlots();
+    })
+    .catch(err => toast('이동 실패: ' + err.message));
+}
+
 function selectEdition(key) {
   _currentKey=key;
   document.querySelectorAll('.edition-item').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.edition-item').forEach(el=>{
-    if(el.querySelector(`[onclick="selectEdition('${key}')"]`)) el.classList.add('active');
+    if(el.dataset.editionKey === key) el.classList.add('active');
   });
   loadEdition(_data[key]);
   if(document.getElementById('json-viewer-modal').classList.contains('show')) refreshJsonViewer();
 }
 
-/* ════ 이번 주 호 설정 ════ */
 function setCurrentEdition(key) {
   const title = _data[key]?.title || key;
   _set(_ref(_db,'config/current_edition'), key)
@@ -437,7 +515,6 @@ function deleteEdition(key) {
   _remove(_ref(_db,`editions/${key}`)).then(()=>{
     toast(`"${title}" 에디션이 삭제되었습니다.`);
     if(_currentKey===key){ _currentKey=null; renderEmptyMain(); }
-    // 삭제된 게 current_edition이면 해제
     if(window._currentEditionKey===key){
       window._currentEditionKey=null;
       _set(_ref(_db,'config/current_edition'), null);
@@ -445,21 +522,28 @@ function deleteEdition(key) {
   }).catch(err=>toast('삭제 실패: '+err.message));
 }
 
+/* ★ createNewEdition: Firebase 즉시 저장 버그 수정 */
 function createNewEdition() {
   const key=new Date().toISOString().split('T')[0]+'_'+Date.now().toString(36);
   const newEd={title:`HR시그널 #${(_keys.length+1)}`,date:'',period:'',period_start:'',period_end:'',intro_title:'이번 주 HR 핵심 이슈',intro:'',top5:[],editors_pick:null,sections:[]};
+  // Firebase에 먼저 저장
+  _set(_ref(_db, `editions/${key}`), newEd)
+    .then(() => {
+      toast('새 에디션이 생성되었습니다.');
+    })
+    .catch(err => toast('생성 실패: '+err.message));
+  // 로컬에도 즉시 반영
   _data[key]=newEd;
   _keys = sortEditionKeys(_data);
   _currentKey=key;
-  renderSidebar(); loadEdition(newEd);
-  toast('새 에디션이 생성되었습니다.');
+  renderSidebar();
+  loadEdition(newEd);
 }
 
 function renderEmptyMain() {
   document.getElementById('admin-main').innerHTML=`<div class="empty-state" style="margin:auto;"><h3>에디션을 선택하거나 새로 만드세요</h3><p>왼쪽 사이드바에서 에디션을 선택하면 편집할 수 있습니다.</p></div>`;
 }
 
-/* ════ 에디션 로드 ════ */
 function loadEdition(ed) {
   _pool = [];
   (ed.sections||[]).forEach(sec=>{
@@ -481,7 +565,6 @@ function loadEdition(ed) {
   renderMain(ed);
 }
 
-/* ════ 메인 렌더 ════ */
 function renderMain(ed) {
   const main = document.getElementById('admin-main');
   main.innerHTML=`
@@ -533,15 +616,10 @@ function renderMain(ed) {
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-/* ════ 기사 풀 렌더 ════ */
 function renderPool() {
   const scroll = document.getElementById('pool-scroll');
   if(!scroll) return;
   const catFilter = document.getElementById('cat-filter')?.value||'';
-  const assignedIds = new Set([
-    ..._top5.filter(Boolean).map(a=>a._id),
-    ...(_ep?[_ep._id]:[])
-  ]);
   const groups = {};
   _pool.filter(a=>!catFilter||a.category===catFilter).forEach(a=>{
     const c = a.category||'기타';
@@ -641,7 +719,6 @@ function toggleArtCard(id) {
   if(card) { card.classList.toggle('editing', isOpening); card.draggable = !isOpening; }
 }
 
-/* ════ 기사 CRUD ════ */
 function addArticle() {
   const catFilter = document.getElementById('cat-filter')?.value||'';
   const a = {_id:generateId(), title:'', date:'', category:catFilter||'', source:'', sub:'', summary:'', url:'', points:[], tags:[]};
@@ -685,7 +762,6 @@ function deleteArticle(id) {
   toast('기사가 삭제되었습니다.');
 }
 
-/* ════ Top5 / EP 지정 ════ */
 function assignTop5(id) {
   const art = _pool.find(a=>a._id===id); if(!art) return;
   if(_top5.some(t=>t&&t._id===id)){ toast('이미 Top5에 있습니다.'); return; }
@@ -710,7 +786,6 @@ function updateTop5Badge(idx, field, val) {
   _top5[idx].badge[field]=val;
 }
 
-/* ════ 슬롯 렌더 ════ */
 function renderSlots() {
   [0,1,2,3,4].forEach(i=>{
     const slot=document.getElementById(`slot-top5-${i}`); if(!slot) return;
@@ -763,14 +838,25 @@ function renderSlots() {
 function artDragStart(e, id) {
   window._draggingId = id; window._draggingSlotIdx = null;
   e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain','');
-  setTimeout(()=>{ const el=document.getElementById('artcard-'+id); if(el) el.classList.add('dragging'); },0);
+  setTimeout(()=>{
+    const el=document.getElementById('artcard-'+id);
+    if(el) el.classList.add('dragging');
+    // ★ 사이드바 드래그 힌트 배너 표시
+    document.getElementById('sidebar-drag-hint').classList.add('show');
+  },0);
 }
+
 function artDragEnd(e) {
   stopAutoScroll();
+  stopSidebarAutoScroll();
   if(window._draggingId){ const el=document.getElementById('artcard-'+window._draggingId); if(el) el.classList.remove('dragging'); }
   window._draggingId=null;
   document.querySelectorAll('.slot').forEach(s=>s.classList.remove('slot-drag-over'));
+  // ★ 사이드바 드롭타깃 & 힌트 초기화
+  document.querySelectorAll('.edition-item.drop-target').forEach(el=>el.classList.remove('drop-target'));
+  document.getElementById('sidebar-drag-hint').classList.remove('show');
 }
+
 function slotDragStart(e, fromIdx) {
   window._draggingSlotIdx = fromIdx; window._draggingId = null;
   e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain','');
@@ -803,6 +889,8 @@ function slotDrop(e, type, toIdx) {
 function poolDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect='move'; autoScroll(e.clientY); }
 function poolDragLeave(e) {}
 function poolDrop(e) { e.preventDefault(); }
+
+/* ★ 기사 목록 자동 스크롤 */
 function autoScroll(clientY) {
   const main=document.getElementById('pool-scroll'); if(!main) return;
   const rect=main.getBoundingClientRect();
@@ -811,6 +899,16 @@ function autoScroll(clientY) {
   else if(clientY>rect.bottom-70) window._autoScrollTimer=setInterval(()=>main.scrollTop+=10,16);
 }
 function stopAutoScroll(){ if(window._autoScrollTimer){clearInterval(window._autoScrollTimer);window._autoScrollTimer=null;} }
+
+/* ★ 사이드바 자동 스크롤 */
+function autoScrollSidebar(clientY) {
+  const sidebar = document.getElementById('sidebar'); if(!sidebar) return;
+  const rect = sidebar.getBoundingClientRect();
+  if(window._sidebarScrollTimer){ clearInterval(window._sidebarScrollTimer); window._sidebarScrollTimer=null; }
+  if(clientY < rect.top + 60) window._sidebarScrollTimer = setInterval(()=>sidebar.scrollTop-=8, 16);
+  else if(clientY > rect.bottom - 60) window._sidebarScrollTimer = setInterval(()=>sidebar.scrollTop+=8, 16);
+}
+function stopSidebarAutoScroll(){ if(window._sidebarScrollTimer){clearInterval(window._sidebarScrollTimer);window._sidebarScrollTimer=null;} }
 
 /* ════ 태그 / 포인트 ════ */
 function addTag(e,input) {
