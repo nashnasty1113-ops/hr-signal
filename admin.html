@@ -890,15 +890,41 @@ function poolDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect='move';
 function poolDragLeave(e) {}
 function poolDrop(e) { e.preventDefault(); }
 
-/* ★ 기사 목록 자동 스크롤 */
+/* ★ 기사 목록 자동 스크롤 - document 레벨에서 커서 위치 감지 */
 function autoScroll(clientY) {
-  const main=document.getElementById('pool-scroll'); if(!main) return;
-  const rect=main.getBoundingClientRect();
+  const pool = document.getElementById('pool-scroll'); if(!pool) return;
+  const rect = pool.getBoundingClientRect();
   if(window._autoScrollTimer){ clearInterval(window._autoScrollTimer); window._autoScrollTimer=null; }
-  if(clientY<rect.top+70) window._autoScrollTimer=setInterval(()=>main.scrollTop-=10,16);
-  else if(clientY>rect.bottom-70) window._autoScrollTimer=setInterval(()=>main.scrollTop+=10,16);
+  // pool-scroll 영역 안에 있을 때만 스크롤
+  if(clientY >= rect.top && clientY <= rect.bottom) {
+    if(clientY < rect.top + 80) {
+      const speed = Math.max(4, Math.round((rect.top + 80 - clientY) / 4));
+      window._autoScrollTimer = setInterval(()=>pool.scrollTop -= speed, 16);
+    } else if(clientY > rect.bottom - 80) {
+      const speed = Math.max(4, Math.round((clientY - (rect.bottom - 80)) / 4));
+      window._autoScrollTimer = setInterval(()=>pool.scrollTop += speed, 16);
+    }
+  }
 }
 function stopAutoScroll(){ if(window._autoScrollTimer){clearInterval(window._autoScrollTimer);window._autoScrollTimer=null;} }
+
+/* ★ document 전체 dragover 감지 - pool-scroll 바깥에서도 스크롤 작동 */
+document.addEventListener('dragover', function(e) {
+  if(!window._draggingId && window._draggingSlotIdx === null) return;
+  const pool = document.getElementById('pool-scroll');
+  if(!pool) return;
+  const rect = pool.getBoundingClientRect();
+  if(window._autoScrollTimer){ clearInterval(window._autoScrollTimer); window._autoScrollTimer=null; }
+  if(e.clientY >= rect.top && e.clientY <= rect.bottom) {
+    if(e.clientY < rect.top + 80) {
+      const speed = Math.max(4, Math.round((rect.top + 80 - e.clientY) / 4));
+      window._autoScrollTimer = setInterval(()=>pool.scrollTop -= speed, 16);
+    } else if(e.clientY > rect.bottom - 80) {
+      const speed = Math.max(4, Math.round((e.clientY - (rect.bottom - 80)) / 4));
+      window._autoScrollTimer = setInterval(()=>pool.scrollTop += speed, 16);
+    }
+  }
+});
 
 /* ★ 사이드바 자동 스크롤 */
 function autoScrollSidebar(clientY) {
