@@ -272,13 +272,15 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
       <select class="archive-filter-select" id="archive-filter-cat" onchange="runArchiveSearch()">
         <option value="">전체</option>
         <option value="노사관계">노사관계</option>
-        <option value="노동법/정책">노동법/정책</option>
+        <option value="노동법">노동법</option>
         <option value="채용/퇴직">채용/퇴직</option>
         <option value="조직/문화">조직/문화</option>
         <option value="보상/복리후생">보상/복리후생</option>
         <option value="교육/개발">교육/개발</option>
         <option value="AI/디지털HR">AI/디지털HR</option>
         <option value="글로벌HR">글로벌HR</option>
+        <option value="식품/유통업계 인사(승진 및 조직개편/보상/제도)">식품/유통업계 인사(승진 및 조직개편/보상/제도)</option>
+        <option value="고용노동부 정책 및 인사동향">고용노동부 정책 및 인사동향</option>
         <option value="기타">기타</option>
       </select>
       <span class="archive-result-info" id="archive-result-info"></span>
@@ -480,7 +482,6 @@ function renderEdition(edition) {
     sec.articles.forEach(item => {
       const href = item.url || '#';
       const target = item.url ? 'target="_blank" rel="noopener"' : '';
-      const catLabel = item.category || (item.tags && item.tags[0]) || '';
       html += `<a class="news-item" href="${href}" ${target}>
         <div class="news-body">
           <span class="news-headline">${item.title}</span>
