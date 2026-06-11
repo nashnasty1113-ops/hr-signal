@@ -363,7 +363,7 @@ Promise.all([
 <script>
 window._data={}; window._keys=[]; window._currentKey=null; window._currentEditionKey=null;
 window._jsonScope='current'; window._jsonTab='view';
-const SEC_CATS=['노사관계','노동법/정책','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','기타'];
+const SEC_CATS=['노사관계','노동법','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','식품/유통업계 인사(승진 및 조직개편/보상/제도)','고용노동부 정책 및 인사동향','기타'];
 
 window._pool = [];
 window._top5 = [null,null,null,null,null];
@@ -553,7 +553,17 @@ function renderMain(ed) {
           <span class="pool-toolbar-title">기사 목록</span>
           <select class="pool-cat-filter" id="cat-filter" onchange="renderPool()">
             <option value="">전체 카테고리</option>
-            ${SEC_CATS.map(c=>`<option value="${c}">${c}</option>`).join('')}
+            <option value="노사관계">노사관계</option>
+            <option value="노동법">노동법</option>
+            <option value="채용/퇴직">채용/퇴직</option>
+            <option value="조직/문화">조직/문화</option>
+            <option value="보상/복리후생">보상/복리후생</option>
+            <option value="교육/개발">교육/개발</option>
+            <option value="AI/디지털HR">AI/디지털HR</option>
+            <option value="글로벌HR">글로벌HR</option>
+            <option value="식품/유통업계 인사(승진 및 조직개편/보상/제도)">식품/유통업계 인사(승진 및 조직개편/보상/제도)</option>
+            <option value="고용노동부 정책 및 인사동향">고용노동부 정책 및 인사동향</option>
+            <option value="기타">기타</option>
           </select>
           <button class="btn-add-art" onclick="addArticle()">+ 기사 추가</button>
         </div>
@@ -637,7 +647,7 @@ function renderPool() {
 }
 
 function catColor(cat) {
-  const colors={'노사관계':'#7A5A3A','노동법/정책':'#2A5A8A','채용/퇴직':'#3A7A5A','조직/문화':'#8A4A7A','보상/복리후생':'#5A7A2A','교육/개발':'#6A4A8A','AI/디지털HR':'#2A6A7A','글로벌HR':'#7A3A4A','기타':'#8A7F6A'};
+  const colors={'노사관계':'#7A5A3A','노동법':'#2A5A8A','채용/퇴직':'#3A7A5A','조직/문화':'#8A4A7A','보상/복리후생':'#5A7A2A','교육/개발':'#6A4A8A','AI/디지털HR':'#2A6A7A','글로벌HR':'#7A3A4A','식품/유통업계 인사(승진 및 조직개편/보상/제도)':'#B45A20','고용노동부 정책 및 인사동향':'#1A6A4A','기타':'#8A7F6A'};
   return colors[cat]||'#8A7F6A';
 }
 
