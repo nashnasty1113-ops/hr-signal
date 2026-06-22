@@ -314,6 +314,12 @@ const db = getDatabase(app);
 // 페이지뷰 기록 (에디션 단위)
 async function recordPageView(editionKey) {
   if (!editionKey) return;
+
+  // ★ localStorage로 중복 방지 — 브라우저 닫고 재방문해도 카운트 안 함
+  const storageKey = `hrsignal_viewed_${editionKey}`;
+  if (localStorage.getItem(storageKey)) return; // 이미 본 에디션이면 종료
+  localStorage.setItem(storageKey, '1');
+
   try {
     const now = new Date();
     const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD
@@ -323,7 +329,7 @@ async function recordPageView(editionKey) {
     const totalRef = ref(db, `views/${editionKey}/total`);
     await runTransaction(totalRef, cur => (cur || 0) + 1);
 
-    // 날짜별 페이지뷰 (기간별 분석용)
+    // 날짜별 페이지뷰
     const dailyRef = ref(db, `views/${editionKey}/daily/${dateKey}`);
     await runTransaction(dailyRef, cur => (cur || 0) + 1);
 
@@ -338,9 +344,12 @@ async function recordPageView(editionKey) {
   }
 }
 
-// 기사 클릭 기록
+// 기사 클릭 기록 (localStorage로 중복 방지)
 window.recordArticleClick = async function(editionKey, articleId) {
   if (!editionKey || !articleId) return;
+  const storageKey = `hrsignal_clicked_${editionKey}_${articleId}`;
+  if (localStorage.getItem(storageKey)) return;
+  localStorage.setItem(storageKey, '1');
   try {
     const now = new Date();
     const dateKey = now.toISOString().split('T')[0];
