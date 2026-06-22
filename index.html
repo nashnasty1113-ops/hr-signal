@@ -26,7 +26,6 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-serif; font-size:14px; line-height:1.7; }
 
-/* 상단 바 */
 .topbar { background:var(--navy-dark); color:rgba(255,255,255,0.6); display:flex; justify-content:space-between; align-items:center; padding:9px 28px; font-size:10px; letter-spacing:2px; }
 .topbar-live { display:flex; align-items:center; gap:6px; }
 .live-dot { width:6px; height:6px; border-radius:50%; background:#F87171; animation:pulse 2s infinite; }
@@ -34,33 +33,27 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
 .admin-link { font-size:10px; letter-spacing:1px; color:rgba(255,255,255,0.4); cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.15); transition:color .15s; }
 .admin-link:hover { color:rgba(255,255,255,0.75); }
 
-/* 헤더 */
 .mag-header { background:var(--navy); padding:36px 24px 28px; text-align:center; }
 .mag-logo { font-family:'Playfair Display','Noto Serif KR',serif; font-size:clamp(48px,11vw,80px); font-weight:900; line-height:1; color:var(--white); letter-spacing:-1px; }
 .mag-logo .sig { color:#93C5FD; }
 .mag-sub { font-size:10px; letter-spacing:4px; color:rgba(255,255,255,0.4); margin-top:8px; }
 .header-rule { height:3px; background:linear-gradient(90deg,var(--navy-dark) 0%,var(--accent) 50%,var(--navy-dark) 100%); }
 
-/* 탭 */
 .tab-nav { background:var(--white); border-bottom:1px solid var(--border); display:flex; padding:0 24px; }
 .tab-btn { padding:12px 20px 10px; border:none; background:none; font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:500; color:var(--ink-light); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:color .15s,border-color .15s; }
 .tab-btn:hover { color:var(--navy); }
 .tab-btn.active { color:var(--navy); border-bottom-color:var(--navy); font-weight:600; }
 
-/* 날짜 바 */
 .meta-bar { background:var(--white); border-bottom:1px solid var(--border); padding:8px 24px; display:flex; align-items:center; justify-content:space-between; }
 .meta-date { font-size:12px; color:var(--ink-light); }
 
-/* 본문 */
 .wrap { max-width:var(--max-w); margin:0 auto; padding:0 20px; }
 
-/* EDITOR'S NOTE */
 .editors-note { background:var(--white); border-left:3px solid var(--navy); border-radius:0 6px 6px 0; padding:20px 24px; margin:28px 0 36px; display:grid; grid-template-columns:90px 1fr; gap:0 20px; }
 .note-label { font-size:9px; letter-spacing:2px; color:var(--navy); font-weight:700; padding-top:2px; }
 .note-body { font-size:13px; color:var(--ink-mid); line-height:1.9; }
 .note-sig  { font-size:12px; color:var(--ink-light); margin-top:8px; font-style:italic; }
 
-/* 섹션 헤더 */
 .sec-header { display:flex; align-items:baseline; justify-content:space-between; padding-bottom:9px; border-bottom:2px solid var(--navy); margin-bottom:4px; }
 .sec-header-left { display:flex; align-items:baseline; gap:10px; }
 .sec-symbol { font-size:10px; color:var(--ink-light); letter-spacing:1px; }
@@ -68,7 +61,6 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
 .sec-count  { font-size:10px; color:var(--ink-light); letter-spacing:1px; }
 .sec-desc   { font-size:11px; color:var(--ink-light); margin:5px 0 18px; font-style:italic; }
 
-/* TOP 5 — 간소화 */
 .top5-list { list-style:none; margin-bottom:40px; }
 .top5-item {
   display:grid;
@@ -102,7 +94,6 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
 .badge-trend { background:var(--navy-light); color:var(--navy); }
 .badge-trend::before { background:var(--navy); }
 
-/* NEWS LIST — 간소화 */
 .news-list { list-style:none; margin-bottom:40px; }
 .news-item {
   display:flex;
@@ -121,7 +112,6 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
 .news-meta { font-size:10px; color:var(--ink-light); white-space:nowrap; flex-shrink:0; }
 .news-link-icon { font-size:11px; color:var(--ink-light); flex-shrink:0; }
 
-/* EDITOR'S PICK — 간소화 */
 .pick-block {
   background:var(--navy);
   border-radius:6px;
@@ -143,7 +133,6 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
 .pick-title  { font-family:'Noto Serif KR',serif; font-size:16px; font-weight:700; line-height:1.5; color:var(--white); word-break:keep-all; }
 .pick-source { font-size:10px; color:rgba(255,255,255,0.4); margin-top:6px; }
 
-/* 아카이브 탭 */
 .archive-wrap { max-width:var(--max-w); margin:0 auto; padding:24px 20px; }
 .archive-search-row { display:flex; gap:8px; margin-bottom:14px; }
 .archive-search-input { flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:6px; font-size:13px; font-family:'Noto Sans KR',sans-serif; background:var(--white); color:var(--ink); outline:none; transition:border-color .15s; }
@@ -185,12 +174,10 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
 .archive-empty { text-align:center; padding:56px 0; font-size:13px; color:var(--ink-light); line-height:2; }
 .archive-empty-icon { font-size:28px; display:block; margin-bottom:8px; }
 
-/* 푸터 */
 .site-footer { background:var(--navy-dark); padding:18px 28px; font-size:11px; color:rgba(255,255,255,0.4); display:flex; justify-content:space-between; margin-top:40px; }
 
 .loading { text-align:center; padding:80px 0; color:var(--ink-light); }
 
-/* 관리자 모달 */
 .admin-modal-backdrop { display:none; position:fixed; inset:0; background:rgba(17,24,39,0.55); backdrop-filter:blur(3px); z-index:300; align-items:center; justify-content:center; }
 .admin-modal-backdrop.show { display:flex; }
 .admin-modal { background:var(--white); border-radius:8px; padding:30px 26px; width:320px; border:1px solid var(--border); border-top:4px solid var(--navy); box-shadow:0 10px 40px rgba(17,24,39,0.15); }
@@ -242,7 +229,6 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
   <button class="tab-btn" id="tab-archive" onclick="switchTab('archive')">뉴스 아카이브</button>
 </nav>
 
-<!-- 이번 주 탭 -->
 <div id="pane-latest">
   <div class="meta-bar">
     <span class="meta-edition" id="mag-edition" style="font-size:13px;font-weight:600;color:var(--ink);"></span>
@@ -254,7 +240,6 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
   </div>
 </div>
 
-<!-- 아카이브 탭 -->
 <div id="pane-archive" style="display:none;">
   <div class="archive-wrap">
     <div class="archive-search-row">
@@ -294,7 +279,6 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
   <span id="footer-date"></span>
 </footer>
 
-<!-- 관리자 로그인 -->
 <div class="admin-modal-backdrop" id="admin-modal">
   <div class="admin-modal">
     <h3>관리자 로그인</h3>
@@ -310,7 +294,7 @@ body { background:var(--bg); color:var(--ink); font-family:'Noto Sans KR',sans-s
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getDatabase, ref, get, set, runTransaction } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBIH03tDDCNSZHdq0_ru-4LnvaehECycSY",
@@ -325,6 +309,60 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+/* ════ 조회수 기록 함수 ════ */
+
+// 페이지뷰 기록 (에디션 단위)
+async function recordPageView(editionKey) {
+  if (!editionKey) return;
+  try {
+    const now = new Date();
+    const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD
+    const monthKey = dateKey.slice(0, 7);            // YYYY-MM
+
+    // 총 페이지뷰
+    const totalRef = ref(db, `views/${editionKey}/total`);
+    await runTransaction(totalRef, cur => (cur || 0) + 1);
+
+    // 날짜별 페이지뷰 (기간별 분석용)
+    const dailyRef = ref(db, `views/${editionKey}/daily/${dateKey}`);
+    await runTransaction(dailyRef, cur => (cur || 0) + 1);
+
+    // 월별 페이지뷰
+    const monthlyRef = ref(db, `views/${editionKey}/monthly/${monthKey}`);
+    await runTransaction(monthlyRef, cur => (cur || 0) + 1);
+
+    // 마지막 방문 시각
+    await set(ref(db, `views/${editionKey}/lastUpdated`), now.toISOString());
+  } catch(e) {
+    console.warn('조회수 기록 실패:', e);
+  }
+}
+
+// 기사 클릭 기록
+window.recordArticleClick = async function(editionKey, articleId) {
+  if (!editionKey || !articleId) return;
+  try {
+    const now = new Date();
+    const dateKey = now.toISOString().split('T')[0];
+    const monthKey = dateKey.slice(0, 7);
+
+    // 총 기사 클릭
+    const artRef = ref(db, `views/${editionKey}/articles/${articleId}`);
+    await runTransaction(artRef, cur => (cur || 0) + 1);
+
+    // 날짜별 기사 클릭
+    const artDailyRef = ref(db, `views/${editionKey}/articles_daily/${dateKey}/${articleId}`);
+    await runTransaction(artDailyRef, cur => (cur || 0) + 1);
+
+    // 월별 기사 클릭
+    const artMonthlyRef = ref(db, `views/${editionKey}/articles_monthly/${monthKey}/${articleId}`);
+    await runTransaction(artMonthlyRef, cur => (cur || 0) + 1);
+  } catch(e) {
+    console.warn('기사 클릭 기록 실패:', e);
+  }
+};
+
+/* ════ 데이터 로드 ════ */
 Promise.all([
   get(ref(db, 'editions')),
   get(ref(db, 'config/current_edition'))
@@ -353,7 +391,13 @@ Promise.all([
     ? currentEditionKey
     : keys[0];
 
+  window._currentEditionKey = targetKey;
+
   initPage(keys, data, targetKey);
+
+  // ★ 페이지뷰 기록 (데이터 로드 완료 후)
+  recordPageView(targetKey);
+
 }).catch(err => {
   document.getElementById('loading').textContent = '데이터 로드에 실패했습니다.';
   console.error(err);
@@ -364,7 +408,6 @@ Promise.all([
 const ADMIN_PASSWORD = 'maeil2024';
 let _allArticles = [];
 
-/* ════ 탭 전환 ════ */
 function switchTab(tab) {
   document.getElementById('pane-latest').style.display  = tab === 'latest'  ? '' : 'none';
   document.getElementById('pane-archive').style.display = tab === 'archive' ? '' : 'none';
@@ -373,7 +416,6 @@ function switchTab(tab) {
   if (tab === 'archive') renderArchive();
 }
 
-/* ════ 초기화 ════ */
 function initPage(keys, data, targetKey) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = 'block';
@@ -404,8 +446,8 @@ function initPage(keys, data, targetKey) {
   renderEdition(data[targetKey]);
 }
 
-/* ════ 이번 주 에디션 렌더 ════ */
 function renderEdition(edition) {
+  const edKey = window._currentEditionKey;
   const num = (edition.title || '').replace(/[^0-9]/g, '');
   document.getElementById('issue-label').textContent = num ? `ISSUE NO. ${num.padStart(3,'0')}` : 'HR시그널';
   document.getElementById('mag-edition').textContent = edition.title || '';
@@ -421,7 +463,7 @@ function renderEdition(edition) {
     </div>`;
   }
 
-  /* ── Top 5 ── */
+  /* Top 5 */
   if (edition.top5 && edition.top5.length) {
     html += `<div class="sec-header">
       <div class="sec-header-left">
@@ -437,7 +479,10 @@ function renderEdition(edition) {
       const badge = item.badge;
       const href = item.url || '#';
       const target = item.url ? 'target="_blank" rel="noopener"' : '';
-      html += `<a class="top5-item" href="${href}" ${target}>
+      // ★ 기사 클릭 시 recordArticleClick 호출
+      const clickHandler = item._id && edKey
+        ? `onclick="recordArticleClick('${edKey}','${item._id}')"` : '';
+      html += `<a class="top5-item" href="${href}" ${target} ${clickHandler}>
         <span class="top5-num">${String(i+1).padStart(2,'0')}</span>
         <div>
           <div class="top5-cat-row">
@@ -452,12 +497,14 @@ function renderEdition(edition) {
     html += `</ul>`;
   }
 
-  /* ── Editor's Pick ── */
+  /* Editor's Pick */
   if (edition.editors_pick) {
     const ep = edition.editors_pick;
     const href = ep.url || '#';
     const target = ep.url ? 'target="_blank" rel="noopener"' : '';
-    html += `<a class="pick-block" href="${href}" ${target}>
+    const clickHandler = ep._id && edKey
+      ? `onclick="recordArticleClick('${edKey}','${ep._id}')"` : '';
+    html += `<a class="pick-block" href="${href}" ${target} ${clickHandler}>
       <div class="pick-left">
         <div class="pick-label">★ EDITOR'S PICK</div>
         <div class="pick-title">${ep.title}</div>
@@ -466,7 +513,7 @@ function renderEdition(edition) {
     </a>`;
   }
 
-  /* ── 섹션별 뉴스 ── */
+  /* 섹션별 뉴스 */
   (edition.sections||[]).forEach((sec, si) => {
     if (!sec.articles || !sec.articles.length) return;
     html += `<div class="sec-header" style="margin-top:8px;">
@@ -482,7 +529,9 @@ function renderEdition(edition) {
     sec.articles.forEach(item => {
       const href = item.url || '#';
       const target = item.url ? 'target="_blank" rel="noopener"' : '';
-      html += `<a class="news-item" href="${href}" ${target}>
+      const clickHandler = item._id && edKey
+        ? `onclick="recordArticleClick('${edKey}','${item._id}')"` : '';
+      html += `<a class="news-item" href="${href}" ${target} ${clickHandler}>
         <div class="news-body">
           <span class="news-headline">${item.title}</span>
         </div>
