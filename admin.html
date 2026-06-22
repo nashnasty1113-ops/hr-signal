@@ -1126,10 +1126,6 @@ function renderViewsModal() {
     return{...a,title};
   }).sort((a,b)=>b.views-a.views);
 
-  // 날짜 범위 파싱
-  const dateFrom = window._viewsDateFrom || '';
-  const dateTo   = window._viewsDateTo   || '';
-
   const periodLabel = (!dateFrom && !dateTo) ? '전체 기간'
     : (dateFrom && dateTo) ? `${dateFrom} ~ ${dateTo}`
     : dateFrom ? `${dateFrom} 이후`
