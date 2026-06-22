@@ -206,6 +206,8 @@ body { background:var(--cream); color:var(--ink); font-family:'Noto Sans KR',san
 .views-refresh-btn { margin-left:auto; padding:5px 12px; background:none; border:1px solid var(--cream-border); border-radius:4px; font-size:11px; font-family:'Noto Sans KR',sans-serif; cursor:pointer; color:var(--ink-mid); }
 .views-refresh-btn:hover { background:var(--cream-dark); }
 .period-select { padding:4px 10px; border-radius:20px; border:1px solid var(--cream-border); background:white; font-family:'Noto Sans KR',sans-serif; font-size:11px; cursor:pointer; color:var(--ink-mid); outline:none; }
+.period-date-input { padding:4px 8px; border:1px solid var(--cream-border); border-radius:6px; font-size:11px; font-family:'Noto Sans KR',sans-serif; color:var(--ink); background:white; outline:none; cursor:pointer; }
+.period-date-input:focus { border-color:var(--ink-mid); }
 </style>
 </head>
 <body>
@@ -333,7 +335,7 @@ Promise.all([
 <script>
 window._data={}; window._keys=[]; window._currentKey=null; window._currentEditionKey=null;
 window._jsonScope='current'; window._jsonTab='view';
-window._viewsTab='editions'; window._viewsScope='all'; window._viewsPeriod='all';
+window._viewsTab='editions'; window._viewsScope='all'; window._viewsDateFrom=''; window._viewsDateTo='';
 const SEC_CATS=['노사관계','노동법','채용/퇴직','조직/문화','보상/복리후생','교육/개발','AI/디지털HR','글로벌HR','식품/유통업계 인사(승진 및 조직개편/보상/제도)','고용노동부 정책 및 인사동향','기타'];
 
 window._pool = [];
@@ -1049,31 +1051,50 @@ function renderViewsModal() {
   const editionKeys = Object.keys(vd);
   const tab = window._viewsTab || 'editions';
   const scope = window._viewsScope || 'all';
-  const period = window._viewsPeriod || 'all';
   const edNames = {};
   (_keys||[]).forEach(k => { edNames[k] = _data[k]?.title || k; });
   const scopedKeys = scope === 'all' ? editionKeys : (editionKeys.includes(scope) ? [scope] : []);
 
+  const dateFrom = window._viewsDateFrom || '';
+  const dateTo   = window._viewsDateTo   || '';
+
+  // 날짜 범위 내 daily 키를 합산
+  function sumDailyRange(dailyObj) {
+    if (!dailyObj) return 0;
+    return Object.entries(dailyObj).reduce((s, [d, v]) => {
+      if (dateFrom && d < dateFrom) return s;
+      if (dateTo   && d > dateTo)   return s;
+      return s + (v || 0);
+    }, 0);
+  }
+  function sumDailyArticleRange(articlesDailyObj) {
+    // articles_daily: { 'YYYY-MM-DD': { articleId: cnt } }
+    const merged = {};
+    if (!articlesDailyObj) return merged;
+    Object.entries(articlesDailyObj).forEach(([d, arts]) => {
+      if (dateFrom && d < dateFrom) return;
+      if (dateTo   && d > dateTo)   return;
+      Object.entries(arts || {}).forEach(([aid, cnt]) => {
+        merged[aid] = (merged[aid] || 0) + cnt;
+      });
+    });
+    return merged;
+  }
+
   function getFilteredViews(edKey) {
     const d = vd[edKey] || {};
-    if (period === 'all') return d.total || 0;
-    if (period.startsWith('month:')) return (d.monthly||{})[period.slice(6)] || 0;
-    if (period.startsWith('day:'))   return (d.daily||{})[period.slice(4)] || 0;
-    return 0;
+    if (!dateFrom && !dateTo) return d.total || 0;
+    return sumDailyRange(d.daily);
   }
   function getFilteredArticleViews(edKey) {
     const d = vd[edKey] || {};
-    if (period === 'all') return Object.values(d.articles||{}).reduce((a,b)=>a+b,0);
-    if (period.startsWith('month:')) return Object.values((d.articles_monthly||{})[period.slice(6)]||{}).reduce((a,b)=>a+b,0);
-    if (period.startsWith('day:'))   return Object.values((d.articles_daily||{})[period.slice(4)]||{}).reduce((a,b)=>a+b,0);
-    return 0;
+    if (!dateFrom && !dateTo) return Object.values(d.articles||{}).reduce((a,b)=>a+b,0);
+    return Object.values(sumDailyArticleRange(d.articles_daily)).reduce((a,b)=>a+b,0);
   }
   function getFilteredArticleMap(edKey) {
     const d = vd[edKey] || {};
-    if (period === 'all') return d.articles || {};
-    if (period.startsWith('month:')) return (d.articles_monthly||{})[period.slice(6)] || {};
-    if (period.startsWith('day:'))   return (d.articles_daily||{})[period.slice(4)] || {};
-    return {};
+    if (!dateFrom && !dateTo) return d.articles || {};
+    return sumDailyArticleRange(d.articles_daily);
   }
 
   const totalViews = scopedKeys.reduce((s,k)=>s+getFilteredViews(k),0);
@@ -1105,18 +1126,14 @@ function renderViewsModal() {
     return{...a,title};
   }).sort((a,b)=>b.views-a.views);
 
-  // 월별/일별 목록
-  const allMonths=new Set(), allDays=new Set();
-  editionKeys.forEach(k=>{
-    Object.keys(vd[k]?.monthly||{}).forEach(m=>allMonths.add(m));
-    Object.keys(vd[k]?.daily||{}).forEach(d=>allDays.add(d));
-  });
-  const monthsSorted=[...allMonths].sort().reverse();
-  const daysSorted=[...allDays].sort().reverse().slice(0,30);
+  // 날짜 범위 파싱
+  const dateFrom = window._viewsDateFrom || '';
+  const dateTo   = window._viewsDateTo   || '';
 
-  const periodLabel = period==='all'?'전체 기간'
-    :period.startsWith('month:')?period.slice(6)+' 월'
-    :period.startsWith('day:')?period.slice(4):'전체 기간';
+  const periodLabel = (!dateFrom && !dateTo) ? '전체 기간'
+    : (dateFrom && dateTo) ? `${dateFrom} ~ ${dateTo}`
+    : dateFrom ? `${dateFrom} 이후`
+    : `${dateTo} 이전`;
 
   const maxEdViews=edRank[0]?.views||1;
   const maxArtViews=artRank[0]?.views||1;
@@ -1128,12 +1145,10 @@ function renderViewsModal() {
   `;
   const periodButtons=`
     <span class="views-scope-label">기간:</span>
-    <button class="views-scope-btn ${period==='all'?'active':''}" onclick="setViewsPeriod('all')">전체</button>
-    ${monthsSorted.map(m=>`<button class="views-scope-btn ${period==='month:'+m?'active':''}" onclick="setViewsPeriod('month:${m}')">${m}</button>`).join('')}
-    ${daysSorted.length?`<select class="period-select" onchange="if(this.value)setViewsPeriod(this.value)">
-      <option value="">일별 선택...</option>
-      ${daysSorted.map(d=>`<option value="day:${d}" ${period==='day:'+d?'selected':''}>${d}</option>`).join('')}
-    </select>`:''}
+    <input type="date" class="period-date-input" id="vd-from" value="${dateFrom}" onchange="setViewsDateRange(this.value, document.getElementById('vd-to')?.value||'')">
+    <span style="font-size:11px;color:var(--ink-light);">~</span>
+    <input type="date" class="period-date-input" id="vd-to" value="${dateTo}" onchange="setViewsDateRange(document.getElementById('vd-from')?.value||'', this.value)">
+    <button class="views-scope-btn ${(!dateFrom&&!dateTo)?'active':''}" onclick="setViewsDateRange('','')">전체</button>
   `;
 
   let tabContent='';
@@ -1191,7 +1206,11 @@ function renderViewsModal() {
     ${tabContent}`;
 }
 
-function setViewsPeriod(p){ window._viewsPeriod=p; renderViewsModal(); }
+function setViewsDateRange(from, to) {
+  window._viewsDateFrom = from;
+  window._viewsDateTo   = to;
+  renderViewsModal();
+}
 function setViewsTab(t){ window._viewsTab=t; renderViewsModal(); }
 function setViewsScope(s){ window._viewsScope=s; renderViewsModal(); }
 function renderViewsError(msg){ document.getElementById('views-body').innerHTML=`<div class="views-empty"><div class="views-empty-icon">⚠️</div>${msg}</div>`; }
